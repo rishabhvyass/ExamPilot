@@ -19,6 +19,7 @@ import type { SharedValue } from 'react-native-reanimated';
 import Svg, { Path } from 'react-native-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { pick, types } from '@react-native-documents/picker';
+import { launchCamera } from 'react-native-image-picker';
 import {
   Field,
   Icon,
@@ -178,7 +179,7 @@ export function Splash() {
             ? state.onboarded
               ? 'Main'
               : 'Details'
-            : 'Login',
+            : 'Intro',
         },
       ],
     });
@@ -1004,6 +1005,14 @@ export function AdmitCard() {
       /* cancelled */
     }
   };
+  const takePhoto = async () => {
+    try {
+      const r = await launchCamera({ mediaType: 'photo', quality: 0.8 });
+      if (!r.didCancel && r.assets?.length) scan();
+    } catch {
+      /* camera unavailable (simulator) */
+    }
+  };
   const confirm = () => {
     update(x => ({
       ...x,
@@ -1087,7 +1096,7 @@ export function AdmitCard() {
               <SecondaryButton
                 icon="camera"
                 label="Take photo"
-                onPress={chooseFile}
+                onPress={takePhoto}
               />
             </View>
             <View style={{ flex: 1 }}>

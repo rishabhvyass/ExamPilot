@@ -8,6 +8,7 @@ import { ReducedMotionConfig, ReduceMotion } from 'react-native-reanimated';
 import { StoreProvider, useStore } from './src/data/store';
 import { ConfettiHost } from './src/lib/celebrate';
 import { TabBar } from './src/components/TabBar';
+import { Intro } from './src/screens/intro';
 import { Splash, Login, Details, AdmitCard, PlanReady } from './src/screens/onboarding';
 import { Today, Calendar, Subjects, Questions } from './src/screens/tabs';
 import { Materials, Assistant, PdfReader } from './src/screens/tools';
@@ -39,6 +40,7 @@ function Root() {
     <NavigationContainer theme={theme}>
       <Stack.Navigator initialRouteName={initial} screenOptions={{ headerShown: false, contentStyle: { backgroundColor: C.ground }, animation: 'fade_from_bottom' }}>
         <Stack.Screen name="Splash" component={Splash} options={{ animation: 'fade' }} />
+        <Stack.Screen name="Intro" component={Intro} options={{ animation: 'fade' }} />
         <Stack.Screen name="Login" component={Login} options={{ animation: 'fade' }} />
         <Stack.Screen name="Details" component={Details} options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="Admit" component={AdmitCard} options={{ animation: 'slide_from_right' }} />

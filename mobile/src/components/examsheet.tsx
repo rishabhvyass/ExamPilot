@@ -14,7 +14,7 @@ import {
 const DOW = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const pad = (n: number) => String(n).padStart(2, '0');
 
-function Row({
+export function Row({
   label,
   value,
   open,
@@ -204,7 +204,7 @@ function Chip({
   );
 }
 
-function TimePicker({
+export function TimePicker({
   value,
   onChange,
 }: {
@@ -305,5 +305,29 @@ export function ExamSheet({
       </View>
       <PrimaryButton label={submit} onPress={() => onSubmit(v)} />
     </BottomSheet>
+  );
+}
+
+/** A tappable row that expands into the time picker. */
+export function TimeField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (t: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <View style={{ gap: 6 }}>
+      <Row
+        label={label}
+        value={fmtTime(value)}
+        open={open}
+        onPress={() => setOpen(!open)}
+      />
+      {open && <TimePicker value={value} onChange={onChange} />}
+    </View>
   );
 }

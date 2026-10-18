@@ -2,6 +2,7 @@
 // `experimental_backgroundImage`, with outer shadows on the root and inset shadows in an overlay above the gradient.
 import type { ReactNode } from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { BlurView } from '../kit/compat';
 import { SURFACE, SUBJ, type SubjectColor, type SurfaceKind } from '../theme';
 
 /** Split "a, inset b, c" into outer / inset lists without breaking on commas inside rgba(). */
@@ -33,6 +34,17 @@ export function Surface({
   const { outer, inset } = SPLIT[kind];
   return (
     <View style={[{ borderRadius: radius, boxShadow: outer }, style]}>
+      {kind === 'glass' && (
+        <View
+          pointerEvents="none"
+          style={[
+            StyleSheet.absoluteFill,
+            { borderRadius: radius, overflow: 'hidden' },
+          ]}
+        >
+          <BlurView intensity={40} tint="light" style={StyleSheet.absoluteFill} />
+        </View>
+      )}
       <View
         pointerEvents="none"
         style={[

@@ -40,3 +40,20 @@ Starting dev server on http://localhost:8081
  BUNDLE  ./index.js 
  BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
  BUNDLE  ./index.js 
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js 
+ ERROR  SyntaxError: /Users/rishabvyas/Desktop/ALL PROJECTS/ExamPilot-RN/mobile/src/screens/tools.tsx: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (1331:6)
+
+  1329 |         ))}
+  1330 |       </ScrollView>
+> 1331 |       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+       |       ^
+  1332 |         <IconButton
+  1333 |           icon="chevron-left"
+  1334 |           label="Previous page"
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js 
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js 
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js 

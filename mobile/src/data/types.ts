@@ -66,6 +66,8 @@ export interface Material {
   count?: number;
   minutes?: number;
   body?: string;
+  /** file:// path of the on-device copy of an uploaded PDF. */
+  uri?: string;
   isSample: boolean;
 }
 export interface PdfProgress {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, Pressable, TextInput, View } from 'react-native';
+import { Alert, Pressable, ScrollView, TextInput, View } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -7,6 +7,10 @@ import Animated, {
   LinearTransition,
   ZoomIn,
 } from 'react-native-reanimated';
+import { GooeyIsland, type IslandState } from '../kit/components/GooeyIsland';
+import { QuickAddMenu } from '../kit/components/QuickAddMenu';
+import { StudyBlockPicker } from '../components/rangepicker';
+import { TimeField } from '../components/examsheet';
 import { useNavigation } from '@react-navigation/native';
 import { pick, types } from '@react-native-documents/picker';
 import {
@@ -37,6 +41,7 @@ import { useNav } from '../navigation';
 import { celebrate } from '../lib/celebrate';
 import {
   countdown,
+  addDays,
   daysBetween,
   dayNum,
   fmtLong,
@@ -94,6 +99,24 @@ export function Today() {
     if (allDone && !wasDone.current) celebrate();
     wasDone.current = allDone;
   }, [allDone]);
+  // The study island greets you with the next exam, then settles back to its idle pill.
+  const [island, setIsland] = useState<IslandState>({ kind: 'idle' });
+  const islandText = next
+    ? `${nextSubj?.code ?? 'Exam'} · ${
+        n <= 0 ? 'today' : n === 1 ? 'tomorrow' : `in ${n} days`
+      }`
+    : `${tasks.length - done} topics left today`;
+  useEffect(() => {
+    const a = setTimeout(
+      () => setIsland({ kind: 'message', text: islandText }),
+      900,
+    );
+    const b = setTimeout(() => setIsland({ kind: 'idle' }), 5200);
+    return () => {
+      clearTimeout(a);
+      clearTimeout(b);
+    };
+  }, [islandText]);
 
   const toggle = (id: string) =>
     update(x => ({
@@ -123,7 +146,45 @@ export function Today() {
     setSheet(false);
   };
   return (
-    <Screen tabs>
+    <Screen
+      tabs
+      footer={
+        <QuickAddMenu
+          actions={[
+            {
+              id: 'topic',
+              label: 'Add topic',
+              icon: <Icon name="plus" size={20} color="#fff" />,
+              onSelect: () => setSheet(true),
+            },
+            {
+              id: 'pdf',
+              label: 'Add material',
+              icon: <Icon name="file-pdf" size={20} color="#fff" />,
+              onSelect: () => nav.navigate('Materials', {}),
+            },
+            {
+              id: 'ask',
+              label: 'Ask study assistant',
+              icon: <Icon name="sparkle" size={20} color="#fff" />,
+              onSelect: () => nav.navigate('Assistant'),
+            },
+          ]}
+        />
+      }
+    >
+      <View style={{ marginHorizontal: -20, marginBottom: 4 }}>
+        <GooeyIsland
+          state={island}
+          onPress={() =>
+            setIsland(
+              island.kind === 'idle'
+                ? { kind: 'message', text: islandText }
+                : { kind: 'idle' },
+            )
+          }
+        />
+      </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <Pressable
           style={{
@@ -407,6 +468,7 @@ export function Calendar() {
   const [form, setForm] = useState({
     subjectId: 'se',
     date: today,
+    endDate: today,
     start: '10:00',
     end: '11:00',
   });
@@ -433,26 +495,23 @@ export function Calendar() {
       .sort((a, b) => a.start.localeCompare(b.start));
   const code = (id: string) =>
     state.subjects.find(s => s.id === id)?.code ?? '';
-  const valid =
-    /^\d{4}-\d{2}-\d{2}$/.test(form.date) &&
-    /^\d{2}:\d{2}$/.test(form.start) &&
-    /^\d{2}:\d{2}$/.test(form.end) &&
-    form.end > form.start;
+  const valid = form.endDate >= form.date && form.end > form.start;
   const addSession = () => {
     if (!valid) return;
+    const n = daysBetween(form.date, form.endDate) + 1;
     update(x => ({
       ...x,
       sessions: [
         ...x.sessions,
-        {
-          id: 'm' + Date.now(),
-          date: form.date,
+        ...Array.from({ length: n }, (_, i) => ({
+          id: 'm' + Date.now() + '-' + i,
+          date: addDays(form.date, i),
           start: form.start,
           end: form.end,
           subjectId: form.subjectId,
           title: 'Study session',
-          source: 'manual',
-        },
+          source: 'manual' as const,
+        })),
       ],
     }));
     setSheet(false);
@@ -772,40 +831,27 @@ export function Calendar() {
             />
           ))}
         </View>
-        <View style={{ flexDirection: 'row', gap: 8, marginBottom: 16 }}>
-          {(
-            [
-              ['date', 'Date', 1.6],
-              ['start', 'Start', 1],
-              ['end', 'End', 1],
-            ] as const
-          ).map(([k, l, f]) => (
-            <View
-              key={k}
-              style={{
-                flex: f,
-                backgroundColor: C.input,
-                borderRadius: 22,
-                paddingHorizontal: 12,
-                paddingVertical: 8,
-              }}
-            >
-              <Txt style={[TYPE.micro, { color: C.inkMuted }]}>{l}</Txt>
-              <TextInput
-                value={form[k]}
-                onChangeText={v => setForm({ ...form, [k]: v })}
-                accessibilityLabel={l}
-                placeholder={k === 'date' ? 'YYYY-MM-DD' : 'HH:mm'}
-                style={{
-                  fontSize: 15,
-                  fontFamily: FONT[400],
-                  color: C.ink,
-                  paddingVertical: 2,
-                }}
-              />
-            </View>
-          ))}
-        </View>
+        <ScrollView
+          style={{ maxHeight: 460 }}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ gap: 12, paddingBottom: 16 }}
+        >
+          <StudyBlockPicker
+            value={{ start: form.date, end: form.endDate }}
+            onChange={r => setForm({ ...form, date: r.start, endDate: r.end })}
+            examDates={state.exams.map(e => e.date)}
+          />
+          <TimeField
+            label="Start time"
+            value={form.start}
+            onChange={start => setForm({ ...form, start })}
+          />
+          <TimeField
+            label="End time"
+            value={form.end}
+            onChange={end => setForm({ ...form, end })}
+          />
+        </ScrollView>
         <PrimaryButton
           label="Add session"
           onPress={addSession}

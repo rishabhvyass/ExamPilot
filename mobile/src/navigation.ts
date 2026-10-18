@@ -9,6 +9,7 @@ export type TabParams = {
 };
 export type RootParams = {
   Splash: undefined;
+  Intro: undefined;
   Login: undefined;
   Details: undefined;
   Admit: undefined;

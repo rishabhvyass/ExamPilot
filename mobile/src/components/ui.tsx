@@ -35,6 +35,8 @@ import { C, FONT, R, SHADOW, SUBJ, TYPE, type SubjectColor, INK } from '../theme
 import { ICONS } from '../assets/icons';
 import { ILLOS } from '../assets/illustrations';
 import { GlassCard, Surface } from './surface';
+import { BlurIn } from '../kit/components/BlurIn';
+import { Haptics } from '../kit/compat';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const spring = {
@@ -118,6 +120,7 @@ export function Press({
       style={outer}
       onPressIn={e => {
         s.value = withSpring(scaleTo, spring.press);
+        Haptics.selectionAsync().catch(() => {});
         p.onPressIn?.(e);
       }}
       onPressOut={e => {
@@ -391,6 +394,7 @@ export function Screen({
     </View>
   );
 }
+/** Block entrance: rises, fades and sharpens out of a blur, staggered 60 ms by `i`. */
 export function Rise({
   children,
   i = 0,
@@ -401,14 +405,9 @@ export function Rise({
   style?: StyleProp<ViewStyle>;
 }) {
   return (
-    <Animated.View
-      style={style}
-      entering={FadeInDown.delay(40 + i * 60)
-        .duration(480)
-        .easing(Easing.bezier(0.05, 0.7, 0.1, 1))}
-    >
+    <BlurIn index={i} style={style}>
       {children}
-    </Animated.View>
+    </BlurIn>
   );
 }
 export function TopBar({
