@@ -114,6 +114,11 @@ export const INK = {
   experimental_backgroundImage: SURFACE.ink.gradient,
   boxShadow: SURFACE.ink.shadow,
 } as const;
+/** Soft clay as a plain style (for pills that hold only text). */
+export const CLAY = {
+  experimental_backgroundImage: SURFACE.clay.gradient,
+  boxShadow: SURFACE.clay.shadow,
+} as const;
 /** White sheen drawn over a subject fill (spread next to its backgroundColor). */
 export const SHEEN = {
   experimental_backgroundImage: SURFACE.sheen.gradient,

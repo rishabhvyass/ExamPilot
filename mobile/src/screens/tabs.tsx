@@ -31,7 +31,7 @@ import {
   TopBar,
   Txt,
 } from '../components/ui';
-import { C, FONT, SUBJ, TYPE, colorOf, SHADOW, INK, SHEEN } from '../theme';
+import { C, FONT, SUBJ, TYPE, colorOf, SHADOW, INK, SHEEN, CLAY } from '../theme';
 import { useStore } from '../data/store';
 import { useNav } from '../navigation';
 import { celebrate } from '../lib/celebrate';
@@ -467,8 +467,7 @@ export function Calendar() {
           style={{
             height: 56,
             borderRadius: 999,
-            backgroundColor: C.surface,
-            boxShadow: SHADOW.soft,
+            ...CLAY,
             paddingHorizontal: 24,
             justifyContent: 'center',
           }}
