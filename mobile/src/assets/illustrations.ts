@@ -1,0 +1,25 @@
+// Generated from design handoff assets/illustrations.
+export const ILLOS: Record<string, string> = {
+  'admit-card-skeleton':
+    '<svg xmlns="http://www.w3.org/2000/svg" width="250" height="320" viewBox="0 0 250 320"><rect width="250" height="320" rx="26" fill="#FFFFFF"/><rect x="20" y="20" width="46" height="56" rx="10" fill="#EEF0F4"/><rect x="78" y="32" width="140" height="9" rx="4.5" fill="#E2E6EC"/><rect x="78" y="50" width="96" height="9" rx="4.5" fill="#E8EBF0"/><rect x="20" y="92" width="210" height="1" fill="#EEF0F4"/><rect x="20" y="106" width="210" height="30" rx="10" fill="#DCEBFF"/><rect x="20" y="148" width="210" height="30" rx="10" fill="#EDE5FF"/><rect x="20" y="190" width="210" height="30" rx="10" fill="#D9F5E6"/><rect x="20" y="236" width="147" height="9" rx="4.5" fill="#E8EBF0"/><rect x="20" y="256" width="95" height="9" rx="4.5" fill="#E8EBF0"/></svg>',
+  'app-icon-1024':
+    '<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><rect width="1024" height="1024" fill="#C7DCFF"/><circle cx="420" cy="430" r="230" fill="#3B82F6"/><circle cx="640" cy="560" r="200" fill="#DDD0FF"/><circle cx="470" cy="700" r="160" fill="#BBF0D3"/><rect x="352" y="352" width="320" height="320" rx="110" fill="#111113"/><g transform="translate(392 392) scale(10)" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7-7 18-2.5-8.5z"/></g></svg>',
+  'assistant-avatar':
+    '<svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52"><rect width="52" height="52" rx="20" fill="#C7DCFF"/><g transform="translate(13 13) scale(1.0833)" fill="#111113"><path d="M12 2l2.2 5.8L20 10l-5.8 2.2L12 18l-2.2-5.8L4 10l5.8-2.2z"/><circle cx="19" cy="18" r="2"/></g></svg>',
+  'hero-card-art-daa-violet':
+    '<svg xmlns="http://www.w3.org/2000/svg" width="150" height="176" viewBox="0 0 150 176"><circle cx="66" cy="30" r="55" fill="#A78BFA"/><circle cx="100" cy="100" r="44" fill="#DCEBFF"/><circle cx="29" cy="129" r="33" fill="none" stroke="#FFFFFF" stroke-opacity=".85" stroke-width="1.5"/></svg>',
+  'hero-card-art-dds-green':
+    '<svg xmlns="http://www.w3.org/2000/svg" width="150" height="176" viewBox="0 0 150 176"><circle cx="66" cy="30" r="55" fill="#34D399"/><circle cx="100" cy="100" r="44" fill="#EDE5FF"/><circle cx="29" cy="129" r="33" fill="none" stroke="#FFFFFF" stroke-opacity=".85" stroke-width="1.5"/></svg>',
+  'hero-card-art-se-blue':
+    '<svg xmlns="http://www.w3.org/2000/svg" width="150" height="176" viewBox="0 0 150 176"><circle cx="66" cy="30" r="60" fill="#3B82F6"/><circle cx="108" cy="98" r="48" fill="#DDD0FF"/><circle cx="30" cy="134" r="35" fill="none" stroke="#FFFFFF" stroke-opacity=".8" stroke-width="1.5"/><circle cx="39" cy="79" r="9" fill="#FFFFFF"/></svg>',
+  'login-corner-art':
+    '<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220"><circle cx="65" cy="105" r="65" fill="#DCEBFF"/><circle cx="135" cy="145" r="55" fill="#EDE5FF"/><circle cx="87" cy="37" r="27" fill="none" stroke="#FFFFFF" stroke-width="1.5"/></svg>',
+  'logo-mark':
+    '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" rx="28" fill="#111113"/><g transform="translate(20 20) scale(1.6667)" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7-7 18-2.5-8.5z"/></g></svg>',
+  'splash-composition':
+    '<svg xmlns="http://www.w3.org/2000/svg" width="342" height="400" viewBox="0 0 342 400"><circle cx="171" cy="190" r="160" fill="none" stroke="#FFFFFF" stroke-opacity=".7" stroke-width="1.5"/><circle cx="171" cy="190" r="110" fill="none" stroke="#FFFFFF" stroke-opacity=".5" stroke-width="1.5"/><circle cx="121" cy="160" r="65" fill="#3B82F6"/><circle cx="217" cy="203" r="59" fill="#DDD0FF"/><circle cx="146" cy="258" r="48" fill="#BBF0D3"/><circle cx="182" cy="30" r="11" fill="#FFFFFF"/><circle cx="18" cy="242" r="7" fill="#111113"/><rect x="131" y="150" width="80" height="80" rx="28" fill="#111113"/><g transform="translate(151 170) scale(1.6667)" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7-7 18-2.5-8.5z"/></g></svg>',
+  'success-badge':
+    '<svg xmlns="http://www.w3.org/2000/svg" width="104" height="104" viewBox="0 0 104 104"><rect width="104" height="104" rx="36" fill="#111113"/><g transform="translate(28 28) scale(2)" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></g></svg>',
+  'upload-badge':
+    '<svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="42" fill="#DCEBFF"/><g transform="translate(25 25) scale(1.4167)" fill="none" stroke="#1E3A8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></g></svg>',
+};

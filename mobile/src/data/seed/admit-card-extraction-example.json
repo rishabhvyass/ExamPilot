@@ -1,0 +1,38 @@
+{
+  "_note": "Schema output for admit-card reading. Personal fields (name, photo, roll no.) are never requested.",
+  "exams": [
+    {
+      "subjectCode": "[CODE]",
+      "subjectName": "Software Engineering",
+      "date": "2026-10-21",
+      "weekdayPrinted": "WED",
+      "start": "14:00",
+      "end": "17:00",
+      "rawText": "21/10/2026 (Wed) 02:00 PM to 05:00 PM",
+      "confidence": 0.94,
+      "flags": []
+    },
+    {
+      "subjectCode": "[CODE]",
+      "subjectName": "Design and Analysis of Algorithm",
+      "date": "2026-10-22",
+      "weekdayPrinted": "THU",
+      "start": "14:00",
+      "end": "17:00",
+      "rawText": "22/10/2026 (Thu) 02:00 PM to 05:00 PM",
+      "confidence": 0.92,
+      "flags": []
+    },
+    {
+      "subjectCode": "[CODE]",
+      "subjectName": "Design of Data Structures",
+      "date": "2026-10-23",
+      "weekdayPrinted": "FRI",
+      "start": "14:00",
+      "end": "17:00",
+      "rawText": "23/10/2026 (Fri) 02:00 PM to 05:00 PM",
+      "confidence": 0.9,
+      "flags": []
+    }
+  ]
+}

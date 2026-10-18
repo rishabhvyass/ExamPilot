@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "881624105411",
+    "project_id": "exampilot-4037d",
+    "storage_bucket": "exampilot-4037d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881624105411:android:fb7d0d726e7d44a3307d76",
+        "android_client_info": {
+          "package_name": "com.exampilot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtBOOhQeKuALCioVmh4ME-ecwZzN54nIM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
