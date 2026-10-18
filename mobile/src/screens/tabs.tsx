@@ -7,7 +7,7 @@ import Animated, {
   LinearTransition,
   ZoomIn,
 } from 'react-native-reanimated';
-import { GooeyIsland, type IslandState } from '../kit/components/GooeyIsland';
+import { liveActivity, type ExamActivity } from '../lib/liveActivity';
 import { QuickAddMenu } from '../kit/components/QuickAddMenu';
 import { StudyBlockPicker } from '../components/rangepicker';
 import { TimeField } from '../components/examsheet';
@@ -99,24 +99,46 @@ export function Today() {
     if (allDone && !wasDone.current) celebrate();
     wasDone.current = allDone;
   }, [allDone]);
-  // The study island greets you with the next exam, then settles back to its idle pill.
-  const [island, setIsland] = useState<IslandState>({ kind: 'idle' });
-  const islandText = next
-    ? `${nextSubj?.code ?? 'Exam'} · ${
-        n <= 0 ? 'today' : n === 1 ? 'tomorrow' : `in ${n} days`
-      }`
-    : `${tasks.length - done} topics left today`;
+  // The next exam lives in the real Dynamic Island / lock screen as a Live Activity (iOS 16.2+).
+  const [islandSupported, setIslandSupported] = useState(false);
+  const [inIsland, setInIsland] = useState(false);
+  const activity: ExamActivity | null = next
+    ? {
+        code: nextSubj?.code ?? 'Exam',
+        title: nextSubj?.name ?? next.title,
+        date: next.date,
+        time: next.time,
+        accent: SUBJ[colorOf(nextSubj?.color)].mark,
+        topicsDone: done,
+        topicsTotal: tasks.length,
+      }
+    : null;
   useEffect(() => {
-    const a = setTimeout(
-      () => setIsland({ kind: 'message', text: islandText }),
-      900,
-    );
-    const b = setTimeout(() => setIsland({ kind: 'idle' }), 5200);
-    return () => {
-      clearTimeout(a);
-      clearTimeout(b);
-    };
-  }, [islandText]);
+    liveActivity.isSupported().then(setIslandSupported).catch(() => {});
+    liveActivity.isRunning().then(setInIsland).catch(() => {});
+  }, []);
+  // Keep a running activity in step with the checklist and the next exam.
+  const activityKey = activity && JSON.stringify(activity);
+  useEffect(() => {
+    if (inIsland && activity) liveActivity.update(activity).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inIsland, activityKey]);
+  const toggleIsland = async () => {
+    try {
+      if (inIsland) {
+        await liveActivity.end();
+        setInIsland(false);
+      } else if (activity) {
+        await liveActivity.start(activity);
+        setInIsland(true);
+      }
+    } catch (e) {
+      Alert.alert(
+        'Couldn’t show it in the Dynamic Island',
+        (e as Error).message ?? 'Please try again.',
+      );
+    }
+  };
 
   const toggle = (id: string) =>
     update(x => ({
@@ -173,18 +195,6 @@ export function Today() {
         />
       }
     >
-      <View style={{ marginHorizontal: -20, marginBottom: 4 }}>
-        <GooeyIsland
-          state={island}
-          onPress={() =>
-            setIsland(
-              island.kind === 'idle'
-                ? { kind: 'message', text: islandText }
-                : { kind: 'idle' },
-            )
-          }
-        />
-      </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <Pressable
           style={{
@@ -212,6 +222,46 @@ export function Today() {
         <IconButton icon="more-horizontal" label="More" />
       </View>
       <ScreenHeader eyebrow={greeting()} title={'Your Exam\nWeek'} />
+      {islandSupported && activity && (
+        <Press
+          accessibilityRole="switch"
+          accessibilityState={{ checked: inIsland }}
+          accessibilityLabel="Show next exam in the Dynamic Island"
+          onPress={toggleIsland}
+          style={[
+            {
+              alignSelf: 'flex-start',
+              height: 44,
+              borderRadius: 22,
+              paddingHorizontal: 16,
+              marginBottom: 14,
+              marginLeft: 4,
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 8,
+            },
+            inIsland ? INK : CLAY,
+          ]}
+        >
+          <View
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: 4,
+              backgroundColor: inIsland ? '#34D399' : C.inkSubtle,
+            }}
+          />
+          <Txt
+            style={{
+              fontSize: 15,
+              fontWeight: 600,
+              color: inIsland ? '#fff' : C.inkButton,
+            }}
+          >
+            {inIsland ? 'In Dynamic Island' : 'Show in Dynamic Island'}
+          </Txt>
+        </Press>
+      )}
       <View style={{ gap: 14 }}>
         {next ? (
           <Rise i={0}>
