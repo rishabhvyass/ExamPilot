@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ExamPilot reference — 10-study-materials</title>
+<!-- Static snapshot of the design prototype (Materials.dc.html) in its first state. Reference only: rebuild as React components. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+body{margin:0;background:#FFFFFF}
+a{color:#1B1B1F}a:hover{color:#000000}
+.press{transition:transform 140ms cubic-bezier(.2,0,0,1),background-color 160ms ease}
+.press:hover{transform:translateY(-1px)}
+.press:active{transform:scale(.97)}
+.item{transition:transform 180ms ease,box-shadow 180ms ease}
+.item:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(15,23,42,.08)}
+.fadeup{animation:fadeup 380ms cubic-bezier(.05,.7,.1,1) both}
+.sheet{animation:sheet 420ms cubic-bezier(.2,.9,.25,1.02) both}
+.scrim{animation:scrim 260ms ease both}
+.fab{animation:fab 2.8s ease-in-out infinite}
+@keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
+@keyframes scrim{from{opacity:0}to{opacity:1}}
+@keyframes fab{0%,100%{box-shadow:0 10px 26px rgba(27,27,31,.25)}50%{box-shadow:0 14px 34px rgba(27,27,31,.35)}}
+button:focus-visible,a:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+
+</style>
+</head>
+<body>
+
+
+<div style="width: 390px; height: 1060px; position: relative; overflow: hidden; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box">
+<main style="padding: 60px 20px 120px; display: flex; flex-direction: column; gap: 14px">
+
+<div style="display: flex; align-items: center; justify-content: space-between">
+<a href="Subjects.dc.html" class="press" aria-label="Back to subjects" style="width: 56px; height: 56px; border-radius: 999px; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<button type="button" class="press" aria-label="Search materials" style="width: 56px; height: 56px; border-radius: 999px; border: 0; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button>
+</div>
+
+<header style="display: flex; flex-direction: column; gap: 6px; padding: 10px 4px 4px">
+<span style="font-size: 20px; font-weight: 500; color: #5B6475">5 items · sample</span>
+<h1 style="margin: 0; font-weight: 600; font-size: 46px; line-height: 1.02; letter-spacing: -0.03em">Study<br>Materials</h1>
+</header>
+
+<div role="group" aria-label="Subject" style="display: flex; gap: 8px">
+
+<button type="button" class="press" aria-pressed="true" style="height: 52px; padding: 0 20px; border-radius: 999px; border: 0; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18); color: #FFFFFF; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">SE</button>
+
+
+
+<button type="button" class="press" aria-pressed="false" style="height: 52px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #CBD2DC; background: transparent; color: #1B1B1F; font: inherit; font-size: 16px; font-weight: 500; cursor: pointer">DAA</button>
+
+
+<button type="button" class="press" aria-pressed="false" style="height: 52px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #CBD2DC; background: transparent; color: #1B1B1F; font: inherit; font-size: 16px; font-weight: 500; cursor: pointer">DDS</button>
+
+</div>
+
+
+<section class="fadeup" style="display: flex; flex-direction: column; gap: 8px; animation-delay: 0ms">
+<h2 style="margin: 6px 4px 0; font-size: 15px; font-weight: 600; color: #5B6475">PDFs</h2>
+
+<a href="PdfReader.dc.html" class="item" style="display: flex; align-items: center; gap: 14px; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); border-radius: 28px; padding: 10px 16px 10px 10px; text-decoration: none; color: #1B1B1F">
+<span style="flex: none; width: 52px; height: 52px; border-radius: 18px; background: #DCEBFF; color: #1E3A8A; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700">PDF</span>
+
+
+
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">SE_Unit3_Design_UML.pdf</span><span style="font-size: 14px; color: #5B6475">12 pages · 2.1 MB</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7385" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+
+<a href="PdfReader.dc.html" class="item" style="display: flex; align-items: center; gap: 14px; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); border-radius: 28px; padding: 10px 16px 10px 10px; text-decoration: none; color: #1B1B1F">
+<span style="flex: none; width: 52px; height: 52px; border-radius: 18px; background: #DCEBFF; color: #1E3A8A; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700">PDF</span>
+
+
+
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">SE_previous_papers.pdf</span><span style="font-size: 14px; color: #5B6475">8 pages · 840 KB</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7385" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+
+</section>
+
+<section class="fadeup" style="display: flex; flex-direction: column; gap: 8px; animation-delay: 90ms">
+<h2 style="margin: 6px 4px 0; font-size: 15px; font-weight: 600; color: #5B6475">Photos &amp; notes</h2>
+
+<a href="#" class="item" style="display: flex; align-items: center; gap: 14px; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); border-radius: 28px; padding: 10px 16px 10px 10px; text-decoration: none; color: #1B1B1F">
+
+<span style="flex: none; width: 52px; height: 52px; border-radius: 18px; background: #DCEBFF; color: #1E3A8A; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="4"></rect><circle cx="9" cy="10" r="2"></circle><path d="M21 16l-5-5-9 9"></path></svg></span>
+
+
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Class notes — Testing</span><span style="font-size: 14px; color: #5B6475">3 photos</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7385" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+
+<a href="#" class="item" style="display: flex; align-items: center; gap: 14px; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); border-radius: 28px; padding: 10px 16px 10px 10px; text-decoration: none; color: #1B1B1F">
+
+
+
+<span style="flex: none; width: 52px; height: 52px; border-radius: 18px; background: #DCEBFF; color: #1E3A8A; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M9 12h7M9 16h5"></path></svg></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">COCOMO formulas</span><span style="font-size: 14px; color: #5B6475">Note · edited today</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7385" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+
+</section>
+
+<section class="fadeup" style="display: flex; flex-direction: column; gap: 8px; animation-delay: 180ms">
+<h2 style="margin: 6px 4px 0; font-size: 15px; font-weight: 600; color: #5B6475">Videos &amp; links</h2>
+
+<a href="#" class="item" style="display: flex; align-items: center; gap: 14px; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); border-radius: 28px; padding: 10px 16px 10px 10px; text-decoration: none; color: #1B1B1F">
+
+
+<span style="flex: none; width: 52px; height: 52px; border-radius: 18px; background: #DCEBFF; color: #1E3A8A; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg></span>
+
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Agile vs Waterfall lecture</span><span style="font-size: 14px; color: #5B6475">Video link · 18 min</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7385" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+
+</section>
+
+
+</main>
+
+<button type="button" class="press fab" style="position: absolute; right: 20px; bottom: 28px; height: 60px; padding: 0 24px 0 18px; border-radius: 999px; border: 0; color: #111113; font: inherit; font-size: 17px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add material</button>
+
+
+</div>
+
+</body>
+</html>

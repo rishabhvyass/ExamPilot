@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ExamPilot reference — 01-splash-animated</title>
+<!-- Static snapshot of the design prototype (Intro.dc.html) in its first state. Reference only: rebuild as React components. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+body{margin:0;background:#FFFFFF}
+a{color:#1B1B1F}a:hover{color:#000000}
+.bloom{opacity:0;transform:scale(.6);animation:bloom 900ms cubic-bezier(.2,.9,.25,1.08) forwards}
+.ring{opacity:0;transform:scale(.85);animation:ring 1100ms cubic-bezier(.2,.8,.2,1) forwards}
+.orbit{animation:orbit 14s linear infinite}
+.mark path{stroke-dasharray:60;stroke-dashoffset:60;animation:draw 700ms 500ms cubic-bezier(.6,0,.2,1) forwards}
+.markbg{opacity:0;transform:scale(.7);animation:bloom 500ms 300ms cubic-bezier(.2,.9,.25,1.1) forwards}
+.letter{display:inline-block;opacity:0;transform:translateY(22px);animation:letter 600ms cubic-bezier(.05,.7,.1,1) forwards}
+.fade{opacity:0;animation:fade 600ms cubic-bezier(.05,.7,.1,1) forwards}
+.bar{transform:scaleX(0);transform-origin:left;animation:bar 1500ms 400ms cubic-bezier(.4,0,.2,1) forwards}
+.press{transition:transform 140ms cubic-bezier(.2,0,0,1),box-shadow 200ms ease}
+.press:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(27,27,31,.22)}
+.press:active{transform:scale(.97)}
+@keyframes bloom{to{opacity:1;transform:scale(1)}}
+@keyframes ring{to{opacity:1;transform:scale(1)}}
+@keyframes orbit{to{transform:rotate(360deg)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes letter{to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes bar{to{transform:scaleX(1)}}
+a:focus-visible,button:focus-visible{outline:3px solid #1B1B1F;outline-offset:3px}
+@media (prefers-reduced-motion: reduce){.bloom,.ring,.markbg,.letter,.fade{opacity:1;transform:none;animation:none}.orbit{animation:none}.mark path{stroke-dashoffset:0;animation:none}.bar{transform:none;animation:none}.press{transition:none}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+
+</style>
+</head>
+<body>
+
+
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box">
+
+<div style="position: absolute; inset: 0; display: flex; flex-direction: column; padding: 64px 24px 40px; box-sizing: border-box">
+
+<div style="display: flex; justify-content: flex-end">
+<button type="button" class="press" style="height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.8); background: rgba(255,255,255,0.5); font: inherit; font-size: 14px; font-weight: 600; color: #1E3A8A; cursor: pointer">Replay</button>
+</div>
+
+<div aria-hidden="true" style="position: relative; flex: 1">
+<span class="ring" style="position: absolute; left: 50%; top: 46%; width: 320px; height: 320px; margin: -160px 0 0 -160px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.7)"></span>
+<span class="ring" style="position: absolute; left: 50%; top: 46%; width: 220px; height: 220px; margin: -110px 0 0 -110px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.5); animation-delay: 120ms"></span>
+<div class="orbit" style="position: absolute; left: 50%; top: 46%; width: 320px; height: 320px; margin: -160px 0 0 -160px">
+<span class="bloom" style="position: absolute; left: 148px; top: -10px; width: 22px; height: 22px; border-radius: 999px; background: #FFFFFF; animation-delay: 700ms"></span>
+<span class="bloom" style="position: absolute; left: 10px; top: 210px; width: 14px; height: 14px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  animation-delay: 820ms"></span>
+</div>
+<span class="bloom" style="position: absolute; left: 70px; top: 120px; width: 130px; height: 130px; border-radius: 999px; background: #3B82F6"></span>
+<span class="bloom" style="position: absolute; left: 172px; top: 168px; width: 118px; height: 118px; border-radius: 999px; background: #DDD0FF; animation-delay: 140ms"></span>
+<span class="bloom" style="position: absolute; left: 112px; top: 236px; width: 96px; height: 96px; border-radius: 999px; background: #BBF0D3; animation-delay: 280ms"></span>
+<span class="markbg" style="position: absolute; left: 155px; top: 190px; width: 80px; height: 80px; border-radius: 28px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  display: flex; align-items: center; justify-content: center">
+<svg class="mark" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7-7 18-2.5-8.5z"></path></svg>
+</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h1 aria-label="ExamPilot" style="margin: 0; font-weight: 600; font-size: 60px; line-height: 1; letter-spacing: -0.04em; display: flex">
+<span class="letter" aria-hidden="true" style="animation-delay: 700ms">E</span><span class="letter" aria-hidden="true" style="animation-delay: 745ms">x</span><span class="letter" aria-hidden="true" style="animation-delay: 790ms">a</span><span class="letter" aria-hidden="true" style="animation-delay: 835ms">m</span><span class="letter" aria-hidden="true" style="animation-delay: 880ms">P</span><span class="letter" aria-hidden="true" style="animation-delay: 925ms">i</span><span class="letter" aria-hidden="true" style="animation-delay: 970ms">l</span><span class="letter" aria-hidden="true" style="animation-delay: 1015ms">o</span><span class="letter" aria-hidden="true" style="animation-delay: 1060ms">t</span>
+</h1>
+<p class="fade" style="margin: 0; font-size: 19px; line-height: 1.5; color: #1E3A8A; animation-delay: 1200ms">Study calm. Exam ready.<br>One topic at a time.</p>
+<div aria-hidden="true" style="height: 4px; border-radius: 999px; background: rgba(255,255,255,0.6); overflow: hidden; margin-top: 6px">
+<span class="bar" style="display: block; height: 100%; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); "></span>
+</div>
+<a class="fade press" href="Login.dc.html" style="animation-delay: 1700ms; margin-top: 12px; display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 8px 0 28px; border-radius: 999px; color: #111113; text-decoration: none; font-size: 18px; font-weight: 600; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07);">
+Let's begin
+<span style="width: 48px; height: 48px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); color: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+</a>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

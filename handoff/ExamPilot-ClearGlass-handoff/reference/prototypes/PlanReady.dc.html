@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ExamPilot — Plan ready</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#1B1B1F}a:hover{color:#000000}
+.press{transition:transform 140ms cubic-bezier(.2,0,0,1),background-color 160ms ease}
+.press:hover{transform:translateY(-1px)}
+.press:active{transform:scale(.97)}
+.burst{position:absolute;left:50%;top:50%;border-radius:999px;opacity:0;animation:burst 1100ms cubic-bezier(.15,.8,.3,1) forwards}
+.badge{animation:badge 700ms cubic-bezier(.2,.9,.25,1.25) both}
+.tick path{stroke-dasharray:30;stroke-dashoffset:30;animation:draw 420ms 380ms ease-out forwards}
+.fadeup{animation:fadeup 460ms cubic-bezier(.05,.7,.1,1) both}
+.grow{transform-origin:left;animation:grow 600ms cubic-bezier(.2,.8,.2,1) both}
+@keyframes burst{0%{opacity:1;transform:translate(-50%,-50%) scale(.4)}70%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1)}}
+@keyframes badge{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+button:focus-visible,a:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.burst{display:none}.tick path{stroke-dashoffset:0}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+</style>
+</helmet>
+<div style="width: 390px; height: 1000px; position: relative; overflow: hidden; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box">
+<main style="padding: 60px 24px 32px; display: flex; flex-direction: column; gap: 16px">
+
+<div style="display: flex; align-items: center; gap: 14px">
+<div style="flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px" aria-hidden="true">
+<span style="height: 6px; border-radius: 999px; background: #151517; "></span>
+<span style="height: 6px; border-radius: 999px; background: #151517; "></span>
+<span class="grow" style="height: 6px; border-radius: 999px; background: #151517; "></span>
+</div>
+<span style="font-size: 14px; font-weight: 600; color: #5B6475">All set</span>
+</div>
+
+<div aria-hidden="true" style="position: relative; height: 150px">
+<sc-for list="{{pieces}}" as="p" hint-placeholder-count="14"><span class="burst" style="{{p.style}}"></span></sc-for>
+<span class="badge" style="position: absolute; left: 50%; top: 50%; width: 104px; height: 104px; margin: -52px 0 0 -52px; border-radius: 36px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  display: flex; align-items: center; justify-content: center">
+<svg class="tick" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+</span>
+</div>
+
+<header class="fadeup" style="display: flex; flex-direction: column; gap: 8px; text-align: center; animation-delay: 300ms">
+<h1 style="margin: 0; font-weight: 600; font-size: 40px; line-height: 1.05; letter-spacing: -0.03em">Your plan is ready</h1>
+<p style="margin: 0; font-size: 17px; line-height: 1.5; color: #5B6475">Built around your three exams, with lighter days right before each one.</p>
+</header>
+
+<div class="fadeup" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; animation-delay: 420ms">
+<div style="background: linear-gradient(160deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%), #DCEBFF; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(255,255,255,.6), 0 12px 30px rgba(15,23,42,.06); border-radius: 26px; padding: 14px; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 34px; font-weight: 600; line-height: 1">3</span><span style="font-size: 14px; color: #1E40AF">exams</span></div>
+<div style="background: linear-gradient(160deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%), #EDE5FF; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(255,255,255,.6), 0 12px 30px rgba(15,23,42,.06); border-radius: 26px; padding: 14px; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 34px; font-weight: 600; line-height: 1">11</span><span style="font-size: 14px; color: #5B21B6">sessions</span></div>
+<div style="background: linear-gradient(160deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%), #D9F5E6; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(255,255,255,.6), 0 12px 30px rgba(15,23,42,.06); border-radius: 26px; padding: 14px; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 34px; font-weight: 600; line-height: 1">2.5h</span><span style="font-size: 14px; color: #065F46">a day</span></div>
+</div>
+
+<section aria-label="This week" style="background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); border-radius: 34px; padding: 18px 16px; display: flex; flex-direction: column; gap: 4px">
+<sc-for list="{{days}}" as="d" hint-placeholder-count="6">
+<div class="fadeup" style="display: flex; align-items: center; gap: 12px; padding: 8px 2px; animation-delay: {{d.delay}}">
+<span style="flex: none; width: 48px; display: flex; flex-direction: column; align-items: center; line-height: 1.1"><span style="font-size: 12px; font-weight: 600; color: #6B7385">{{d.wd}}</span><span style="font-size: 20px; font-weight: 700">{{d.n}}</span></span>
+<span style="flex: 1; display: flex; gap: 6px; flex-wrap: wrap">
+<sc-for list="{{d.items}}" as="i" hint-placeholder-count="2">
+<sc-if value="{{i.examSE}}" hint-placeholder-val="{{false}}"><span style="height: 32px; padding: 0 12px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  color: #FFFFFF; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600"><span style="width: 8px; height: 8px; border-radius: 999px; background: #A9C9FF"></span>SE exam · 2 PM</span></sc-if>
+<sc-if value="{{i.examDAA}}" hint-placeholder-val="{{false}}"><span style="height: 32px; padding: 0 12px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  color: #FFFFFF; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600"><span style="width: 8px; height: 8px; border-radius: 999px; background: #DDD0FF"></span>DAA exam · 2 PM</span></sc-if>
+<sc-if value="{{i.examDDS}}" hint-placeholder-val="{{false}}"><span style="height: 32px; padding: 0 12px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  color: #FFFFFF; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600"><span style="width: 8px; height: 8px; border-radius: 999px; background: #BBF0D3"></span>DDS exam · 2 PM</span></sc-if>
+<sc-if value="{{i.studySE}}" hint-placeholder-val="{{true}}"><span style="height: 32px; padding: 0 12px; border-radius: 999px; background: #DCEBFF; color: #1E3A8A; display: flex; align-items: center; font-size: 13px; font-weight: 600">SE · {{i.h}}</span></sc-if>
+<sc-if value="{{i.studyDAA}}" hint-placeholder-val="{{false}}"><span style="height: 32px; padding: 0 12px; border-radius: 999px; background: #EDE5FF; color: #5B21B6; display: flex; align-items: center; font-size: 13px; font-weight: 600">DAA · {{i.h}}</span></sc-if>
+<sc-if value="{{i.studyDDS}}" hint-placeholder-val="{{false}}"><span style="height: 32px; padding: 0 12px; border-radius: 999px; background: #D9F5E6; color: #065F46; display: flex; align-items: center; font-size: 13px; font-weight: 600">DDS · {{i.h}}</span></sc-if>
+</sc-for>
+</span>
+</div>
+</sc-for>
+</section>
+
+<a class="press fadeup" href="Main.dc.html" style="animation-delay: 900ms; display: flex; align-items: center; justify-content: space-between; height: 62px; padding: 0 8px 0 28px; border-radius: 999px; color: #111113; text-decoration: none; font-size: 18px; font-weight: 600; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07);">Open my plan<span style="width: 46px; height: 46px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); color: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a>
+<a class="press fadeup" href="Assistant.dc.html" style="animation-delay: 980ms; display: flex; align-items: center; justify-content: center; gap: 8px; height: 56px; border-radius: 999px; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); color: #1B1B1F; text-decoration: none; font-size: 16px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z"></path></svg>Adjust with study assistant</a>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var colors = ['#3B82F6', '#DDD0FF', '#BBF0D3', '#1B1B1F', '#FFFFFF', '#C7DCFF', '#CDBBFF'];
+    var pieces = [];
+    for (var i = 0; i < 14; i++) {
+      var a = (i / 14) * Math.PI * 2;
+      var r = 110 + (i % 3) * 22;
+      var size = 8 + (i % 4) * 4;
+      pieces.push({ style: 'width:' + size + 'px;height:' + size + 'px;background:' + colors[i % colors.length] + ';--x:' + Math.round(Math.cos(a) * r) + 'px;--y:' + Math.round(Math.sin(a) * r * 0.55) + 'px;animation-delay:' + (150 + (i % 5) * 40) + 'ms' });
+    }
+    var raw = [
+      { wd: 'SUN', n: 18, items: [['SE', '1.5h'], ['DAA', '1h']] },
+      { wd: 'MON', n: 19, items: [['SE', '1.5h'], ['DAA', '1.5h']] },
+      { wd: 'TUE', n: 20, items: [['SE', '1h'], ['DAA', '1.5h']] },
+      { wd: 'WED', n: 21, items: [['xSE'], ['DAA', '1h']] },
+      { wd: 'THU', n: 22, items: [['xDAA'], ['DDS', '1h']] },
+      { wd: 'FRI', n: 23, items: [['xDDS']] }
+    ];
+    var days = raw.map(function (d, di) {
+      return {
+        wd: d.wd, n: d.n, delay: (520 + di * 70) + 'ms',
+        items: d.items.map(function (it) {
+          var c = it[0];
+          return { h: it[1] || '', examSE: c === 'xSE', examDAA: c === 'xDAA', examDDS: c === 'xDDS', studySE: c === 'SE', studyDAA: c === 'DAA', studyDDS: c === 'DDS' };
+        })
+      };
+    });
+    return { pieces: pieces, days: days };
+  }
+}
+</script>
+</body>
+</html>

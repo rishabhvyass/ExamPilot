@@ -1,3 +1,4 @@
+import { useIsFocused } from "@react-navigation/native";
 // QuickAddMenu — board M4. A glossy black + (64px) above the tab bar, bottom-right.
 // Tap: the whole screen blurs behind a white veil, the actions fly out of the button one after another
 // (last item first), and the + rotates 45° into ×. Tap the veil or × (or Android back) to close.
@@ -5,7 +6,7 @@
 // iOS: live BlurView veil (intensity 40). Android: a white 82% veil (no live blur — cheaper, reads the same).
 import { useEffect, useState, type ReactNode } from "react";
 import { BackHandler, Platform, Pressable, StyleSheet, Text, View } from "react-native";
-import Animated, { FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, { FadeIn, FadeOut, useAnimatedStyle, useSharedValue, useReducedMotion, withSpring } from "react-native-reanimated";
 import { BlurView } from "../compat";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { PressableScale } from "./PressableScale";
@@ -17,8 +18,11 @@ import { color, fontFamily } from "../theme";
 export type QuickAction = { id: string; label: string; icon: ReactNode; onSelect: () => void };
 
 export function QuickAddMenu({ actions }: { actions: QuickAction[] }) {
+  const focused = useIsFocused();
+  const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
   const insets = useSafeAreaInsets();
+  useEffect(() => { if (!focused) setOpen(false); }, [focused]);
   const rot = useSharedValue(0);
   useEffect(() => {
     rot.value = withSpring(open ? 45 : 0, spring.press);
@@ -34,7 +38,7 @@ export function QuickAddMenu({ actions }: { actions: QuickAction[] }) {
       {open && (
         <Animated.View entering={FadeIn.duration(duration.veil)} exiting={FadeOut.duration(duration.veil)} style={StyleSheet.absoluteFill}>
           <Pressable style={StyleSheet.absoluteFill} onPress={() => setOpen(false)} accessibilityLabel="Close quick add">
-            {Platform.OS === "ios" ? (
+            {Platform.OS === "ios" && !reduce ? (
               <BlurView intensity={BLUR.veil} tint="light" style={[StyleSheet.absoluteFill, { backgroundColor: "rgba(255,255,255,0.55)" }]} />
             ) : (
               <View style={[StyleSheet.absoluteFill, { backgroundColor: "rgba(255,255,255,0.82)" }]} />

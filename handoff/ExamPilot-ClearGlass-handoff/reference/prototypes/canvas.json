@@ -1,0 +1,838 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "AdmitCard.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "4 · Admit card upload",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "AppIcon.dc.html": {
+      "h": 560,
+      "page": "lavender",
+      "title": "App icon & mascot",
+      "w": 620,
+      "x": 1650,
+      "y": 8084
+    },
+    "Assistant.dc.html": {
+      "h": 1160,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "11 · Study assistant",
+      "w": 390,
+      "x": 470,
+      "y": 3460
+    },
+    "BlurReader.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "M9 · Blur reader + soft buttons",
+      "w": 390,
+      "x": 2350,
+      "y": 6640
+    },
+    "Calendar.dc.html": {
+      "h": 1180,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "7 · Calendar",
+      "w": 390,
+      "x": 470,
+      "y": 1450
+    },
+    "Intro.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "1 · Animated splash",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "LiveIcons.dc.html": {
+      "h": 560,
+      "is_interactive": true,
+      "page": "lavender",
+      "title": "M7 · Live subject icons",
+      "w": 1100,
+      "x": 470,
+      "y": 8084
+    },
+    "Login.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "2 · Login",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "h": 1180,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "6 · Today",
+      "w": 390,
+      "x": 0,
+      "y": 1450
+    },
+    "Materials.dc.html": {
+      "h": 1060,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "10 · Study materials",
+      "w": 390,
+      "x": 0,
+      "y": 3460
+    },
+    "MotionIsland.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "M2 · Study island (gooey)",
+      "w": 390,
+      "x": 470,
+      "y": 6640
+    },
+    "MotionOnboarding.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "M3 · Onboarding carousel",
+      "w": 390,
+      "x": 940,
+      "y": 6640
+    },
+    "MotionPdfTools.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "M5 · PDF tools (bar → grid)",
+      "w": 390,
+      "x": 1880,
+      "y": 6640
+    },
+    "MotionQuickAdd.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "M4 · Quick add (blur menu)",
+      "w": 390,
+      "x": 1410,
+      "y": 6640
+    },
+    "MotionTabBar.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "M6 · Split tab bar",
+      "w": 390,
+      "x": 0,
+      "y": 8084
+    },
+    "MotionVerify.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "M1 · Email code (code pill)",
+      "w": 390,
+      "x": 0,
+      "y": 6640
+    },
+    "PdfReader.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "12 · PDF reader",
+      "w": 390,
+      "x": 940,
+      "y": 3460
+    },
+    "PlanReady.dc.html": {
+      "h": 1000,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "5 · Plan generated",
+      "w": 390,
+      "x": 1880,
+      "y": 0
+    },
+    "Profile.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "3 · Your details",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "Questions.dc.html": {
+      "h": 1440,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "9 · Questions",
+      "w": 390,
+      "x": 1410,
+      "y": 1450
+    },
+    "SkyAdmit.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "6 · Admit card",
+      "w": 390,
+      "x": 2350,
+      "y": 0
+    },
+    "SkyAppIcon.dc.html": {
+      "h": 720,
+      "is_interactive": true,
+      "page": "sky",
+      "title": "App icon · 3D Pilo",
+      "w": 1120,
+      "x": 0,
+      "y": 5020
+    },
+    "SkyAssistant.dc.html": {
+      "h": 1160,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "13 · Study assistant",
+      "w": 390,
+      "x": 470,
+      "y": 3500
+    },
+    "SkyBtn3D.dc.html": {
+      "h": 90,
+      "is_interactive": true,
+      "page": "sky",
+      "title": "Component · 3D button",
+      "w": 358,
+      "x": 1410,
+      "y": 3500
+    },
+    "SkyCalendar.dc.html": {
+      "h": 1240,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "9 · Calendar",
+      "w": 390,
+      "x": 470,
+      "y": 1450
+    },
+    "SkyDetails.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "5 · Your details",
+      "w": 390,
+      "x": 1880,
+      "y": 0
+    },
+    "SkyLanding.dc.html": {
+      "h": 2300,
+      "is_interactive": true,
+      "page": "sky",
+      "title": "Web · Landing page",
+      "w": 1440,
+      "x": 0,
+      "y": 6400
+    },
+    "SkyLogin.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "3 · Login",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "SkyMaterials.dc.html": {
+      "h": 1000,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "12 · Study materials",
+      "w": 390,
+      "x": 0,
+      "y": 3500
+    },
+    "SkyOnboarding.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "2 · Onboarding",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "SkyPdf.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "14 · PDF reader",
+      "w": 390,
+      "x": 940,
+      "y": 3500
+    },
+    "SkyPlan.dc.html": {
+      "h": 1000,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "7 · Plan ready",
+      "w": 390,
+      "x": 2820,
+      "y": 0
+    },
+    "SkyQuestions.dc.html": {
+      "h": 1400,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "11 · Questions",
+      "w": 390,
+      "x": 1410,
+      "y": 1450
+    },
+    "SkySplash.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "1 · Splash — sky cycle",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "SkySubjects.dc.html": {
+      "h": 1500,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "10 · Subjects",
+      "w": 390,
+      "x": 940,
+      "y": 1450
+    },
+    "SkyTabBar.dc.html": {
+      "h": 90,
+      "is_interactive": true,
+      "page": "sky",
+      "title": "Component · Split tab bar",
+      "w": 390,
+      "x": 1410,
+      "y": 3670
+    },
+    "SkyToday.dc.html": {
+      "h": 1700,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "8 · Today",
+      "w": 390,
+      "x": 0,
+      "y": 1450
+    },
+    "SkyTokens.dc.html": {
+      "h": 1000,
+      "page": "sky",
+      "title": "Design system · Sky Glass",
+      "w": 1620,
+      "x": 1200,
+      "y": 5020
+    },
+    "SkyVerify.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "sky",
+      "radius": 44,
+      "title": "4 · Verify email",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "Splash.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "Earlier splash (static)",
+      "w": 390,
+      "x": 1848,
+      "y": 3460
+    },
+    "StudyBlockPicker.dc.html": {
+      "h": 700,
+      "is_interactive": true,
+      "page": "lavender",
+      "title": "M8 · Study block picker (range)",
+      "w": 700,
+      "x": 470,
+      "y": 8764
+    },
+    "SubjectHero.dc.html": {
+      "h": 330,
+      "page": "lavender",
+      "radius": 34,
+      "title": "Component · Subject hero",
+      "w": 358,
+      "x": 1410,
+      "y": 3460
+    },
+    "Subjects.dc.html": {
+      "h": 1560,
+      "is_interactive": true,
+      "page": "lavender",
+      "radius": 44,
+      "title": "8 · Subjects",
+      "w": 390,
+      "x": 940,
+      "y": 1450
+    },
+    "Tokens.dc.html": {
+      "h": 1120,
+      "page": "lavender",
+      "title": "Design system — Clear Glass",
+      "w": 2270,
+      "x": 0,
+      "y": 5070
+    },
+    "V3AppIcon.dc.html": {
+      "h": 720,
+      "is_interactive": true,
+      "page": "aurora",
+      "title": "App icon · Pilo blob",
+      "w": 1120,
+      "x": 0,
+      "y": 5400
+    },
+    "V3Assistant.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "aurora",
+      "radius": 44,
+      "title": "10 · Ask Pilo",
+      "w": 390,
+      "x": 470,
+      "y": 4150
+    },
+    "V3Button.dc.html": {
+      "h": 80,
+      "is_interactive": true,
+      "page": "aurora",
+      "title": "Component · water button",
+      "w": 358,
+      "x": 1410,
+      "y": 4320
+    },
+    "V3Calendar.dc.html": {
+      "h": 1100,
+      "is_interactive": true,
+      "page": "aurora",
+      "radius": 44,
+      "title": "6 · Calendar — range picker",
+      "w": 390,
+      "x": 470,
+      "y": 2300
+    },
+    "V3Landing.dc.html": {
+      "h": 2600,
+      "is_interactive": true,
+      "page": "aurora",
+      "title": "Web · Landing page",
+      "w": 1440,
+      "x": 0,
+      "y": 6800
+    },
+    "V3Materials.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "page": "aurora",
+      "radius": 44,
+      "title": "9 · Materials",
+      "w": 390,
+      "x": 0,
+      "y": 4150
+    },
+    "V3Onboarding.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "aurora",
+      "radius": 44,
+      "title": "3 · Onboarding cards",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "V3Pdf.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "aurora",
+      "radius": 44,
+      "title": "11 · PDF reader",
+      "w": 390,
+      "x": 940,
+      "y": 4150
+    },
+    "V3Questions.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "aurora",
+      "radius": 44,
+      "title": "8 · Questions — swipe cards",
+      "w": 390,
+      "x": 1410,
+      "y": 2300
+    },
+    "V3Setup.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "aurora",
+      "radius": 44,
+      "title": "4 · Setup flow (interactive)",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "V3SetupStrip.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "aurora",
+      "title": "4a · Setup steps, side by side",
+      "w": 2190,
+      "x": 0,
+      "y": 1100
+    },
+    "V3Splash.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "aurora",
+      "radius": 44,
+      "title": "1 · Splash — painted lens",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "V3Subjects.dc.html": {
+      "h": 1300,
+      "is_interactive": true,
+      "page": "aurora",
+      "radius": 44,
+      "title": "7 · Subjects",
+      "w": 390,
+      "x": 940,
+      "y": 2300
+    },
+    "V3TabBar.dc.html": {
+      "h": 100,
+      "is_interactive": true,
+      "page": "aurora",
+      "title": "Component · tab bar",
+      "w": 390,
+      "x": 1410,
+      "y": 4150
+    },
+    "V3Today.dc.html": {
+      "h": 1500,
+      "is_interactive": true,
+      "page": "aurora",
+      "radius": 44,
+      "title": "5 · Today",
+      "w": 390,
+      "x": 0,
+      "y": 2300
+    },
+    "V3Tokens.dc.html": {
+      "h": 1000,
+      "page": "aurora",
+      "title": "Design system · Water Glass",
+      "w": 1620,
+      "x": 1200,
+      "y": 5400
+    },
+    "V3Welcome.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "aurora",
+      "radius": 44,
+      "title": "2 · Welcome — rolling words",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-18T05:05:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "page": "aurora",
+    "view": "canvas"
+  },
+  "notes": {
+    "au0": {
+      "kind": "title1",
+      "maxW": 2190,
+      "page": "aurora",
+      "text": "1 · Getting started",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "au1": {
+      "kind": "title1",
+      "maxW": 2190,
+      "page": "aurora",
+      "text": "Setup flow — every step",
+      "w": 240,
+      "x": 0,
+      "y": 860
+    },
+    "au2": {
+      "kind": "title1",
+      "maxW": 2190,
+      "page": "aurora",
+      "text": "2 · Daily app — four tabs",
+      "w": 240,
+      "x": 0,
+      "y": 2060
+    },
+    "au3": {
+      "kind": "title1",
+      "maxW": 2190,
+      "page": "aurora",
+      "text": "3 · Study tools + components",
+      "w": 240,
+      "x": 0,
+      "y": 3910
+    },
+    "au4": {
+      "kind": "title1",
+      "maxW": 2190,
+      "page": "aurora",
+      "text": "4 · Icon & design system",
+      "w": 240,
+      "x": 0,
+      "y": 5160
+    },
+    "au5": {
+      "kind": "title1",
+      "maxW": 2190,
+      "page": "aurora",
+      "text": "5 · Web",
+      "w": 240,
+      "x": 0,
+      "y": 6560
+    },
+    "rowA": {
+      "kind": "title1",
+      "maxW": 2270,
+      "page": "lavender",
+      "text": "1 · Getting started",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "rowB": {
+      "kind": "title1",
+      "maxW": 1800,
+      "page": "lavender",
+      "text": "2 · Daily app — four tabs",
+      "w": 240,
+      "x": 0,
+      "y": 1150
+    },
+    "rowC": {
+      "kind": "title1",
+      "maxW": 2238,
+      "page": "lavender",
+      "text": "3 · Study tools",
+      "w": 240,
+      "x": 0,
+      "y": 3160
+    },
+    "rowD": {
+      "kind": "title1",
+      "maxW": 2270,
+      "page": "lavender",
+      "text": "4 · Design system",
+      "w": 240,
+      "x": 0,
+      "y": 4770
+    },
+    "rowE": {
+      "kind": "title1",
+      "maxW": 2270,
+      "page": "lavender",
+      "text": "5 · Motion lab — from your references",
+      "w": 240,
+      "x": 0,
+      "y": 6340
+    },
+    "rowF": {
+      "kind": "title1",
+      "maxW": 2270,
+      "page": "lavender",
+      "text": "6 · Live icons, app icon & study block",
+      "w": 240,
+      "x": 0,
+      "y": 7784
+    },
+    "skyA": {
+      "kind": "title1",
+      "maxW": 3210,
+      "page": "sky",
+      "text": "1 · Welcome & setup",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "skyB": {
+      "kind": "title1",
+      "maxW": 1800,
+      "page": "sky",
+      "text": "2 · Daily app — four tabs",
+      "w": 240,
+      "x": 0,
+      "y": 1150
+    },
+    "skyC": {
+      "kind": "title1",
+      "maxW": 1800,
+      "page": "sky",
+      "text": "3 · Study tools & components",
+      "w": 240,
+      "x": 0,
+      "y": 3200
+    },
+    "skyD": {
+      "kind": "title1",
+      "maxW": 2820,
+      "page": "sky",
+      "text": "4 · Brand",
+      "w": 240,
+      "x": 0,
+      "y": 4720
+    },
+    "skyE": {
+      "kind": "title1",
+      "maxW": 1440,
+      "page": "sky",
+      "text": "5 · Web",
+      "w": 240,
+      "x": 0,
+      "y": 6100
+    }
+  },
+  "order": [
+    "SkySplash.dc.html",
+    "SkyOnboarding.dc.html",
+    "SkyLogin.dc.html",
+    "SkyVerify.dc.html",
+    "SkyDetails.dc.html",
+    "SkyAdmit.dc.html",
+    "SkyPlan.dc.html",
+    "SkyToday.dc.html",
+    "SkyCalendar.dc.html",
+    "SkySubjects.dc.html",
+    "SkyQuestions.dc.html",
+    "SkyMaterials.dc.html",
+    "SkyAssistant.dc.html",
+    "SkyPdf.dc.html",
+    "SkyBtn3D.dc.html",
+    "SkyTabBar.dc.html",
+    "SkyAppIcon.dc.html",
+    "SkyTokens.dc.html",
+    "SkyLanding.dc.html",
+    "V3Splash.dc.html",
+    "V3Welcome.dc.html",
+    "V3Onboarding.dc.html",
+    "V3Setup.dc.html",
+    "V3SetupStrip.dc.html",
+    "V3Today.dc.html",
+    "V3Calendar.dc.html",
+    "V3Subjects.dc.html",
+    "V3Questions.dc.html",
+    "V3Materials.dc.html",
+    "V3Assistant.dc.html",
+    "V3Pdf.dc.html",
+    "V3TabBar.dc.html",
+    "V3Button.dc.html",
+    "V3AppIcon.dc.html",
+    "V3Tokens.dc.html",
+    "V3Landing.dc.html",
+    "Intro.dc.html",
+    "Login.dc.html",
+    "Profile.dc.html",
+    "AdmitCard.dc.html",
+    "PlanReady.dc.html",
+    "Main.dc.html",
+    "Calendar.dc.html",
+    "Subjects.dc.html",
+    "Questions.dc.html",
+    "Materials.dc.html",
+    "Assistant.dc.html",
+    "PdfReader.dc.html",
+    "SubjectHero.dc.html",
+    "Splash.dc.html",
+    "Tokens.dc.html",
+    "MotionVerify.dc.html",
+    "MotionIsland.dc.html",
+    "MotionOnboarding.dc.html",
+    "MotionQuickAdd.dc.html",
+    "MotionPdfTools.dc.html",
+    "MotionTabBar.dc.html",
+    "LiveIcons.dc.html",
+    "AppIcon.dc.html",
+    "StudyBlockPicker.dc.html",
+    "BlurReader.dc.html"
+  ],
+  "pages": [
+    {
+      "id": "aurora",
+      "name": "v3 · Water Glass (current)"
+    },
+    {
+      "id": "sky",
+      "name": "v2 · Sky Glass (archive)"
+    },
+    {
+      "id": "lavender",
+      "name": "v1 · Clear Glass (current)"
+    }
+  ],
+  "title": "ExamPilot"
+}

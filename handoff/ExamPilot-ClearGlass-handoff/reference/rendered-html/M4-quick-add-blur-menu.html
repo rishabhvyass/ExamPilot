@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ExamPilot reference — M4-quick-add-blur-menu</title>
+<!-- Static snapshot of the design prototype (MotionQuickAdd.dc.html) in its first state. Reference only: rebuild as React components. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+body{margin:0;background:#FFFFFF}
+a{color:#1B1B1F}a:hover{color:#000000}
+.fab{transition:transform 260ms cubic-bezier(.2,.9,.25,1.2),opacity 180ms ease}
+.fab:hover{transform:translateY(-2px)}
+.fab:active{transform:scale(.92)}
+.veil{animation:veil 200ms ease-out both}
+.veil.out{animation:veilout 180ms ease-in both}
+.item{transform-origin:100% 100%;animation:itemin 440ms cubic-bezier(.2,.9,.25,1.25) both}
+.item.out{animation:itemout 160ms cubic-bezier(.4,0,1,1) both}
+.row{transition:transform 140ms cubic-bezier(.2,0,0,1)}
+.row:hover{transform:translateX(-3px)}
+.row:active{transform:scale(.96)}
+.toast{animation:toast 2.2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes veil{from{opacity:0}to{opacity:1}}
+@keyframes veilout{from{opacity:1}to{opacity:0}}
+@keyframes itemin{0%{opacity:0;transform:translate(14px,26px) scale(.3);filter:blur(4px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:none}}
+@keyframes itemout{from{opacity:1;transform:none}to{opacity:0;transform:translate(10px,18px) scale(.4);filter:blur(3px)}}
+@keyframes toast{0%{opacity:0;transform:translateY(-14px) scale(.96)}12%{opacity:1;transform:none}85%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px)}}
+button:focus-visible,a:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){.item,.item.out,.veil,.veil.out{animation-duration:1ms!important;animation-delay:0ms!important}.fab,.row{transition:none}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+
+</style>
+</head>
+<body>
+
+
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box">
+
+<main style="padding: 60px 20px 0; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span aria-hidden="true" style="width: 56px; height: 56px; border-radius: 999px; background: #DCEBFF; color: #1E3A8A; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
+<span style="width: 56px; height: 56px; border-radius: 999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></span>
+</div>
+<span style="font-size: 20px; font-weight: 500; color: #5B6475; padding: 10px 4px 0">Good morning</span>
+<h1 style="margin: 0 4px; font-weight: 600; font-size: 46px; line-height: 1.02; letter-spacing: -0.03em">Your Exam<br>Week</h1>
+<section style="background: linear-gradient(160deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%), #DCEBFF; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(255,255,255,.6), 0 12px 30px rgba(15,23,42,.06); border-radius: 34px; padding: 8px">
+<div style="padding: 16px 16px 14px"><span style="font-size: 14px; font-weight: 600; color: #1E40AF">Next exam</span><h2 style="margin: 4px 0 0; font-size: 26px; font-weight: 600; letter-spacing: -0.02em">Software Engineering</h2><span style="font-size: 15px; color: #1E40AF">Wednesday, 21 October at 2:00 PM</span></div>
+<div style="height: 130px; border-radius: 28px; background: #BFD6FF; display: flex; overflow: hidden"><div style="width: 92px; padding: 16px 0 0 20px; border-right: 1px solid rgba(30,58,138,.18)"><span style="font-size: 14px; color: #1E40AF">Days</span><div style="font-size: 50px; font-weight: 600; line-height: 1">3</div></div><div style="flex: 1; position: relative"><span style="position: absolute; left: 30px; top: -20px; width: 110px; height: 110px; border-radius: 999px; background: #3B82F6"></span><span style="position: absolute; left: 110px; top: 50px; width: 90px; height: 90px; border-radius: 999px; background: #DDD0FF"></span></div></div>
+</section>
+<div style="display: flex; align-items: center; gap: 14px; background: #EDE5FF; border-radius: 999px; padding: 8px 20px 8px 8px"><span style="width: 52px; height: 52px; border-radius: 999px; background: #CDBBFF; color: #5B21B6; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">DAA</span><span style="display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">Algorithms</span><span style="font-size: 14px; color: #5B21B6">Thursday, 22 Oct · 2:00 PM</span></span></div>
+<div style="display: flex; align-items: center; gap: 14px; background: #D9F5E6; border-radius: 999px; padding: 8px 20px 8px 8px"><span style="width: 52px; height: 52px; border-radius: 999px; background: #9EE6C0; color: #065F46; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">DDS</span><span style="display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">Data Structures</span><span style="font-size: 14px; color: #065F46">Friday, 23 Oct · 2:00 PM</span></span></div>
+<div style="height: 160px; border-radius: 34px; background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); padding: 20px; box-sizing: border-box"><span style="font-size: 22px; font-weight: 600">Today’s revision</span><div style="margin-top: 14px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px"><span style="height: 8px; border-radius: 999px; background: #151517; "></span><span style="height: 8px; border-radius: 999px; background: #151517; "></span><span style="height: 8px; border-radius: 999px; background: #EEF0F4"></span><span style="height: 8px; border-radius: 999px; background: #EEF0F4"></span></div></div>
+</main>
+
+
+
+
+
+<button type="button" class="fab" aria-label="Quick add" aria-expanded="false" style="position: absolute; right: 24px; bottom: 40px; width: 60px; height: 60px; border-radius: 999px; border: 0; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 12px 28px rgba(27,27,31,.3); z-index: 5; transform: none; opacity: 1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+
+</body>
+</html>

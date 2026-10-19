@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ExamPilot — Quick add</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#1B1B1F}a:hover{color:#000000}
+.fab{transition:transform 260ms cubic-bezier(.2,.9,.25,1.2),opacity 180ms ease}
+.fab:hover{transform:translateY(-2px)}
+.fab:active{transform:scale(.92)}
+.veil{animation:veil 200ms ease-out both}
+.veil.out{animation:veilout 180ms ease-in both}
+.item{transform-origin:100% 100%;animation:itemin 440ms cubic-bezier(.2,.9,.25,1.25) both}
+.item.out{animation:itemout 160ms cubic-bezier(.4,0,1,1) both}
+.row{transition:transform 140ms cubic-bezier(.2,0,0,1)}
+.row:hover{transform:translateX(-3px)}
+.row:active{transform:scale(.96)}
+.toast{animation:toast 2.2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes veil{from{opacity:0}to{opacity:1}}
+@keyframes veilout{from{opacity:1}to{opacity:0}}
+@keyframes itemin{0%{opacity:0;transform:translate(14px,26px) scale(.3);filter:blur(4px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:none}}
+@keyframes itemout{from{opacity:1;transform:none}to{opacity:0;transform:translate(10px,18px) scale(.4);filter:blur(3px)}}
+@keyframes toast{0%{opacity:0;transform:translateY(-14px) scale(.96)}12%{opacity:1;transform:none}85%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-8px)}}
+button:focus-visible,a:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){.item,.item.out,.veil,.veil.out{animation-duration:1ms!important;animation-delay:0ms!important}.fab,.row{transition:none}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box">
+
+<main style="padding: 60px 20px 0; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span aria-hidden="true" style="width: 56px; height: 56px; border-radius: 999px; background: #DCEBFF; color: #1E3A8A; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
+<span style="width: 56px; height: 56px; border-radius: 999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></span>
+</div>
+<span style="font-size: 20px; font-weight: 500; color: #5B6475; padding: 10px 4px 0">Good morning</span>
+<h1 style="margin: 0 4px; font-weight: 600; font-size: 46px; line-height: 1.02; letter-spacing: -0.03em">Your Exam<br>Week</h1>
+<section style="background: linear-gradient(160deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%), #DCEBFF; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(255,255,255,.6), 0 12px 30px rgba(15,23,42,.06); border-radius: 34px; padding: 8px">
+<div style="padding: 16px 16px 14px"><span style="font-size: 14px; font-weight: 600; color: #1E40AF">Next exam</span><h2 style="margin: 4px 0 0; font-size: 26px; font-weight: 600; letter-spacing: -0.02em">Software Engineering</h2><span style="font-size: 15px; color: #1E40AF">Wednesday, 21 October at 2:00 PM</span></div>
+<div style="height: 130px; border-radius: 28px; background: #BFD6FF; display: flex; overflow: hidden"><div style="width: 92px; padding: 16px 0 0 20px; border-right: 1px solid rgba(30,58,138,.18)"><span style="font-size: 14px; color: #1E40AF">Days</span><div style="font-size: 50px; font-weight: 600; line-height: 1">3</div></div><div style="flex: 1; position: relative"><span style="position: absolute; left: 30px; top: -20px; width: 110px; height: 110px; border-radius: 999px; background: #3B82F6"></span><span style="position: absolute; left: 110px; top: 50px; width: 90px; height: 90px; border-radius: 999px; background: #DDD0FF"></span></div></div>
+</section>
+<div style="display: flex; align-items: center; gap: 14px; background: #EDE5FF; border-radius: 999px; padding: 8px 20px 8px 8px"><span style="width: 52px; height: 52px; border-radius: 999px; background: #CDBBFF; color: #5B21B6; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">DAA</span><span style="display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">Algorithms</span><span style="font-size: 14px; color: #5B21B6">Thursday, 22 Oct · 2:00 PM</span></span></div>
+<div style="display: flex; align-items: center; gap: 14px; background: #D9F5E6; border-radius: 999px; padding: 8px 20px 8px 8px"><span style="width: 52px; height: 52px; border-radius: 999px; background: #9EE6C0; color: #065F46; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">DDS</span><span style="display: flex; flex-direction: column"><span style="font-size: 16px; font-weight: 600">Data Structures</span><span style="font-size: 14px; color: #065F46">Friday, 23 Oct · 2:00 PM</span></span></div>
+<div style="height: 160px; border-radius: 34px; background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); padding: 20px; box-sizing: border-box"><span style="font-size: 22px; font-weight: 600">Today’s revision</span><div style="margin-top: 14px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px"><span style="height: 8px; border-radius: 999px; background: #151517; "></span><span style="height: 8px; border-radius: 999px; background: #151517; "></span><span style="height: 8px; border-radius: 999px; background: #EEF0F4"></span><span style="height: 8px; border-radius: 999px; background: #EEF0F4"></span></div></div>
+</main>
+
+<sc-if value="{{showToast}}" hint-placeholder-val="{{false}}">
+<div class="toast" role="status" style="position: absolute; left: 50%; top: 60px; margin-left: -120px; width: 240px; height: 48px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18); color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 600; z-index: 9">{{toast}}</div>
+</sc-if>
+
+<sc-if value="{{mounted}}" hint-placeholder-val="{{false}}">
+<div class="veil {{outClass}}" onClick="{{close}}" style="position: absolute; inset: 0; background: rgba(255,255,255,.62); -webkit-backdrop-filter: blur(16px) saturate(1.1); backdrop-filter: blur(16px) saturate(1.1); z-index: 6"></div>
+<div role="menu" aria-label="Quick add" style="position: absolute; right: 26px; bottom: 44px; display: flex; flex-direction: column; align-items: flex-end; gap: 18px; z-index: 7">
+<sc-for list="{{items}}" as="it" hint-placeholder-count="4">
+<button type="button" role="menuitem" class="row item {{outClass}}" onClick="{{it.pick}}" style="animation-delay: {{it.delay}}; display: flex; align-items: center; gap: 14px; min-height: 48px; border: 0; background: transparent; font: inherit; color: #1B1B1F; cursor: pointer; padding: 0">
+<span style="font-size: 20px; font-weight: 600; letter-spacing: -0.01em">{{it.label}}</span>
+<span style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: {{it.color}}">
+<sc-if value="{{it.isSession}}" hint-placeholder-val="{{false}}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="4"></rect><path d="M16 3v4M8 3v4M3 10h18"></path></svg></sc-if>
+<sc-if value="{{it.isTask}}" hint-placeholder-val="{{false}}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l3 3 5-6"></path></svg></sc-if>
+<sc-if value="{{it.isUpload}}" hint-placeholder-val="{{false}}"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"></path><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"></path></svg></sc-if>
+<sc-if value="{{it.isAsk}}" hint-placeholder-val="{{true}}"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.2 5.8L20 10l-5.8 2.2L12 18l-2.2-5.8L4 10l5.8-2.2z"></path><circle cx="19" cy="18" r="2"></circle></svg></sc-if>
+</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<button type="button" class="fab" onClick="{{open}}" aria-label="Quick add" aria-expanded="{{expanded}}" style="position: absolute; right: 24px; bottom: 40px; width: 60px; height: 60px; border-radius: 999px; border: 0; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 12px 28px rgba(27,27,31,.3); z-index: 5; transform: {{fabTransform}}; opacity: {{fabOpacity}}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { phase: 'closed', toast: '', toastKey: 0 };
+  }
+  componentWillUnmount() { clearTimeout(this.t); clearTimeout(this.tt); }
+  renderVals() {
+    var s = this, ph = this.state.phase;
+    var close = function (msg) {
+      if (s.state.phase !== 'open') return;
+      s.setState({ phase: 'closing' });
+      clearTimeout(s.t);
+      s.t = setTimeout(function () { s.setState({ phase: 'closed' }); }, 200);
+      if (typeof msg === 'string') {
+        s.setState({ toast: msg, toastKey: s.state.toastKey + 1 });
+        clearTimeout(s.tt);
+        s.tt = setTimeout(function () { s.setState({ toast: '' }); }, 2200);
+      }
+    };
+    var ITEMS = [
+      { label: 'Study session', k: 'session', color: 'linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%)', msg: 'New study session' },
+      { label: 'Add a task', k: 'task', color: '#1B1B1F', msg: 'New task for today' },
+      { label: 'Upload notes', k: 'upload', color: '#7C3AED', msg: 'Upload notes' },
+      { label: 'Ask study buddy', k: 'ask', color: '#10B981', msg: 'Opening study buddy' }
+    ];
+    var n = ITEMS.length;
+    return {
+      mounted: ph !== 'closed',
+      outClass: ph === 'closing' ? 'out' : '',
+      expanded: ph === 'open' ? 'true' : 'false',
+      fabTransform: ph === 'closed' ? 'none' : 'scale(.2) rotate(45deg)',
+      fabOpacity: ph === 'closed' ? '1' : '0',
+      showToast: !!this.state.toast,
+      toast: this.state.toast,
+      items: ITEMS.map(function (it, i) {
+        return { label: it.label, color: it.color, isSession: it.k === 'session', isTask: it.k === 'task', isUpload: it.k === 'upload', isAsk: it.k === 'ask',
+          delay: (ph === 'closing' ? i * 20 : (n - 1 - i) * 45) + 'ms', pick: function () { close(it.msg); } };
+      }),
+      open: function () { if (s.state.phase === 'closed') s.setState({ phase: 'open' }); },
+      close: function () { close(); }
+    };
+  }
+}
+</script>
+</body>
+</html>

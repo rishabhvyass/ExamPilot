@@ -1,38 +1,49 @@
 # ExamPilot
 
-Calm exam-prep companion for B.Tech students, built from the design handoff.
+A calm exam-prep companion built with React Native CLI 0.88 and TypeScript.
 
-| Folder | What it is |
+| Folder | Purpose |
 |---|---|
-| `mobile/` | The app — React Native CLI 0.88 (TypeScript) |
-| `handoff/ExamPilot-design-handoff/` | Design spec, screenshots, tokens, sample data |
-| `exampilot/` | Earlier web prototype (Vite + React), kept for reference |
+| `mobile/` | iOS and Android app |
+| `server/` | AI backend |
+| `handoff/ExamPilot-ClearGlass-handoff/` | Supplied Clear Glass native kit, screenshots, prototypes and measured motion references |
+| `handoff/ExamPilot-design-handoff/` | Original design reference |
+| `exampilot/` | Earlier web prototype |
 
-## Run the app
+## Run
 
 ```sh
 cd mobile
 npm install
 cd ios && bundle install && bundle exec pod install && cd ..
-npm start          # Metro
-npm run ios        # or: npm run android
+npm start
+npm run ios       # or npm run android
 ```
 
-## Stack
-React Navigation (native stack + custom floating tab bar) · Reanimated 4 · react-native-svg (icons and illustrations from the handoff) · AsyncStorage · @react-native-documents/picker · Urbanist font bundled in `mobile/assets/fonts`.
+Rebuild the native app to pick up launcher icons and platform appearance settings. JavaScript UI changes work with Metro reload.
 
-## Code map (`mobile/src`)
-- `theme.ts` — Lavender Calm tokens (colours, type, radii, shadows)
-- `components/ui.tsx` — shared components (buttons, chips, hero card, checkbox, sheets…)
-- `components/TabBar.tsx` — floating capsule nav
-- `screens/onboarding.tsx` — splash, login, details, admit card, plan ready
-- `screens/tabs.tsx` — Today, Calendar, Subjects, Questions
-- `screens/tools.tsx` — study materials, study assistant, PDF reader
-- `data/` — types, AsyncStorage store, seed JSON
-- `lib/` — dates, plan generator, confetti
+## Clear Glass implementation
 
-## Not wired yet
-- Auth is a local mock (Firebase Auth + Google sign-in to come).
-- Admit-card reading returns the sample extraction after 2.4 s.
-- Assistant replies are canned, in the AI contract shape (`text`, `study_plan`, `chart`).
-- The PDF reader shows sample pages; picked files store metadata only.
+The app keeps its existing routes and data flows. Shared components use a white page, Urbanist typography, clay buttons, glossy ink selections, frosted cards and blue/violet/green subject palettes.
+
+- `mobile/src/theme.ts` and `src/kit/theme.ts`: existing token API and supplied native kit tokens.
+- `src/components/surface.tsx`: adapter for existing material styles; the supplied `Surface` owns gradient and shadow layers.
+- `src/kit/compat.tsx`: React Native CLI gradient, blur and haptic adapters.
+- `src/kit/motion.ts`: measured handoff timings and springs.
+- `src/components/ui.tsx`: shared controls and screen entrances that preserve child state.
+- `src/screens/`: splash, onboarding, verification, four tabs, materials, assistant and PDF reader.
+- `src/components/FocusReaderSheet.tsx`: focus reading for PDFs, notes and assistant replies; highlights are saved as notes.
+- `src/components/StudyIsland.tsx`: focus/pause/resume timer on Today.
+- `src/components/TimeRangePicker.tsx`: quarter-hour study-time range, including accessible adjustments.
+
+Firebase authentication and cloud storage, admit-card parsing, file imports and the existing AI integration remain connected. PDF notes and bookmarks persist through the existing store. The app starts with the student's data rather than automatically seeding the screenshot examples.
+
+See [the implementation and validation notes](mobile/design-review/CLEAR-GLASS.md) for platform adaptations and verification limits.
+
+## Checks
+
+```sh
+cd mobile
+npx tsc --noEmit
+npx jest --runInBand --watchman=false
+```

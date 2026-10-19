@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ExamPilot — Split tab bar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#1B1B1F}a:hover{color:#000000}
+.tab{transition:margin-left 460ms cubic-bezier(.3,1.35,.45,1),border-radius 460ms cubic-bezier(.3,1.35,.45,1),background-color 260ms ease,color 260ms ease,padding 460ms cubic-bezier(.3,1.35,.45,1),box-shadow 260ms ease,transform 140ms cubic-bezier(.2,0,0,1)}
+.tab:hover{filter:brightness(.97)}
+.tab:active{transform:scale(.95)}
+.screen{animation:screen 380ms cubic-bezier(.2,.8,.2,1) both}
+@keyframes screen{from{opacity:0;transform:translateY(10px);filter:blur(4px)}to{opacity:1;transform:none;filter:blur(0)}}
+button:focus-visible{outline:3px solid #3B82F6;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){.tab{transition:background-color 120ms ease,color 120ms ease}.screen{animation:none}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box">
+
+<sc-for list="{{tabs}}" as="sc" hint-placeholder-count="1">
+<sc-if value="{{sc.on}}" hint-placeholder-val="{{true}}">
+<main class="screen" style="padding: 60px 20px 0; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between"><span style="width: 56px; height: 56px; border-radius: 999px; background: #DCEBFF"></span><span style="width: 56px; height: 56px; border-radius: 999px; background: #FFFFFF"></span></div>
+<span style="font-size: 20px; font-weight: 500; color: #5B6475; padding: 10px 4px 0">{{sc.eyebrow}}</span>
+<h1 style="margin: 0 4px; font-weight: 600; font-size: 46px; line-height: 1.02; letter-spacing: -0.03em; white-space: pre-line">{{sc.title}}</h1>
+<div style="height: 250px; border-radius: 34px; background: {{sc.tint}}"></div>
+<div style="height: 68px; border-radius: 999px; background: #FFFFFF"></div>
+<div style="height: 68px; border-radius: 999px; background: #FFFFFF; opacity: .7"></div>
+</main>
+</sc-if>
+</sc-for>
+
+<div style="position: absolute; left: 16px; right: 16px; bottom: 92px; background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); border-radius: 26px; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #5B6475; box-shadow: 0 8px 20px rgba(15,23,42,.06)">The active tab breaks away into its own black pill; the others regroup on either side. Springs: 460 ms, slight overshoot.</div>
+
+<nav aria-label="Main" style="position: absolute; left: 0; right: 0; bottom: 28px; display: flex; justify-content: center">
+<div style="display: flex; align-items: center; padding: 4px; border-radius: 999px">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+<button type="button" class="tab" onClick="{{t.pick}}" aria-current="{{t.current}}" style="height: 48px; margin-left: {{t.ml}}; padding: {{t.pad}}; border: 0; border-radius: {{t.radius}}; background: {{t.bg}}; color: {{t.fg}}; box-shadow: {{t.shadow}}; font: inherit; font-size: 13px; font-weight: {{t.weight}}; display: flex; align-items: center; gap: 5px; white-space: nowrap; cursor: pointer">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{t.d}}"></path><path d="{{t.d2}}"></path></svg>{{t.label}}
+</button>
+</sc-for>
+</div>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { a: 0 };
+  }
+  renderVals() {
+    var s = this, a = this.state.a;
+    var T = [
+      { label: 'Today', d: 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z', d2: 'M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4', eyebrow: 'Good morning', title: 'Your Exam\nWeek', tint: '#DCEBFF' },
+      { label: 'Calendar', d: 'M7 5h10a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4z', d2: 'M16 3v4M8 3v4M3 10h18', eyebrow: 'Calendar · 2026', title: 'October', tint: '#FFFFFF' },
+      { label: 'Subjects', d: 'M7 3.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM17 3.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z', d2: 'M7 13.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM17 13.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z', eyebrow: 'Sample syllabus', title: 'Your Custom\nSyllabus', tint: '#EDE5FF' },
+      { label: 'Questions', d: 'M8 4h8a5 5 0 0 1 5 5v6a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V9a5 5 0 0 1 5-5z', d2: 'M8 10h8M8 14h5', eyebrow: 'Sample question bank', title: 'Important\nQuestions', tint: '#D9F5E6' }
+    ];
+    var n = T.length;
+    return {
+      tabs: T.map(function (t, i) {
+        var on = i === a;
+        var start = i === 0 || i === a || i === a + 1;
+        var end = i === n - 1 || i === a || i === a - 1;
+        var L = start ? '24px' : '0px', R = end ? '24px' : '0px';
+        return {
+          label: t.label, d: t.d, d2: t.d2, eyebrow: t.eyebrow, title: t.title, tint: t.tint, on: on,
+          current: on ? 'page' : 'false',
+          ml: i > 0 && (i === a || i === a + 1) ? '8px' : '0px',
+          radius: L + ' ' + R + ' ' + R + ' ' + L,
+          pad: on ? '0 14px' : '0 10px',
+          bg: on ? 'linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%)' : '#FFFFFF',
+          fg: on ? '#FFFFFF' : '#5B6475',
+          weight: on ? '700' : '600',
+          shadow: on ? '0 8px 20px rgba(27,27,31,.25)' : '0 6px 16px rgba(15,23,42,.06)',
+          pick: function () { s.setState({ a: i }); }
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

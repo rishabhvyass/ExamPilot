@@ -1,21 +1,15 @@
-// Clear Glass materials in plain React Native (no gradient library): a CSS linear-gradient via
-// `experimental_backgroundImage`, with outer shadows on the root and inset shadows in an overlay above the gradient.
-import type { ReactNode } from 'react';
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
-import { BlurView } from '../kit/compat';
-import { SURFACE, SUBJ, type SubjectColor, type SurfaceKind } from '../theme';
-
-/** Split "a, inset b, c" into outer / inset lists without breaking on commas inside rgba(). */
-const splitShadow = (shadow: string) => {
-  const parts = shadow.split(/,(?![^(]*\))/).map(p => p.trim());
-  return {
-    outer: parts.filter(p => !p.startsWith('inset')).join(', '),
-    inset: parts.filter(p => p.startsWith('inset')).join(', '),
-  };
-};
-const SPLIT = Object.fromEntries(
-  Object.entries(SURFACE).map(([k, v]) => [k, splitShadow(v.shadow)]),
-) as Record<SurfaceKind, { outer: string; inset: string }>;
+// The existing screens and the supplied kit share one material renderer.
+import { forwardRef, type ReactNode, type ComponentRef } from 'react';
+import {
+  StyleSheet,
+  View,
+  type ViewProps,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
+import Animated from 'react-native-reanimated';
+import { Surface as KitSurface } from '../kit/components/Surface';
+import { SURFACE, type SubjectColor, type SurfaceKind } from '../theme';
 
 export function Surface({
   kind,
@@ -25,53 +19,62 @@ export function Surface({
   children,
 }: {
   kind: SurfaceKind;
-  /** kind="sheen": which subject fill sits under the white sheen. */
   subject?: SubjectColor;
   radius?: number;
   style?: StyleProp<ViewStyle>;
   children?: ReactNode;
 }) {
-  const { outer, inset } = SPLIT[kind];
   return (
-    <View style={[{ borderRadius: radius, boxShadow: outer }, style]}>
-      {kind === 'glass' && (
-        <View
-          pointerEvents="none"
-          style={[
-            StyleSheet.absoluteFill,
-            { borderRadius: radius, overflow: 'hidden' },
-          ]}
-        >
-          <BlurView intensity={40} tint="light" style={StyleSheet.absoluteFill} />
-        </View>
-      )}
-      <View
-        pointerEvents="none"
-        style={[
-          StyleSheet.absoluteFill,
-          {
-            borderRadius: radius,
-            experimental_backgroundImage: SURFACE[kind].gradient,
-            backgroundColor:
-              kind === 'sheen' && subject ? SUBJ[subject].fill : undefined,
-          },
-        ]}
-      />
-      {inset ? (
-        <View
-          pointerEvents="none"
-          style={[
-            StyleSheet.absoluteFill,
-            { borderRadius: radius, boxShadow: inset },
-          ]}
-        />
-      ) : null}
+    <KitSurface
+      kind={kind}
+      subject={subject?.toUpperCase() as 'SE' | 'DAA' | 'DDS' | undefined}
+      radius={radius}
+      style={style}
+    >
       {children}
-    </View>
+    </KitSurface>
   );
 }
 
-/** Frosted-glass card: translucent white gradient, hairline and soft shadow. */
+/** Adapts legacy styles: Surface owns the gradient and both shadow layers. */
+export const MaterialView = forwardRef<ComponentRef<typeof View>, ViewProps>(
+  ({ style, children, ...props }, ref) => {
+    const flat = StyleSheet.flatten(style) ?? {};
+    const kind = (Object.keys(SURFACE) as SurfaceKind[]).find(
+      k => flat.experimental_backgroundImage === SURFACE[k].gradient,
+    );
+    if (!kind)
+      return (
+        <View ref={ref} {...props} style={style}>
+          {children}
+        </View>
+      );
+    const layout = { ...flat };
+    delete layout.experimental_backgroundImage;
+    delete layout.boxShadow;
+    const corners = {
+      borderRadius: flat.borderRadius ?? 0,
+      borderTopLeftRadius: flat.borderTopLeftRadius,
+      borderTopRightRadius: flat.borderTopRightRadius,
+      borderBottomLeftRadius: flat.borderBottomLeftRadius,
+      borderBottomRightRadius: flat.borderBottomRightRadius,
+    };
+    return (
+      <View ref={ref} {...props} style={layout}>
+        <View pointerEvents="none" style={[StyleSheet.absoluteFill, corners]}>
+          <Surface
+            kind={kind}
+            radius={Number(flat.borderRadius ?? 0)}
+            style={[StyleSheet.absoluteFill, corners]}
+          />
+        </View>
+        {children}
+      </View>
+    );
+  },
+);
+export const AnimatedMaterialView =
+  Animated.createAnimatedComponent(MaterialView);
 export const GlassCard = ({
   children,
   radius = 34,

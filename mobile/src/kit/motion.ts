@@ -20,22 +20,22 @@ export const ease = {
 /* ─────────────── Springs (stiffness / damping identical to the web spec, mass 1) ─────────────── */
 const s = (stiffness: number, damping: number): WithSpringConfig => ({ stiffness, damping, mass: 1, reduceMotion: ReduceMotion.System });
 export const spring = {
-  press: s(500, 40),
-  layout: s(400, 36), // tab groove, segmented slider, dock morph
-  progress: s(300, 31),
+  press: s(500, 30),
+  layout: s(400, 34), // tab groove, segmented slider, dock morph
+  progress: s(300, 30),
   sheet: s(380, 36),
-  pop: s(600, 34),
-  icon: s(500, 31),
-  pen: s(420, 29),
-  island: s(380, 33),
-  quickAdd: s(420, 33),
-  tool: s(500, 36),
+  pop: s(600, 18),
+  icon: s(500, 18),
+  pen: s(420, 16),
+  island: s(380, 26),
+  quickAdd: s(420, 24),
+  tool: s(500, 22),
 };
 
 /* ─────────────── Durations (ms) ─────────────── */
 export const duration = {
   blurIn: 480, blurInSoft: 260, page: 360, pageExit: 140, blurSwap: 520,
-  tabLabelDelay: 120, tabLabel: 300, check: 260, tick: 220, strike: 240,
+  tabLabelDelay: 180, tabLabel: 320, tabGrow: 520, check: 260, tick: 220, strike: 240,
   accordion: 250, message: 360, bar: 800, barStagger: 120, pageTurn: 420,
   readerTrack: 900, readerLine: 700, readerStep: 2600, veil: 260,
   staggerStep: 60,
@@ -76,8 +76,13 @@ export const riseOut = new Keyframe({
   100: { opacity: 0, transform: [{ translateY: -6 }], easing: ease.accelerate },
 }).duration(160);
 
+/** Tab bar: the active tab grows 56 → full width in 520ms with a tiny overshoot (measured from the live design). */
+export const tabGrow = LinearTransition.duration(520).easing(Easing.bezier(0.2, 0.9, 0.25, 1.04)).reduceMotion(ReduceMotion.System);
+/** Tab label: fades + slides 6pt from the left, 320ms, starting 180ms after the tab starts growing. */
+export const tabLabelTiming = { duration: 320, delay: 180 } as const;
+
 /** Groove / dock / list re-layouts. */
-export const layout = LinearTransition.springify().stiffness(400).damping(36).reduceMotion(ReduceMotion.System);
+export const layout = LinearTransition.springify().stiffness(400).damping(34).reduceMotion(ReduceMotion.System);
 
 export const fadeIn = (ms = 260, delay = 0) => FadeIn.duration(ms).delay(delay).reduceMotion(ReduceMotion.System);
 export const fadeOut = (ms = 160) => FadeOut.duration(ms);

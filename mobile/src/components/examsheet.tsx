@@ -1,3 +1,4 @@
+import { MaterialView } from './surface';
 import { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { BottomSheet, Field, PrimaryButton, Txt } from './ui';
@@ -142,7 +143,7 @@ function Calendar({
                 justifyContent: 'center',
               }}
             >
-              <View
+              <MaterialView
                 style={{
                   width: 40,
                   height: 40,
@@ -163,7 +164,7 @@ function Calendar({
                 >
                   {d}
                 </Txt>
-              </View>
+              </MaterialView>
             </Pressable>
           );
         })}

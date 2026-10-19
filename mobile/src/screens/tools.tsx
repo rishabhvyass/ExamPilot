@@ -1,9 +1,11 @@
+import { FocusReaderSheet, readingLines } from '../components/FocusReaderSheet';
+import { MaterialView, AnimatedMaterialView } from '../components/surface';
 import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
-  Modal,
   Pressable,
   ScrollView,
+  Share,
   TextInput,
   View,
   KeyboardAvoidingView,
@@ -24,8 +26,7 @@ import { useRoute, type RouteProp } from '@react-navigation/native';
 import { keepLocalCopy, pick, types } from '@react-native-documents/picker';
 import Pdf from 'react-native-pdf';
 import { BarChart } from 'react-native-gifted-charts';
-import { BlurReader } from '../kit/components/BlurReader';
-import { ICON, Icon as KIcon, READER_ICONS } from '../kit/components/Icon';
+import { ICON, READER_ICONS, Icon as KIcon } from '../kit/components/Icon';
 import { ToolDock } from '../kit/components/ToolDock';
 import { ChoiceGroup } from '../components/choicegroup';
 import {
@@ -37,6 +38,7 @@ import {
   IconButton,
   Press,
   Rise,
+  SecondaryButton,
   Screen,
   TypingDots,
   Txt,
@@ -108,6 +110,7 @@ function MaterialsBody() {
   );
   const [sheet, setSheet] = useState(false);
   const [form, setForm] = useState<'link' | 'note' | null>(null);
+  const [pendingForm, setPendingForm] = useState<'link' | 'note' | null>(null);
   const items = state.materials.filter(m => m.subjectId === f);
   const sj = state.subjects.find(x => x.id === picked) ?? state.subjects[0];
   const f = sj.id;
@@ -205,7 +208,7 @@ function MaterialsBody() {
       SUBJ.dds.text,
       () => {
         setSheet(false);
-        setForm('link');
+        setPendingForm('link');
       },
     ],
     [
@@ -215,7 +218,7 @@ function MaterialsBody() {
       C.ink,
       () => {
         setSheet(false);
-        setForm('note');
+        setPendingForm('note');
       },
     ],
   ];
@@ -317,7 +320,7 @@ function MaterialsBody() {
                       padding: 12,
                     }}
                   >
-                    <View
+                    <MaterialView
                       style={{
                         width: 52,
                         height: 52,
@@ -329,7 +332,7 @@ function MaterialsBody() {
                       }}
                     >
                       <Icon name={TYPE_ICON[m.type]} color={c.text} />
-                    </View>
+                    </MaterialView>
                     <View style={{ flex: 1 }}>
                       <Txt numberOfLines={1} style={TYPE.bodyStrong}>
                         {m.name}
@@ -364,13 +367,18 @@ function MaterialsBody() {
       <BottomSheet
         open={sheet}
         onClose={() => setSheet(false)}
+        onDismiss={() => {
+          if (pendingForm) {
+            setForm(pendingForm);
+            setPendingForm(null);
+          }
+        }}
         title={`Add to ${sj.code}`}
       >
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-          {tiles.map(([l, ic, bg, fg, fn], i) => (
-            <Animated.View
+          {tiles.map(([l, ic, bg, fg, fn]) => (
+            <View
               key={l}
-              entering={FadeInDown.delay(100 + i * 60).duration(300)}
               style={{ width: '47%', flexGrow: 1 }}
             >
               <Press
@@ -387,7 +395,7 @@ function MaterialsBody() {
                 <Icon name={ic} size={26} color={fg} />
                 <Txt style={{ fontWeight: 600, color: fg }}>{l}</Txt>
               </Press>
-            </Animated.View>
+            </View>
           ))}
         </View>
         <Txt style={{ marginTop: 16, fontSize: 14, color: C.inkMuted }}>
@@ -541,6 +549,7 @@ function reply(q: string, state: State): Omit<ChatMessage, 'id' | 'role'> {
   };
 }
 export function Assistant() {
+  const [focusReply, setFocusReply] = useState<string | null>(null);
   const nav = useNav();
   const insets = useSafeAreaInsets();
   const { state, update } = useStore();
@@ -630,7 +639,7 @@ export function Assistant() {
           onPress={() => nav.goBack()}
         />
         <Glow>
-          <View
+          <MaterialView
             style={{
               width: 48,
               height: 48,
@@ -642,7 +651,7 @@ export function Assistant() {
             }}
           >
             <Icon name="sparkle" color={SUBJ.se.text} />
-          </View>
+          </MaterialView>
         </Glow>
         <View>
           <Txt style={{ fontSize: 18, fontWeight: 600 }}>Study buddy</Txt>
@@ -699,7 +708,7 @@ export function Assistant() {
             }}
           >
             {!!m.text && (
-              <View
+              <MaterialView
                 style={[
                   {
                     maxWidth: '86%',
@@ -732,8 +741,9 @@ export function Assistant() {
                 >
                   {m.text}
                 </Txt>
-              </View>
+              </MaterialView>
             )}
+            {m.role === 'assistant' && !!m.text && m.text.length > 180 && <SecondaryButton label="Focus read" icon="book-open" onPress={() => setFocusReply(m.text!)} />}
             {m.block?.type === 'study_plan' && (
               <PlanCard m={m} onAdd={() => addToCal(m)} />
             )}
@@ -853,6 +863,7 @@ export function Assistant() {
           </Press>
         </View>
       </View>
+    <FocusReaderSheet open={focusReply !== null} onClose={() => setFocusReply(null)} title="Study assistant" lines={readingLines(focusReply ?? '')} />
     </KeyboardAvoidingView>
   );
 }
@@ -891,7 +902,7 @@ function PlanCard({ m, onAdd }: { m: ChatMessage; onAdd: () => void }) {
       <Txt style={{ fontWeight: 600, marginBottom: 8 }}>{b.title}</Txt>
       <View style={{ gap: 8 }}>
         {b.sessions.map(x => (
-          <View
+          <MaterialView
             key={x.date + x.topic}
             style={{
               flexDirection: 'row',
@@ -913,7 +924,7 @@ function PlanCard({ m, onAdd }: { m: ChatMessage; onAdd: () => void }) {
             <Txt style={{ fontSize: 14, fontWeight: 600, color: c.text }}>
               {x.hours}h
             </Txt>
-          </View>
+          </MaterialView>
         ))}
       </View>
       <Press
@@ -1024,6 +1035,8 @@ export function PdfReader() {
   const [focus, setFocus] = useState<{ page: string[]; all: string[] } | null>(
     null,
   );
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [trackW, setTrackW] = useState(0);
   const pct = total > 1 ? (page - 1) / (total - 1) : 0;
   const knob = useSharedValue(0);
@@ -1074,6 +1087,22 @@ export function PdfReader() {
       Alert.alert('Couldn’t read this PDF', (e as Error).message);
     }
   };
+  const searchPages = async (values: Record<string, string>) => {
+    if (!m?.uri || !values.query?.trim()) return;
+    try {
+      const result = await pdfText(m.uri);
+      const matches = result.pages.map((text, index) => ({ text, page: index + 1 })).filter(p => p.text.toLocaleLowerCase().includes(values.query.toLocaleLowerCase()));
+      setSearchOpen(false);
+      if (!matches.length) return Alert.alert('No matches', 'Try a different word or phrase.');
+      Alert.alert('Matching pages', `${matches.length} pages contain “${values.query}”.`, [...matches.slice(0, 8).map(hit => ({ text: `Page ${hit.page}`, onPress: () => go(hit.page) })), { text: 'Cancel', style: 'cancel' }]);
+    } catch (error) { Alert.alert('Couldn’t search this PDF', (error as Error).message); }
+  };
+  const addNote = (values: Record<string, string>) => {
+    if (!values.note?.trim() || !m) return;
+    update(s => ({ ...s, materials: [...s.materials, { id: uid(), subjectId: m.subjectId, type: 'note', name: `${m.name} · Page ${page}`, body: values.note.trim(), isSample: false }] }));
+    setNoteOpen(false);
+  };
+  const bookmark = () => save(page, { bookmarks: (prog.bookmarks ?? []).includes(page) ? (prog.bookmarks ?? []).filter(p => p !== page) : [...(prog.bookmarks ?? []), page] });
   if (!m?.uri)
     return (
       <Screen>
@@ -1201,7 +1230,7 @@ export function PdfReader() {
         />
       </View>
       {finished && (
-        <Animated.View
+        <AnimatedMaterialView
           entering={ZoomIn.springify().stiffness(400).damping(28)}
           style={{
             marginTop: 16,
@@ -1215,87 +1244,30 @@ export function PdfReader() {
             {micro.pdf.finished}
           </Txt>
           <Txt style={{ color: SUBJ.se.text }}>{micro.pdf.finishedSub}</Txt>
-        </Animated.View>
+        </AnimatedMaterialView>
       )}
       <View style={{ marginTop: 16 }}>
         <ToolDock
           primary={[
-            {
-              id: 'prev',
-              label: 'Previous page',
-              icon: <KIcon d={ICON.chevronLeft} />,
-              onSelect: () => go(page - 1),
-            },
-            {
-              id: 'focus',
-              label: 'Focus read',
-              icon: <Icon name="book-open" size={22} color={C.inkButton} />,
-              onSelect: openFocus,
-            },
-            {
-              id: 'ask',
-              label: 'Ask about this page',
-              icon: <Icon name="sparkle" size={22} color={C.inkButton} />,
-              onSelect: () => nav.navigate('Assistant'),
-            },
-            {
-              id: 'next',
-              label: 'Next page',
-              icon: <KIcon d={ICON.chevronRight} />,
-              onSelect: () => go(page + 1),
-            },
+            { id: 'highlight', label: 'Highlight in focus reader', icon: <Icon name="highlighter" />, onSelect: openFocus },
+            { id: 'note', label: 'Add page note', icon: <Icon name="note" />, onSelect: () => setNoteOpen(true) },
+            { id: 'bookmark', label: (prog.bookmarks ?? []).includes(page) ? 'Remove bookmark' : 'Bookmark page', active: (prog.bookmarks ?? []).includes(page), icon: <KIcon d={READER_ICONS.notes} />, onSelect: bookmark },
+            { id: 'search', label: 'Search PDF', icon: <Icon name="search" />, onSelect: () => setSearchOpen(true) },
           ]}
           more={[
-            {
-              id: 'first',
-              label: 'First',
-              icon: <KIcon d={ICON.chevronLeft} />,
-              onSelect: () => go(1),
-            },
-            {
-              id: 'last',
-              label: 'Last',
-              icon: <KIcon d={ICON.chevronRight} />,
-              onSelect: () => go(total),
-            },
+            { id: 'prev', label: 'Previous', icon: <KIcon d={ICON.chevronLeft} />, onSelect: () => go(page - 1) },
+            { id: 'next', label: 'Next', icon: <KIcon d={ICON.chevronRight} />, onSelect: () => go(page + 1) },
+            { id: 'focus', label: 'Focus read', icon: <Icon name="book-open" />, onSelect: openFocus },
+            { id: 'ask', label: 'Ask Pilo', icon: <Icon name="sparkle" />, onSelect: () => nav.navigate('Assistant') },
+            { id: 'first', label: 'First page', icon: <KIcon d={ICON.chevronLeft} />, onSelect: () => go(1) },
+            { id: 'last', label: 'Last page', icon: <KIcon d={ICON.chevronRight} />, onSelect: () => go(total) },
+            { id: 'share', label: 'Share', icon: <Icon name="arrow-up-right" />, onSelect: () => { Share.share(Platform.OS === 'ios' ? { url: m.uri!, title: m.name } : { message: m.name }).catch(() => Alert.alert('Couldn’t share this file')); } },
           ]}
         />
       </View>
-      <Modal
-        visible={!!focus}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setFocus(null)}
-      >
-        <View style={{ flex: 1, backgroundColor: C.ground, padding: 20 }}>
-          <View style={{ alignItems: 'flex-end', marginBottom: 12 }}>
-            <IconButton
-              icon="close"
-              label="Close focus read"
-              onPress={() => setFocus(null)}
-            />
-          </View>
-          {focus && (
-            <BlurReader
-              height={620}
-              modes={[
-                {
-                  id: 'page',
-                  label: `Page ${page}`,
-                  iconPath: READER_ICONS.notes,
-                  lines: focus.page,
-                },
-                {
-                  id: 'all',
-                  label: 'Whole PDF',
-                  iconPath: READER_ICONS.saved,
-                  lines: focus.all,
-                },
-              ]}
-            />
-          )}
-        </View>
-      </Modal>
+      <FormSheet open={noteOpen} onClose={() => setNoteOpen(false)} title={`Note · Page ${page}`} submit="Save note" fields={[{ key: 'note', label: 'Your note' }]} onSubmit={addNote} />
+      <FormSheet open={searchOpen} onClose={() => setSearchOpen(false)} title="Search PDF" submit="Find pages" fields={[{ key: 'query', label: 'Word or phrase' }]} onSubmit={searchPages} />
+      <FocusReaderSheet open={!!focus} onClose={() => setFocus(null)} title={`${m.name} · Page ${page}`} lines={focus?.page ?? []} subjectId={m.subjectId} />
     </Screen>
   );
 }

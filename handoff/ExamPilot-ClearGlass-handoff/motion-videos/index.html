@@ -1,0 +1,182 @@
+<title>ExamPilot Motion Reference</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one white page, a grid of phone-shaped video cards; tapping a card opens a modal player with a seekable step list. Single light look, matching the Clear Glass app. */
+:root{
+  --ground:#FFFFFF; --ink:#1B1B1F; --ink-btn:#111113; --muted:#5B6475; --subtle:#6B7385;
+  --line:#E8EBF0; --line2:#E2E6EC; --input:#F4F6FA; --muted-surface:#F6F7F9;
+  --se:#DCEBFF; --se-text:#1E3A8A; --daa:#EDE5FF; --daa-text:#5B21B6; --dds:#D9F5E6; --dds-text:#065F46;
+  --scrim:rgba(27,27,31,.42);
+  --display:"Urbanist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --clay-bg:linear-gradient(180deg,#FFFFFF 0%,#F1F1F2 60%,#E9E9EB 100%);
+  --clay-sh:inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07);
+  --recess-bg:linear-gradient(180deg,#DEDEE1,#E9E9EB);
+  --recess-sh:inset 0 2px 6px rgba(0,0,0,.13), inset 0 -1px 0 rgba(255,255,255,.9);
+  --ink-bg:linear-gradient(180deg,#4A4A4F 0%,#1C1C1F 55%,#0E0E10 100%);
+  --ink-sh:inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18);
+  --glass-sh:inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font:400 16px/1.55 var(--display);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-block:40px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:36px}
+header{display:flex;flex-direction:column;gap:12px;max-width:720px}
+.eyebrow{font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h1{margin:0;font-weight:600;font-size:clamp(36px,6vw,54px);line-height:1.02;letter-spacing:-.03em;text-wrap:balance}
+.lede{margin:0;color:var(--muted);font-size:17px;max-width:62ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border-radius:999px;font-size:14px;font-weight:600;background:var(--muted-surface);color:var(--ink)}
+.chip b{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:16px}
+h2{margin:0;font-weight:600;font-size:24px;letter-spacing:-.02em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:18px}
+.card{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:10px;border-radius:26px;padding:8px 8px 12px;background:var(--clay-bg);box-shadow:var(--clay-sh);transition:transform .18s cubic-bezier(.2,0,0,1)}
+.card:hover{transform:translateY(-2px)}
+.card:active{transform:scale(.97)}
+.card:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.thumb{position:relative;border-radius:20px;overflow:hidden;background:var(--input);aspect-ratio:390/600}
+.thumb.wide{aspect-ratio:16/10}
+.thumb img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.thumb .play{position:absolute;right:8px;bottom:8px;width:38px;height:38px;border-radius:50%;background:var(--ink-bg);box-shadow:var(--ink-sh);display:grid;place-items:center}
+.thumb .dur{position:absolute;left:8px;bottom:10px;font:500 11px var(--mono);background:rgba(255,255,255,.88);padding:3px 7px;border-radius:999px}
+.card .t{padding:0 6px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.card .n{font-weight:600;font-size:15px;line-height:1.25}
+.card .s{font-size:13px;color:var(--subtle);line-height:1.35}
+
+/* modal */
+dialog{border:0;padding:0;width:min(1080px,100vw - 24px);max-height:calc(100dvh - 24px);border-radius:32px;background:var(--ground);color:var(--ink);box-shadow:var(--glass-sh),0 40px 80px rgba(15,23,42,.25);overflow:hidden}
+dialog::backdrop{background:var(--scrim);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+dialog[open]{animation:pop .36s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+.m{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);max-height:calc(100dvh - 24px)}
+.m.wide{grid-template-columns:minmax(0,1fr)}
+.player{background:#F3F4F7;display:flex;flex-direction:column;gap:12px;padding:18px;align-items:center;justify-content:flex-start;min-width:0}
+.player video{width:100%;max-height:calc(100dvh - 160px);border-radius:24px;background:#fff;box-shadow:var(--glass-sh);display:block}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+.seg{display:flex;padding:4px;gap:2px;border-radius:999px;background:linear-gradient(180deg,#FFFFFF,#F0F0F2);box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(0,0,0,.05),0 2px 4px rgba(0,0,0,.05)}
+.seg button{all:unset;cursor:pointer;height:34px;padding:0 12px;border-radius:999px;font:600 13px var(--display);color:var(--ink-btn)}
+.seg button[aria-pressed="true"]{background:var(--recess-bg);box-shadow:var(--recess-sh)}
+.seg button:focus-visible,.close:focus-visible,.step:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.time{font:500 12px var(--mono);color:var(--muted);min-width:84px;text-align:center}
+.info{overflow:auto;padding:24px 26px 30px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.info h3{margin:0;font-weight:600;font-size:28px;line-height:1.1;letter-spacing:-.02em;text-wrap:balance}
+.info .what{margin:0;color:var(--muted)}
+.close{all:unset;cursor:pointer;position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;background:var(--clay-bg);box-shadow:var(--clay-sh);display:grid;place-items:center;z-index:2}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.step{all:unset;cursor:pointer;display:grid;grid-template-columns:62px minmax(0,1fr);gap:12px;padding:10px 12px;border-radius:16px;align-items:start}
+.step:hover{background:var(--muted-surface)}
+.step.on{background:var(--se)}
+.step .ts{font:500 12px var(--mono);color:var(--se-text);padding-top:3px}
+.step .tx{font-size:15px;line-height:1.45}
+.step .tx code,.build code{font:500 12.5px var(--mono);background:var(--input);padding:1px 5px;border-radius:6px}
+.lab{font-weight:600;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.build{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+details{border-radius:18px;background:var(--muted-surface);padding:12px 14px}
+summary{cursor:pointer;font-weight:600;font-size:14px}
+.tbl{overflow-x:auto;margin-top:10px}
+table{border-collapse:collapse;font:400 12px/1.4 var(--mono);min-width:760px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line2);vertical-align:top}
+th{font-weight:500;color:var(--muted)}
+tr.act td{font-weight:500;background:#fff}
+@media (max-width:760px){
+  .m{grid-template-columns:minmax(0,1fr);overflow:auto}
+  .player video{max-height:58dvh;width:auto;max-width:100%}
+  .info{overflow:visible}
+  dialog{width:100vw;max-height:100dvh;border-radius:26px 26px 0 0;margin-bottom:0}
+}
+@media (prefers-reduced-motion:reduce){dialog[open]{animation:none}.card{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">ExamPilot · Clear Glass · v1</span>
+    <h1>Motion reference</h1>
+    <p class="lede">Every animation from the live design, recorded frame by frame at 30 fps. Open a clip to watch it at full speed or slowed down, and tap any step to jump to that moment.</p>
+    <div class="legend" id="legend"></div>
+  </header>
+  <section><h2>Screens</h2><div class="grid" id="g-screens"></div></section>
+  <section><h2>Motion lab</h2><div class="grid" id="g-lab"></div></section>
+</div>
+
+<dialog id="dlg" aria-labelledby="d-title">
+  <button class="close" id="d-close" aria-label="Close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="m" id="d-m">
+    <div class="player">
+      <video id="d-video" playsinline muted loop controls preload="auto"></video>
+      <div class="ctrl">
+        <div class="seg" role="group" aria-label="Playback speed" id="d-speed">
+          <button data-r="0.25" aria-pressed="false">0.25×</button><button data-r="0.5" aria-pressed="false">0.5×</button><button data-r="1" aria-pressed="true">1×</button>
+        </div>
+        <span class="time" id="d-time">0.00s</span>
+      </div>
+    </div>
+    <div class="info">
+      <h3 id="d-title"></h3>
+      <p class="what" id="d-what"></p>
+      <span class="lab">Step by step</span>
+      <ol class="steps" id="d-steps"></ol>
+      <span class="lab">Build it in React Native</span>
+      <ol class="build" id="d-build"></ol>
+      <details><summary>Exact spec from the live design (every animation, timing and easing)</summary><div class="tbl" id="d-table"></div></details>
+    </div>
+  </div>
+</dialog>
+
+<script src="motion-data.js"></script>
+<script>
+(function(){
+  const data = window.MOTION || [];
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const md = s => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+  const legend = document.getElementById("legend");
+  [["Blur-in","480 ms"],["Press","scale .96"],["Groove","spring 400/34"],["Reader step","2.6 s"]].forEach(([a,b])=>{
+    const c=document.createElement("span"); c.className="chip"; c.innerHTML=esc(a)+" <b>"+esc(b)+"</b>"; legend.appendChild(c);
+  });
+  function card(v){
+    const b=document.createElement("button"); b.className="card"; b.type="button";
+    b.setAttribute("aria-label","Play "+v.title);
+    b.innerHTML='<div class="thumb'+(v.wide?' wide':'')+'"><img loading="lazy" alt="" src="'+esc(v.poster)+'"><span class="dur">'+v.duration.toFixed(1)+'s</span><span class="play"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></div><div class="t"><span class="n">'+esc(v.title)+'</span><span class="s">'+esc(v.short)+'</span></div>';
+    b.addEventListener("click",()=>open(v));
+    return b;
+  }
+  data.forEach(v=>document.getElementById(v.group==="lab"?"g-lab":"g-screens").appendChild(card(v)));
+
+  const dlg=document.getElementById("dlg"), vid=document.getElementById("d-video"), time=document.getElementById("d-time");
+  let cur=null;
+  function open(v){
+    cur=v;
+    document.getElementById("d-m").classList.toggle("wide", !!v.wide);
+    document.getElementById("d-title").textContent=v.title;
+    document.getElementById("d-what").textContent=v.what;
+    vid.src=v.file; vid.poster=v.poster; setRate(1);
+    const ol=document.getElementById("d-steps"); ol.innerHTML="";
+    v.steps.forEach((s,i)=>{
+      const li=document.createElement("li");
+      const b=document.createElement("button"); b.className="step"; b.type="button"; b.dataset.t=s.t;
+      b.innerHTML='<span class="ts">'+s.t.toFixed(2)+'s</span><span class="tx">'+md(s.text)+'</span>';
+      b.addEventListener("click",()=>{ vid.currentTime=s.t; vid.play().catch(()=>{}); });
+      li.appendChild(b); ol.appendChild(li);
+    });
+    document.getElementById("d-build").innerHTML=v.build.map(x=>"<li>"+md(x)+"</li>").join("");
+    document.getElementById("d-table").innerHTML='<table><thead><tr><th>time</th><th>element</th><th>animation</th><th>from → to</th><th>ms</th><th>delay</th><th>easing</th><th>loop</th></tr></thead><tbody>'+
+      v.rows.map(r=>r.action?'<tr class="act"><td>'+r.t.toFixed(2)+'s</td><td colspan="7">👆 '+esc(r.action)+'</td></tr>':'<tr><td>'+r.t.toFixed(2)+'s</td><td>'+esc(r.el)+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.from)+' → '+esc(r.to)+'</td><td>'+esc(r.dur)+'</td><td>'+esc(r.delay)+'</td><td>'+esc(r.easing)+'</td><td>'+esc(r.loop)+'</td></tr>').join("")+'</tbody></table>';
+    if(typeof dlg.showModal==="function") dlg.showModal(); else dlg.setAttribute("open","");
+    vid.play().catch(()=>{});
+  }
+  function setRate(r){ vid.playbackRate=r; document.querySelectorAll("#d-speed button").forEach(b=>b.setAttribute("aria-pressed", String(+b.dataset.r===r))); }
+  document.querySelectorAll("#d-speed button").forEach(b=>b.addEventListener("click",()=>setRate(+b.dataset.r)));
+  vid.addEventListener("timeupdate",()=>{
+    time.textContent=vid.currentTime.toFixed(2)+"s";
+    if(!cur) return; let on=-1; cur.steps.forEach((s,i)=>{ if(vid.currentTime>=s.t-0.02) on=i; });
+    document.querySelectorAll("#d-steps .step").forEach((b,i)=>b.classList.toggle("on", i===on));
+  });
+  function close(){ vid.pause(); dlg.close ? dlg.close() : dlg.removeAttribute("open"); }
+  document.getElementById("d-close").addEventListener("click",close);
+  dlg.addEventListener("click",e=>{ if(e.target===dlg) close(); });
+  dlg.addEventListener("close",()=>vid.pause());
+  const h=(location.hash||"").slice(1); const pre=data.find(v=>v.id===h); if(pre) open(pre);
+})();
+</script>

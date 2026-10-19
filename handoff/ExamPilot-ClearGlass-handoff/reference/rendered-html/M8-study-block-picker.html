@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ExamPilot reference — M8-study-block-picker</title>
+<!-- Static snapshot of the design prototype (StudyBlockPicker.dc.html) in its first state. Reference only: rebuild as React components. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+body{margin:0;background:#FFFFFF}
+.band{transition:background-color 140ms ease,border-radius 140ms ease}
+.dot{transition:background-color 180ms ease,color 180ms ease,transform 260ms cubic-bezier(.3,1.4,.45,1),box-shadow 180ms ease}
+.day:hover .dot{box-shadow:inset 0 0 0 1.5px #C7DCFF}
+.day:active .dot{transform:scale(.88)}
+.ul{transition:left 380ms cubic-bezier(.3,1.3,.45,1),width 380ms cubic-bezier(.3,1.3,.45,1)}
+.badge{animation:badge 300ms cubic-bezier(.2,.9,.25,1.3) both}
+.val{animation:val 280ms cubic-bezier(.2,.8,.2,1) both}
+.chip{transition:background-color 180ms ease,color 180ms ease,transform 140ms ease}
+.chip:active{transform:scale(.95)}
+@keyframes badge{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+@keyframes val{from{opacity:0;transform:translateY(6px);filter:blur(3px)}to{opacity:1;transform:none;filter:blur(0)}}
+button:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){.band,.dot,.ul,.chip{transition:none}.badge,.val{animation:none}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+
+</style>
+</head>
+<body>
+
+
+<div style="width: 700px; height: 700px; box-sizing: border-box; padding: 40px; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; display: flex; gap: 36px; align-items: flex-start">
+
+<div style="width: 170px; display: flex; flex-direction: column; gap: 10px; padding-top: 10px">
+<span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; color: #6B7385">CALENDAR</span>
+<h1 style="margin: 0; font-size: 30px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em">Plan a study block</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #5B6475">Tap a start day, slide to an end day. The band follows your finger. Presets fill it in one tap.</p>
+</div>
+
+<section aria-label="Study block" style="width: 414px; border-radius: 32px; background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: 0 24px 50px rgba(15,23,42,.14); padding: 8px">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px 14px">
+<span style="font-size: 17px; font-weight: 600">Study block</span>
+<span class="badge" role="status" style="height: 30px; padding: 0 12px; border-radius: 999px; background: #DCEBFF; color: #1E3A8A; display: flex; align-items: center; font-size: 13px; font-weight: 700">3 days</span>
+</div>
+<div style="background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); border-radius: 26px; padding: 16px 16px 12px">
+<div style="position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-bottom: 12px; border-bottom: 1px solid #F6F7F9">
+<button type="button" style="border: 0; background: transparent; font: inherit; color: inherit; text-align: left; padding: 0 0 10px; cursor: pointer"><span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #6B7385">START</span><span class="val" style="display: block; font-size: 19px; font-weight: 600; margin-top: 2px; color: #1B1B1F">Oct 18</span></button>
+<button type="button" style="border: 0; background: transparent; font: inherit; color: inherit; text-align: left; padding: 0 0 10px 16px; border-left: 1px solid #F6F7F9; cursor: pointer"><span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #6B7385">END</span><span class="val" style="display: block; font-size: 19px; font-weight: 600; margin-top: 2px; color: #1B1B1F">Oct 20</span></button>
+<span class="ul" aria-hidden="true" style="position: absolute; bottom: 10px; left: 0px; width: 56px; height: 3px; border-radius: 999px; background: #2563EB"></span>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 4px 8px"><span style="font-size: 17px; font-weight: 600">October 2026</span><span style="display: flex; gap: 10px; font-size: 12px; color: #5B6475"><span style="display: flex; align-items: center; gap: 5px"><span style="width: 6px; height: 6px; border-radius: 999px; background: #7C3AED"></span>Exam</span></span></div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; font-size: 12px; font-weight: 600; color: #6B7385; padding-bottom: 6px" aria-hidden="true"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+<div role="grid" aria-label="October 2026" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); row-gap: 4px">
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Thursday 1 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">1</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Friday 2 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">2</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Saturday 3 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">3</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Sunday 4 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">4</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Monday 5 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">5</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Tuesday 6 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">6</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Wednesday 7 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">7</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Thursday 8 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">8</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Friday 9 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">9</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Saturday 10 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">10</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Sunday 11 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">11</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Monday 12 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">12</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Tuesday 13 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">13</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Wednesday 14 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">14</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Thursday 15 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">15</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Friday 16 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">16</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" disabled="" aria-label="Saturday 17 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #CBD2DC; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">17</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: #E2EDFF; border-radius: 22px 22px 22px 22px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Sunday 18 October" aria-pressed="true" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">18</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: #E2EDFF; border-radius: 22px 0px 0px 22px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Monday 19 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1E3A8A; font-size: 15px; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">19</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: #E2EDFF; border-radius: 0px 22px 22px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Tuesday 20 October" aria-pressed="true" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">20</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Wednesday 21 October, exam day" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1B1B1F; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">21<span style="width: 5px; height: 5px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); margin-top: 3px"></span></span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Thursday 22 October, exam day" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1B1B1F; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">22<span style="width: 5px; height: 5px; border-radius: 999px; background: #7C3AED; margin-top: 3px"></span></span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Friday 23 October, exam day" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1B1B1F; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">23<span style="width: 5px; height: 5px; border-radius: 999px; background: #10B981; margin-top: 3px"></span></span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Saturday 24 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1B1B1F; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">24</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Sunday 25 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1B1B1F; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">25</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Monday 26 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1B1B1F; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">26</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Tuesday 27 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1B1B1F; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">27</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Wednesday 28 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1B1B1F; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">28</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Thursday 29 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1B1B1F; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">29</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Friday 30 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1B1B1F; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">30</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+<button type="button" class="day" aria-label="Saturday 31 October" aria-pressed="false" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: transparent; color: #1B1B1F; font-size: 15px; font-weight: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">31</span>
+</button>
+
+</div>
+
+<div class="band" style="height: 44px; background: transparent; border-radius: 0px 0px 0px 0px; display: flex; align-items: center; justify-content: center">
+
+</div>
+
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 6px; padding: 12px 8px 6px">
+<button type="button" class="chip" aria-pressed="false" style="height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid #E8EBF0; background: #FFFFFF; color: #1B1B1F; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Weekend</button><button type="button" class="chip" aria-pressed="false" style="height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid #E8EBF0; background: #FFFFFF; color: #1B1B1F; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">3 days</button><button type="button" class="chip" aria-pressed="false" style="height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid #E8EBF0; background: #FFFFFF; color: #1B1B1F; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">1 week</button><button type="button" class="chip" aria-pressed="true" style="height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid #1B1B1F; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); color: #FFFFFF; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Until exam</button>
+<button type="button" style="margin-left: auto; height: 34px; padding: 0 8px; border: 0; background: transparent; font: inherit; font-size: 13px; font-weight: 600; color: #6B7385; cursor: pointer">Clear</button>
+</div>
+</section>
+</div>
+
+</body>
+</html>

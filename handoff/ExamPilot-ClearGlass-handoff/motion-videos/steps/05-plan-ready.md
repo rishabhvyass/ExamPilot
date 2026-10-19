@@ -1,0 +1,21 @@
+| time | trigger / element | animation | from → to | dur ms | delay ms | easing | loops | React Native |
+|---|---|---|---|---|---|---|---|---|
+| 0.00s | shape 0×6 | `grow` | transform:scaleX(0) → transform:scaleX(1) | 600 | 0 | `bezier(0.2, 0.8, 0.2, 1)` |  | scaleX 0→1, transformOrigin left |
+| 0.00s | 3 elements: shape 12×12, shape 16×16, shape 8×8 | `burst` | opacity:1; transform:translate(-50%, -50%) scale(0.4) → opacity:0; transform:translate(calc(-50% + 110px), -50%) scale(1) | 1100 | 150 | `bezier(0.15, 0.8, 0.3, 1)` |  | Keyframe out from centre (+ CelebrateLayer) |
+| 0.00s | 3 elements: shape 12×12, shape 16×16, shape 20×20 | `burst` | opacity:1; transform:translate(-50%, -50%) scale(0.4) → opacity:0; transform:translate(calc(-50% + 119px), calc(-50% + 31px)) … | 1100 | 190 | `bezier(0.15, 0.8, 0.3, 1)` |  | Keyframe out from centre (+ CelebrateLayer) |
+| 0.00s | 3 elements: shape 16×16, shape 20×20, shape 8×8 | `burst` | opacity:1; transform:translate(-50%, -50%) scale(0.4) → opacity:0; transform:translate(calc(-50% + 96px), calc(-50% + 66px)) s… | 1100 | 230 | `bezier(0.15, 0.8, 0.3, 1)` |  | Keyframe out from centre (+ CelebrateLayer) |
+| 0.00s | 3 elements: shape 12×12, shape 20×20, shape 8×8 | `burst` | opacity:1; transform:translate(-50%, -50%) scale(0.4) → opacity:0; transform:translate(calc(-50% + 24px), calc(-50% + 59px)) s… | 1100 | 270 | `bezier(0.15, 0.8, 0.3, 1)` |  | Keyframe out from centre (+ CelebrateLayer) |
+| 0.00s | 2 elements: shape 12×12, shape 8×8 | `burst` | opacity:1; transform:translate(-50%, -50%) scale(0.4) → opacity:0; transform:translate(calc(-50% - 29px), calc(-50% + 71px)) s… | 1100 | 310 | `bezier(0.15, 0.8, 0.3, 1)` |  | Keyframe out from centre (+ CelebrateLayer) |
+| 0.00s | shape 62×62 | `badge` | opacity:0; transform:scale(0.6) → opacity:1; transform:scale(1) | 700 | 0 | `bezier(0.2, 0.9, 0.25, 1.25)` |  | popIn() |
+| 0.00s | SVG stroke 19×13 | `draw` | strokeDashoffset:30px → strokeDashoffset:0px | 420 | 380 | `ease-out` |  | strokeDashoffset via useAnimatedProps |
+| 0.00s | “Your plan is ready Built around y…” | `fadeup` | opacity:0; transform:translateY(8px); filter:blur(8px) → opacity:1; transform:none; filter:blur(0px) | 460 | 300 | `bezier(0.05, 0.7, 0.1, 1)` |  | BlurIn soft |
+| 0.00s | “3 exams 11 sessions 2.5h a day” | `fadeup` | opacity:0; transform:translateY(8px); filter:blur(8px) → opacity:1; transform:none; filter:blur(0px) | 460 | 420 | `bezier(0.05, 0.7, 0.1, 1)` |  | BlurIn soft |
+| 0.00s | “SUN 18 SE · 1.5h DAA · 1h” | `fadeup` | opacity:0; transform:translateY(8px); filter:blur(8px) → opacity:1; transform:none; filter:blur(0px) | 460 | 520 | `bezier(0.05, 0.7, 0.1, 1)` |  | BlurIn soft |
+| 0.00s | “MON 19 SE · 1.5h DAA · 1.5h” | `fadeup` | opacity:0; transform:translateY(8px); filter:blur(8px) → opacity:1; transform:none; filter:blur(0px) | 460 | 590 | `bezier(0.05, 0.7, 0.1, 1)` |  | BlurIn soft |
+| 0.00s | “TUE 20 SE · 1h DAA · 1.5h” | `fadeup` | opacity:0; transform:translateY(8px); filter:blur(8px) → opacity:1; transform:none; filter:blur(0px) | 460 | 660 | `bezier(0.05, 0.7, 0.1, 1)` |  | BlurIn soft |
+| 0.00s | “WED 21 SE exam · 2 PM DAA · 1h” | `fadeup` | opacity:0; transform:translateY(8px); filter:blur(8px) → opacity:1; transform:none; filter:blur(0px) | 460 | 730 | `bezier(0.05, 0.7, 0.1, 1)` |  | BlurIn soft |
+| 0.00s | “THU 22 DAA exam · 2 PM DDS · 1h” | `fadeup` | opacity:0; transform:translateY(8px); filter:blur(8px) → opacity:1; transform:none; filter:blur(0px) | 460 | 800 | `bezier(0.05, 0.7, 0.1, 1)` |  | BlurIn soft |
+| 0.00s | “FRI 23 DDS exam · 2 PM” | `fadeup` | opacity:0; transform:translateY(8px); filter:blur(8px) → opacity:1; transform:none; filter:blur(0px) | 460 | 870 | `bezier(0.05, 0.7, 0.1, 1)` |  | BlurIn soft |
+| 0.00s | “Open my plan” | `fadeup` | opacity:0; transform:translateY(8px); filter:blur(8px) → opacity:1; transform:none; filter:blur(0px) | 460 | 900 | `bezier(0.05, 0.7, 0.1, 1)` |  | BlurIn soft |
+| 0.00s | “Adjust with study assistant” | `fadeup` | opacity:0; transform:translateY(8px); filter:blur(8px) → opacity:1; transform:none; filter:blur(0px) | 460 | 980 | `bezier(0.05, 0.7, 0.1, 1)` |  | BlurIn soft |
+| **3.20s** | 👆 **scroll to y=260** | | | | | | | |

@@ -1,0 +1,62 @@
+/* Tailwind CSS v4 (tailwindcss@4.x) — paste into your main CSS file after  @import "tailwindcss";
+   Then use classes like  bg-se-fill  text-ink-muted  rounded-card  font-sans  ease-smooth  shadow-clay */
+
+@theme {
+  --font-sans: "Urbanist", "Urbanist Variable", system-ui, sans-serif;
+
+  --color-ground: #FFFFFF;
+  --color-input: #F4F6FA;
+  --color-surface-muted: #F6F7F9;
+  --color-skeleton: #EEF0F4;
+  --color-line: #E8EBF0;
+  --color-line-2: #E2E6EC;
+  --color-line-strong: #CBD2DC;
+
+  --color-ink: #1B1B1F;
+  --color-ink-button: #111113;
+  --color-ink-muted: #5B6475;
+  --color-ink-subtle: #6B7385;
+  --color-placeholder: #8A92A3;
+
+  --color-se-fill: #DCEBFF;  --color-se-deep: #BFD6FF;  --color-se-text: #1E3A8A;  --color-se-mark: #2563EB;
+  --color-daa-fill: #EDE5FF; --color-daa-deep: #CDBBFF; --color-daa-text: #5B21B6; --color-daa-mark: #7C3AED;
+  --color-dds-fill: #D9F5E6; --color-dds-deep: #9EE6C0; --color-dds-text: #065F46; --color-dds-mark: #10B981;
+
+  --color-art-blue: #3B82F6;
+  --color-art-violet: #DDD0FF;
+  --color-art-green: #BBF0D3;
+  --color-highlighter: #E3EEFF;
+
+  --color-info-bg: #E3EEF8;    --color-info-text: #2C5577;
+  --color-headsup-bg: #FEF3C7; --color-headsup-text: #92400E;
+  --color-error-bg: #FEE2E2;   --color-error-text: #B91C1C;
+
+  --radius-input: 22px;
+  --radius-panel: 28px;
+  --radius-card: 34px;
+  --radius-sheet: 36px;
+  --radius-reader: 40px;
+
+  --shadow-clay: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07);
+  --shadow-recess: inset 0 2px 6px rgba(0,0,0,.13), inset 0 -1px 0 rgba(255,255,255,.9);
+  --shadow-dock: inset 0 1px 0 #FFFFFF, 0 0 0 1px rgba(0,0,0,.05), 0 2px 4px rgba(0,0,0,.05), 0 16px 34px rgba(0,0,0,.10);
+  --shadow-ink: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18);
+  --shadow-glass: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07);
+  --shadow-sheen: inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(255,255,255,.6), 0 12px 30px rgba(15,23,42,.06);
+
+  --ease-standard: cubic-bezier(.2,0,0,1);
+  --ease-decelerate: cubic-bezier(.05,.7,.1,1);
+  --ease-smooth: cubic-bezier(.2,.8,.2,1);
+  --ease-overshoot: cubic-bezier(.2,.9,.25,1.08);
+  --ease-spring: cubic-bezier(.3,1.25,.45,1);
+}
+
+/* gradient surfaces (Tailwind has no token type for these) */
+@utility bg-clay { background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); }
+@utility bg-recess { background: linear-gradient(180deg, #DEDEE1, #E9E9EB); }
+@utility bg-dock { background: linear-gradient(180deg, #FFFFFF, #F0F0F2); }
+@utility bg-ink-gloss { background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); }
+@utility bg-glass { background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); backdrop-filter: blur(22px) saturate(1.6); -webkit-backdrop-filter: blur(22px) saturate(1.6); }
+@utility bg-sheen-se { background: linear-gradient(160deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%), #DCEBFF; }
+@utility bg-sheen-daa { background: linear-gradient(160deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%), #EDE5FF; }
+@utility bg-sheen-dds { background: linear-gradient(160deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%), #D9F5E6; }

@@ -71,6 +71,7 @@ export interface Material {
   isSample: boolean;
 }
 export interface PdfProgress {
+  bookmarks?: number[];
   page: number;
   finished?: boolean;
   highlights: Record<number, number[]>;

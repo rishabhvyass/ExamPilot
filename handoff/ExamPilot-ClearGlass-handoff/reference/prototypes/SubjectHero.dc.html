@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ExamPilot — Subject hero card</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+</style>
+</helmet>
+<div style="width: 100%; box-sizing: border-box; background: {{tint}}; border-radius: 34px; padding: 8px 8px 10px; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; display: flex; flex-direction: column">
+<div style="padding: 18px 14px 18px 18px; display: flex; gap: 12px; align-items: flex-start">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-weight: 600; font-size: 28px; line-height: 1.1; letter-spacing: -0.02em">{{s.name}}</h2>
+<span style="font-size: 15px; line-height: 1.45; color: {{subColor}}">{{s.desc}}</span>
+</div>
+<button type="button" aria-label="Subject options" style="flex: none; width: 48px; height: 48px; border-radius: 999px; border: 1.5px solid rgba(27,27,31,0.2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="#1B1B1F" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+</div>
+<div style="position: relative; height: 170px; border-radius: 28px; background: {{panel}}; overflow: hidden; display: flex">
+<div style="width: 84px; padding: 16px 0 16px 18px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(27,27,31,0.12)">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; color: {{subColor}}">Topics</span><span style="font-size: 40px; font-weight: 600; line-height: 1.05; letter-spacing: -0.02em">{{s.topicStat}}</span></span>
+<span style="font-size: 13px; color: {{subColor}}">revised</span>
+</div>
+<div style="width: 76px; padding: 16px 0 16px 16px; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; border-right: 1px solid rgba(27,27,31,0.12)">
+<span style="font-size: 14px; color: {{subColor}}">PDFs</span>
+<span style="font-size: 40px; font-weight: 600; line-height: 1.05">{{s.pdfCount}}</span>
+</div>
+<div aria-hidden="true" style="position: relative; flex: 1">
+<span style="position: absolute; left: 10px; top: -26px; width: 110px; height: 110px; border-radius: 999px; background: {{artA}}"></span>
+<span style="position: absolute; left: 56px; top: 56px; width: 88px; height: 88px; border-radius: 999px; background: {{artB}}"></span>
+<span style="position: absolute; left: -4px; top: 96px; width: 66px; height: 66px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.85)"></span>
+</div>
+<span style="position: absolute; right: 14px; bottom: 14px; height: 44px; padding: 0 16px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18); color: #FFFFFF; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="4"></rect><path d="M16 3v4M8 3v4M3 10h18"></path></svg>{{s.exam}}</span>
+</div>
+<div style="display: flex; gap: 4px; padding: 12px 10px 6px" aria-hidden="true">
+<sc-for list="{{s.segs}}" as="g" hint-placeholder-count="6">
+<sc-if value="{{g.on}}" hint-placeholder-val="{{true}}"><span style="flex: 1; height: 6px; border-radius: 999px; background: #151517; "></span></sc-if>
+<sc-if value="{{g.off}}" hint-placeholder-val="{{false}}"><span style="flex: 1; height: 6px; border-radius: 999px; background: rgba(255,255,255,0.75)"></span></sc-if>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"subject":{"editor":null},"tint":{"editor":"color","default":"#DCEBFF","options":["#DCEBFF","#EDE5FF","#D9F5E6"]},"subColor":{"editor":null},"panel":{"editor":null},"artA":{"editor":null},"artB":{"editor":null},"$preview":{"width":358,"height":330}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var fallback = { name: 'Software Engineering', desc: 'Process models, requirements, design, testing and quality.', topicStat: '4/6', pdfCount: 2, exam: '21 Oct',
+      segs: [{ on: true, off: false }, { on: true, off: false }, { on: true, off: false }, { on: true, off: false }, { on: false, off: true }, { on: false, off: true }] };
+    return {
+      s: this.props.subject || fallback,
+      tint: this.props.tint || '#DCEBFF',
+      subColor: this.props.subColor || '#1E40AF',
+      panel: this.props.panel || '#BFD6FF',
+      artA: this.props.artA || '#3B82F6',
+      artB: this.props.artB || '#DDD0FF'
+    };
+  }
+}
+</script>
+</body>
+</html>

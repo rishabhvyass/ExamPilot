@@ -1,20 +1,20 @@
 // TabBar — floating bottom nav (exactly four tabs: Today, Calendar, Subjects, Questions).
 // One soft dock; inactive tabs are flat 56px icons; the active tab grows to show icon + label inside a
 // pressed-in grey groove. The groove is ONE view that springs (400/34) to the active tab's measured frame;
-// the label blurs/fades in 120ms later.
+// the label fades/slides in 180ms later (320ms).
 //
 // React Navigation 7:   <Tab.Navigator tabBar={(p) => <TabBar {...p} />} screenOptions={{ headerShown: false }}>
 // expo-router:          <Tabs tabBar={(p) => <TabBar {...p} />} screenOptions={{ headerShown: false }}>
 // Route names are matched to icons below; the label is `options.title` (or the route name).
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View, type LayoutChangeEvent } from "react-native";
+import { StyleSheet, Text, View, useWindowDimensions, type LayoutChangeEvent } from "react-native";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, { Keyframe, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { Surface } from "./Surface";
 import { PressableScale } from "./PressableScale";
 import { Icon, ICON } from "./Icon";
-import { ease, layout, spring } from "../motion";
+import { ease, spring, tabGrow, tabLabelTiming } from "../motion";
 import { color, fontFamily, surface } from "../theme";
 import { splitShadow } from "./Surface";
 import { LinearGradient } from "../compat";
@@ -27,11 +27,13 @@ const labelIn = new Keyframe({
   0: { opacity: 0, transform: [{ translateX: -6 }] },
   100: { opacity: 1, transform: [{ translateX: 0 }], easing: ease.decelerate },
 })
-  .duration(300)
-  .delay(120);
+  .duration(tabLabelTiming.duration)
+  .delay(tabLabelTiming.delay);
 
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+  const compact = useWindowDimensions().width < 375;
+  const inactiveWidth = compact ? 44 : 56;
   const x = useSharedValue(0);
   const w = useSharedValue(0);
   const [frames, setFrames] = useState<Record<string, { x: number; width: number }>>({});
@@ -76,19 +78,19 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             if (!focused && !e.defaultPrevented) navigation.navigate(route.name, route.params);
           };
           return (
-            <Animated.View key={route.key} layout={layout} onLayout={onTabLayout(route.key, focused)} style={focused ? { flex: 1 } : { width: 56 }}>
+            <Animated.View key={route.key} layout={tabGrow} onLayout={onTabLayout(route.key, focused)} style={focused ? { flex: 1 } : { width: inactiveWidth }}>
               <PressableScale
                 amount="small"
                 onPress={onPress}
                 accessibilityRole="tab"
                 accessibilityState={{ selected: focused }}
                 accessibilityLabel={label}
-                style={{ height: 56, borderRadius: 9999, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, paddingHorizontal: focused ? 20 : 0 }}
+                style={{ height: 56, borderRadius: 9999, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, paddingHorizontal: focused ? (compact ? 6 : 14) : 0 }}
               >
                 <Icon d={[...d]} size={focused ? 20 : 22} color={color.inkButton} />
                 {focused && (
                   <Animated.View entering={labelIn}>
-                    <Text numberOfLines={1} style={{ fontFamily: fontFamily[600], fontSize: 16, color: color.inkButton }}>{label}</Text>
+                    <Text numberOfLines={1} style={{ fontFamily: fontFamily[600], fontSize: compact ? 13 : 16, color: color.inkButton }}>{label}</Text>
                   </Animated.View>
                 )}
               </PressableScale>

@@ -22,7 +22,7 @@ export function ToolDock({ primary, more }: { primary: Tool[]; more: Tool[] }) {
   const plus = useAnimatedStyle(() => ({ transform: [{ rotate: `${rot.value}deg` }] }));
 
   return (
-    <Animated.View layout={layout} style={{ width: open ? 340 : undefined, alignSelf: "center" }}>
+    <Animated.View layout={layout} style={{ width: open ? "100%" : undefined, maxWidth: 340, alignSelf: "center" }}>
       <Surface kind="dock" radius={open ? 30 : 9999} style={{ padding: open ? 16 : 6 }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
           {primary.map((t) => (
@@ -46,7 +46,7 @@ export function ToolDock({ primary, more }: { primary: Tool[]; more: Tool[] }) {
         {open && (
           <Animated.View exiting={FadeOut.duration(150)} style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, paddingTop: 12 }}>
             {more.map((t, i) => (
-              <Animated.View key={t.id} entering={toolIn(i)} style={{ width: "23%" }}>
+              <Animated.View key={t.id} entering={toolIn(i)} style={{ width: "22%" }}>
                 <PressableScale amount="small" onPress={t.onSelect} accessibilityLabel={t.label}>
                   <Surface kind="clay" radius={18} style={{ alignItems: "center", gap: 6, paddingVertical: 12 }}>
                     {t.icon}

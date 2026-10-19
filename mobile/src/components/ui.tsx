@@ -1,5 +1,9 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useNav } from '../navigation';
+import { LiveSubjectIcon } from './LiveSubjectIcon';
+import { AnimatedMaterialView } from './surface';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -17,33 +21,30 @@ import {
 } from 'react-native';
 import Animated, {
   Easing,
-  FadeIn,
-  FadeInDown,
-  SlideInDown,
   useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
+  useReducedMotion,
+  cancelAnimation,
+  withRepeat,
   withDelay,
   withSequence,
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 import Svg, { Path, SvgXml } from 'react-native-svg';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { C, FONT, R, SHADOW, SUBJ, TYPE, type SubjectColor, INK } from '../theme';
+import { C, FONT, R, SHADOW, SUBJ, TYPE, type SubjectColor, INK, SHEEN } from '../theme';
 import { ICONS } from '../assets/icons';
 import { ILLOS } from '../assets/illustrations';
 import { GlassCard, Surface } from './surface';
 import { BlurIn } from '../kit/components/BlurIn';
 import { Haptics } from '../kit/compat';
+import { spring, ease, duration } from '../kit/motion';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
-const spring = {
-  press: { stiffness: 500, damping: 40 },
-  progress: { stiffness: 300, damping: 31 },
-};
-
 /* ---------- Text: maps fontWeight to the right Urbanist file ---------- */
 export function Txt({
   style,
@@ -60,7 +61,7 @@ export function Txt({
     flat.fontFamily = FONT[w];
     delete flat.fontWeight;
   }
-  return <Text maxFontSizeMultiplier={1.4} {...p} style={flat} />;
+  return <Text maxFontSizeMultiplier={1.3} {...p} style={flat} />;
 }
 
 /* ---------- Icons & illustrations ---------- */
@@ -102,21 +103,23 @@ export function Illo({
 export function Press({
   children,
   style,
-  scaleTo = 0.97,
+  scaleTo = 0.96,
   ...p
 }: PressableProps & {
   style?: StyleProp<ViewStyle>;
   scaleTo?: number;
   children?: ReactNode;
 }) {
+  const reduce = useReducedMotion();
   const s = useSharedValue(1);
-  const a = useAnimatedStyle(() => ({ transform: [{ scale: s.value }] }));
+  const a = useAnimatedStyle(() => ({ opacity: p.disabled ? 0.45 : 1 - (1 - s.value) * 1.5, transform: [{ scale: reduce ? 1 : s.value }] }));
   // Sizing in the parent's layout belongs on the Pressable, or flex/width are ignored.
   const { flex, flexGrow, flexShrink, alignSelf, width, ...inner } = StyleSheet.flatten(style) ?? {};
   const outer = { flex, flexGrow, flexShrink, alignSelf, width };
   return (
     <Pressable
       {...p}
+      accessibilityState={{ ...p.accessibilityState, disabled: !!p.disabled }}
       style={outer}
       onPressIn={e => {
         s.value = withSpring(scaleTo, spring.press);
@@ -128,7 +131,7 @@ export function Press({
         p.onPressOut?.(e);
       }}
     >
-      <Animated.View style={[inner, width !== undefined && { width: '100%' }, a]}>{children}</Animated.View>
+      <AnimatedMaterialView style={[inner, width !== undefined && { width: '100%' }, a]}>{children}</AnimatedMaterialView>
     </Pressable>
   );
 }
@@ -154,7 +157,7 @@ export function PrimaryButton({
       <Surface
         kind="clay"
         style={{
-          height: 62,
+          height: 64,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -367,8 +370,10 @@ export function Screen({
   footer?: ReactNode;
 }) {
   const insets = useSafeAreaInsets();
+  const [visit, setVisit] = useState(0);
+  useFocusEffect(useCallback(() => { setVisit(v => v + 1); }, []));
   return (
-    <View style={{ flex: 1, backgroundColor: C.ground }}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, backgroundColor: C.ground }}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
@@ -382,16 +387,12 @@ export function Screen({
           alignSelf: 'center',
         }}
       >
-        <Animated.View
-          entering={FadeInDown.duration(360).easing(
-            Easing.bezier(0.2, 0.8, 0.2, 1),
-          )}
-        >
+        <BlurIn replayKey={visit} ms={duration.page} rise={10} delay={0} easing={ease.smooth}>
           {children}
-        </Animated.View>
+        </BlurIn>
       </ScrollView>
       {footer}
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 /** Block entrance: rises, fades and sharpens out of a blur, staggered 60 ms by `i`. */
@@ -419,7 +420,7 @@ export function TopBar({
   onSearch?: () => void;
   more?: boolean;
 }) {
-  const nav = useNavigation();
+  const nav = useNav();
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
       {back ? (
@@ -434,8 +435,8 @@ export function TopBar({
         </View>
       )}
       <View style={{ flex: 1 }} />
-      <IconButton icon="search" label="Search" onPress={onSearch} />
-      {more && <IconButton icon="more-horizontal" label="More" />}
+      <IconButton icon="search" label="Search" onPress={onSearch ?? (() => nav.navigate('Materials', {}))} />
+      {more && <IconButton icon="more-horizontal" label="More" onPress={() => Alert.alert('Study tools', undefined, [{ text: 'Study materials', onPress: () => nav.navigate('Materials', {}) }, { text: 'Study assistant', onPress: () => nav.navigate('Assistant') }, { text: 'Cancel', style: 'cancel' }])} />}
     </View>
   );
 }
@@ -535,7 +536,7 @@ export function SubjectRow({
       accessibilityRole="button"
       accessibilityLabel={`${title}, ${meta}`}
       onPress={onPress}
-      style={[s.pillRow, { backgroundColor: c.fill }]}
+      style={[s.pillRow, { backgroundColor: c.fill }, SHEEN]}
     >
       <View style={[s.circle52, { backgroundColor: c.deep }]}>
         <Txt style={{ fontSize: 14, fontWeight: 600, color: c.text }}>
@@ -567,11 +568,11 @@ function Segment({ on, tint, h }: { on: boolean; tint?: boolean; h: number }) {
         backgroundColor: tint ? 'rgba(255,255,255,0.75)' : C.track,
       }}
     >
-      <Animated.View
+      <AnimatedMaterialView
         style={[
           {
             flex: 1,
-            ...INK,
+            backgroundColor: C.inkFlat,
             borderRadius: 99,
             transformOrigin: 'left',
           },
@@ -623,7 +624,7 @@ export function HeroCard({
 }) {
   const c = SUBJ[color];
   return (
-    <View style={{ backgroundColor: c.fill, borderRadius: R.card, padding: 8 }}>
+    <Surface kind="sheen" subject={color} radius={R.card} style={{ padding: 8 }}>
       <View
         style={{
           flexDirection: 'row',
@@ -644,12 +645,7 @@ export function HeroCard({
             {desc}
           </Txt>
         </View>
-        <IconButton
-          icon="more-horizontal"
-          label="More options"
-          tone="outline"
-          size={48}
-        />
+        <LiveSubjectIcon subject={color} size={48} />
       </View>
       <View
         style={{
@@ -673,7 +669,7 @@ export function HeroCard({
           >
             <Txt style={{ fontSize: 15, color: c.text }}>{st.label}</Txt>
             <View>
-              <Txt adjustsFontSizeToFit numberOfLines={1} style={TYPE.stat}>
+              <Txt adjustsFontSizeToFit numberOfLines={1} style={[TYPE.stat, i > 0 && { fontSize: 40, lineHeight: 44 }]}>
                 {st.value}
               </Txt>
               {st.foot && (
@@ -703,7 +699,7 @@ export function HeroCard({
           {footer}
         </View>
       )}
-    </View>
+    </Surface>
   );
 }
 export const ArrowButton = ({
@@ -812,20 +808,64 @@ export function StepHeader({
 export function BottomSheet({
   open,
   onClose,
+  onDismiss,
   title,
   children,
 }: {
   open: boolean;
   onClose: () => void;
+  onDismiss?: () => void;
   title: string;
   children: ReactNode;
 }) {
   const insets = useSafeAreaInsets();
+  const reduce = useReducedMotion();
+  const [mounted, setMounted] = useState(open);
+  const [shown, setShown] = useState(false);
+  const [height, setHeight] = useState(0);
+  const progress = useSharedValue(0);
+  const openRef = useRef(open);
+  const wasMounted = useRef(mounted);
+  openRef.current = open;
+  useEffect(() => {
+    if (wasMounted.current && !mounted && Platform.OS !== 'ios') onDismiss?.();
+    wasMounted.current = mounted;
+  }, [mounted, onDismiss]);
+  const finishClose = useCallback(() => {
+    if (openRef.current) return;
+    setMounted(false);
+    setShown(false);
+  }, []);
+  useEffect(() => {
+    if (open) setMounted(true);
+  }, [open]);
+  useEffect(() => {
+    if (!mounted) return;
+    if (!open && (!shown || !height)) {
+      finishClose();
+      return;
+    }
+    if (!shown || !height) return;
+    progress.value = withTiming(open ? 1 : 0, {
+      duration: reduce ? 0 : open ? 360 : 240,
+      easing: open ? Easing.bezier(0.22, 0.61, 0.36, 1) : Easing.inOut(Easing.cubic),
+    }, finished => {
+      if (finished && !open) scheduleOnRN(finishClose);
+    });
+    return () => cancelAnimation(progress);
+  }, [open, mounted, shown, height, reduce, progress, finishClose]);
+  const backdropStyle = useAnimatedStyle(() => ({ opacity: progress.value }));
+  const sheetStyle = useAnimatedStyle(() => ({
+    opacity: height ? (reduce ? progress.value : 1) : 0,
+    transform: [{ translateY: reduce ? 0 : (1 - progress.value) * (height + 32) }],
+  }));
   return (
     <Modal
-      visible={open}
+      visible={mounted}
       transparent
       animationType="none"
+      onShow={() => setShown(true)}
+      onDismiss={onDismiss}
       onRequestClose={onClose}
       statusBarTranslucent
     >
@@ -834,8 +874,7 @@ export function BottomSheet({
         style={{ flex: 1, justifyContent: 'flex-end' }}
       >
         <Animated.View
-          entering={FadeIn.duration(260)}
-          style={StyleSheet.absoluteFill}
+          style={[StyleSheet.absoluteFill, backdropStyle]}
         >
           <Pressable
             accessibilityLabel="Close"
@@ -844,9 +883,10 @@ export function BottomSheet({
           />
         </Animated.View>
         <Animated.View
-          entering={SlideInDown.springify().stiffness(380).damping(36)}
+          onLayout={e => setHeight(e.nativeEvent.layout.height)}
           accessibilityViewIsModal
-          style={{
+          pointerEvents={open ? 'auto' : 'none'}
+          style={[{
             backgroundColor: C.surface,
             borderTopLeftRadius: R.sheet,
             borderTopRightRadius: R.sheet,
@@ -854,7 +894,7 @@ export function BottomSheet({
             paddingTop: 12,
             paddingBottom: 24 + insets.bottom,
             boxShadow: SHADOW.sheet,
-          }}
+          }, sheetStyle]}
         >
           <View
             style={{
@@ -936,18 +976,20 @@ export function AnimatedCheckbox({
 }) {
   const p = useSharedValue(checked ? 1 : 0);
   const pop = useSharedValue(1);
+  const tickProgress = useSharedValue(checked ? 1 : 0);
   useEffect(() => {
     p.value = withTiming(checked ? 1 : 0, {
       duration: 240,
       easing: Easing.bezier(0.2, 0.8, 0.2, 1),
     });
+    tickProgress.value = checked ? withDelay(60, withTiming(1, { duration: 220, easing: ease.standard })) : withTiming(0, { duration: 120 });
     if (checked)
       pop.value = withSequence(
         withTiming(0.9, { duration: 60 }),
         withTiming(1.12, { duration: 100 }),
         withTiming(1, { duration: 100 }),
       );
-  }, [checked, p, pop]);
+  }, [checked, p, pop, tickProgress]);
   const box = useAnimatedStyle(() => ({
     transform: [{ scale: pop.value }],
     backgroundColor:
@@ -955,7 +997,7 @@ export function AnimatedCheckbox({
     borderWidth: p.value > 0.5 ? 0 : 2,
   }));
   const tick = useAnimatedProps(() => ({
-    strokeDashoffset: 24 * (1 - p.value),
+    strokeDashoffset: 24 * (1 - tickProgress.value),
   }));
   // Title dims briefly mid-toggle, then settles.
   const strike = useAnimatedStyle(() => ({ opacity: 1 - 0.15 * Math.sin(Math.PI * p.value) }));
@@ -965,7 +1007,7 @@ export function AnimatedCheckbox({
       accessibilityState={{ checked }}
       accessibilityLabel={title}
       onPress={onToggle}
-      scaleTo={0.98}
+      scaleTo={0.96}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
@@ -988,6 +1030,7 @@ export function AnimatedCheckbox({
           box,
         ]}
       >
+        {checked && <Surface kind="ink" radius={15} style={StyleSheet.absoluteFill} />}
         <Svg width={16} height={16} viewBox="0 0 24 24">
           <AnimatedPath
             d="M5 12l5 5L20 7"
@@ -1010,7 +1053,7 @@ export function AnimatedCheckbox({
             style={[
               TYPE.bodyL,
               checked
-                ? { color: C.inkSubtle, textDecorationLine: 'line-through', textDecorationColor: '#A9A4B0' }
+                ? { color: C.inkSubtle, textDecorationLine: 'line-through', textDecorationColor: C.inkSubtle }
                 : { color: C.ink },
             ]}
           >
@@ -1051,20 +1094,11 @@ export function TypingDots() {
 }
 function Dot({ delay }: { delay: number }) {
   const v = useSharedValue(0);
+  const reduce = useReducedMotion();
   useEffect(() => {
-    const loop = () => {
-      v.value = withDelay(
-        delay,
-        withSequence(
-          withTiming(1, { duration: 300 }),
-          withTiming(0, { duration: 300 }),
-        ),
-      );
-    };
-    loop();
-    const id = setInterval(loop, 1000);
-    return () => clearInterval(id);
-  }, [delay, v]);
+    if (!reduce) v.value = withDelay(delay, withRepeat(withSequence(withTiming(1, { duration: 300 }), withTiming(0, { duration: 300 }), withDelay(400, withTiming(0, { duration: 0 }))), -1));
+    return () => cancelAnimation(v);
+  }, [delay, reduce, v]);
   const a = useAnimatedStyle(() => ({
     opacity: 0.4 + v.value * 0.6,
     transform: [{ translateY: -5 * v.value }],

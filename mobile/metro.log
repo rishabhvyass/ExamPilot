@@ -112,3 +112,43 @@ Starting dev server on http://localhost:8081
  BUNDLE  ./index.js 
  BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
  BUNDLE  ./index.js 
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js 
+ BUNDLE  ./index.js 
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js 
+ ERROR  SyntaxError: /Users/rishabvyas/Desktop/ALL PROJECTS/ExamPilot-RN/mobile/src/screens/tabs.tsx: Identifier 'MaterialView' has already been declared. (4:31)
+
+  2 | import { BlurIn } from '../kit/components/BlurIn';
+  3 | import { FocusReaderSheet, readingLines } from '../components/FocusReaderSheet';
+> 4 | import { AnimatedMaterialView, MaterialView } from '../components/surface';
+    |                                ^
+  5 | import { useEffect, useMemo, useRef, useState } from 'react';
+  6 | import { Alert, Pressable, ScrollView, TextInput, View } from 'react-native';
+  7 | import Animated, {
+ ERROR  SyntaxError: /Users/rishabvyas/Desktop/ALL PROJECTS/ExamPilot-RN/mobile/src/screens/onboarding.tsx: Expected corresponding JSX closing tag for <BlurIn>. (1617:6)
+
+  1615 |           onPress={() => finish('Assistant')}
+  1616 |         />
+> 1617 |       </View>
+       |       ^
+  1618 |     </Screen>
+  1619 |   );
+  1620 | }
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js 
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js ▓▓▓▓▓░░░░░░░░░░░ 31% (448/800)
+ BUNDLE  ./index.js ▓▓▓▓▓▓▓▓▓░░░░░░░ 61% (1047/1338)
+ BUNDLE  ./index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░ 91% (1561/1635)
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 97% (1926/1947)
+ BUNDLE  ./index.js ▓▓▓░░░░░░░░░░░░░ 21% (261/563)
+ BUNDLE  ./index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 98% (1937/1951)
+ BUNDLE  ./index.js ▓▓▓▓▓▓▓░░░░░░░░░ 48% (758/1090)
+ BUNDLE  ./index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99% (1950/1955)
+ BUNDLE  ./index.js ▓▓▓▓▓▓▓▓▓▓▓▓▓░░░ 82% (1387/1525)
+ BUNDLE  ./index.js 
+ BUNDLE  ./index.js 
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js 

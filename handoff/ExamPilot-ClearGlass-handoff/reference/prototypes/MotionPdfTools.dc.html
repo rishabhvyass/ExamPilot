@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ExamPilot — PDF tools</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#1B1B1F}a:hover{color:#000000}
+.panel{transition:width 440ms cubic-bezier(.3,1.2,.45,1),height 440ms cubic-bezier(.3,1.2,.45,1),border-radius 440ms ease}
+.layer{transition:opacity 220ms ease,filter 260ms ease,transform 380ms cubic-bezier(.3,1.2,.45,1)}
+.btn{transition:transform 360ms cubic-bezier(.3,1.4,.45,1),background-color 200ms ease}
+.btn:active{transform:scale(.88)}
+.flash{animation:flash 520ms ease both}
+.tool{transition:background-color 220ms ease,transform 140ms cubic-bezier(.2,0,0,1)}
+.tool:hover{background:rgba(255,255,255,.08)}
+.tool:active{transform:scale(.92)}
+.mark{transition:background-color 320ms ease}
+.hint{animation:hint 1.8s ease both}
+@keyframes flash{0%{background:#FFFFFF}100%{background:#3A3A42}}
+@keyframes hint{0%{opacity:0;transform:translateY(6px)}15%{opacity:1;transform:none}85%{opacity:1}100%{opacity:0}}
+button:focus-visible,a:focus-visible{outline:3px solid #3B82F6;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){.panel,.layer,.btn,.tool,.mark{transition:opacity 150ms ease!important}.flash{animation:none}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box">
+
+<header style="padding: 56px 20px 10px; display: flex; align-items: center; gap: 12px">
+<a href="PdfReader.dc.html" aria-label="Back" style="flex: none; width: 52px; height: 52px; border-radius: 999px; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">SE_Unit3_Design_UML.pdf</span><span style="font-size: 14px; color: #5B6475">Page 3 of 6 · sample</span></span>
+</header><article style="margin: 6px 20px 0; height: 520px; background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); border-radius: 28px; box-shadow: 0 16px 40px rgba(15,23,42,.10); padding: 26px 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+<span style="font-size: 13px; font-weight: 600; color: #6B7385">UNIT 3 · PAGE 3</span>
+<h2 style="margin: 0; font-size: 26px; font-weight: 600; line-height: 1.15; letter-spacing: -0.02em">Cohesion and coupling</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.65">Cohesion measures how related a module’s responsibilities are. Coupling measures how much modules depend on one another.</p>
+<p style="margin: 0; font-size: 16px; line-height: 1.65"><span class="mark" style="background: transparent; border-radius: 6px; padding: 1px 3px">Aim for high cohesion and low coupling.</span> Changes then stay small and testing stays simple.</p>
+<sc-if value="{{false}}" hint-placeholder-val="{{false}}"><div class="hint" style="animation-duration: 99s; align-self: flex-start; background: #FEF3C7; color: #92400E; border-radius: 16px 16px 16px 4px; padding: 10px 14px; font-size: 14px; font-weight: 600">Note: likely 5-mark question</div></sc-if>
+</article>
+
+
+
+<sc-if value="{{hasHint}}" hint-placeholder-val="{{false}}"><div class="hint" role="status" style="position: absolute; left: 50%; top: 610px; margin-left: -90px; width: 180px; height: 40px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 8px 20px rgba(15,23,42,.12); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600">{{hintText}}</div></sc-if>
+
+<div class="panel" style="position: absolute; left: 20px; bottom: 34px; width: {{panelW}}; height: {{panelH}}; border-radius: {{panelR}}; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  box-shadow: 0 18px 40px rgba(27,27,31,.28); overflow: hidden">
+<div class="layer" aria-hidden="{{barHidden}}" style="position: absolute; left: 0; right: 0; bottom: 0; height: 60px; display: flex; align-items: center; justify-content: space-around; padding: 0 10px; opacity: {{barOpacity}}; filter: {{barBlur}}">
+<button type="button" class="tool" tabindex="{{barTab}}" aria-label="Pages" style="width: 48px; height: 48px; border-radius: 16px; border: 0; background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="11" height="15" rx="2.5"></rect><path d="M9 21h8a3 3 0 0 0 3-3V8"></path></svg></button>
+<button type="button" class="tool" tabindex="{{barTab}}" onClick="{{toggleHl}}" aria-label="Highlight" aria-pressed="{{hlPressed}}" style="width: 48px; height: 48px; border-radius: 16px; border: 0; background: {{hlBarBg}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l-5 5v3h3l5-5"></path><path d="M14 4l6 6-8 8-6-6z"></path></svg></button>
+<button type="button" class="tool" tabindex="{{barTab}}" aria-label="Bookmark" style="width: 48px; height: 48px; border-radius: 16px; border: 0; background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"></path></svg></button>
+<button type="button" class="tool" tabindex="{{barTab}}" aria-label="Text size" style="width: 48px; height: 48px; border-radius: 16px; border: 0; background: transparent; color: #FFFFFF; font: inherit; font-size: 18px; font-weight: 600; cursor: pointer">Aa</button>
+</div>
+<div class="layer" role="menu" aria-label="Study tools" aria-hidden="{{gridHidden}}" style="position: absolute; inset: 0; padding: 18px 14px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 82px; gap: 4px; opacity: {{gridOpacity}}; filter: {{gridBlur}}; transform: {{gridScale}}; transform-origin: 50% 100%; pointer-events: {{gridEvents}}">
+<sc-for list="{{tools}}" as="t" hint-placeholder-count="11">
+<button type="button" role="menuitem" class="tool {{t.flashClass}}" tabindex="{{gridTab}}" onClick="{{t.pick}}" style="border: 0; border-radius: 18px; background: {{t.bg}}; color: #FFFFFF; font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer">
+<span style="width: 44px; height: 44px; border-radius: 999px; background: {{t.iconBg}}; color: {{t.iconFg}}; display: flex; align-items: center; justify-content: center; transition: background-color 220ms ease, color 220ms ease">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{t.d}}"></path><path d="{{t.d2}}"></path></svg>
+</span>
+<span style="font-size: 12px; font-weight: 600; color: #D9DFE9">{{t.label}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+
+<button type="button" class="btn" onClick="{{toggle}}" aria-label="{{btnLabel}}" aria-expanded="{{expanded}}" style="position: absolute; right: 20px; bottom: 34px; width: 60px; height: 60px; border-radius: 999px; border: 0; background: {{btnBg}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 14px 30px rgba(27,27,31,.28)">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true" style="transition: transform 380ms cubic-bezier(.3,1.4,.45,1); transform: {{plusRot}}"><path d="M12 5v14M5 12h14"></path></svg>
+</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { open: false, hl: false, note: false, flash: -1, hint: '', hintKey: 0, btnKey: 0 };
+  }
+  componentWillUnmount() { clearTimeout(this.t); clearTimeout(this.h); }
+  renderVals() {
+    var s = this, o = this.state.open;
+    var T = [
+      { label: 'Highlight', d: 'M9 11l-5 5v3h3l5-5', d2: 'M14 4l6 6-8 8-6-6z', k: 'hl' },
+      { label: 'Note', d: 'M6 3h9l4 4v14H6z', d2: 'M9 12h7M9 16h5', k: 'note' },
+      { label: 'Ask buddy', d: 'M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z', d2: 'M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z', hint: 'Asking about page 3' },
+      { label: 'Quiz me', d: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', d2: 'M9.2 9a3 3 0 0 1 5.6 1c0 2-2.8 2.6-2.8 4M12 17.5h.01', hint: '5 questions coming up' },
+      { label: 'Flashcards', d: 'M7 7h11a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z', d2: 'M4 15V6a2 2 0 0 1 2-2h10', hint: '8 cards made' },
+      { label: 'Summarise', d: 'M4 6h16M4 10h16M4 14h10', d2: 'M4 18h7', hint: 'Summary ready' },
+      { label: 'Bookmark', d: 'M6 3h12v18l-6-4-6 4z', d2: '', hint: 'Page bookmarked' },
+      { label: 'Focus', d: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', d2: 'M12 7v5l3 2', hint: '25-min focus started' },
+      { label: 'Read aloud', d: 'M4 10v4h4l5 4V6L8 10z', d2: 'M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11', hint: 'Reading aloud' },
+      { label: 'Search', d: 'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14z', d2: 'M20 20l-3.5-3.5', hint: 'Search this PDF' },
+      { label: 'Share', d: 'M12 15V3M7 8l5-5 5 5', d2: 'M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6', hint: 'Share sheet' }
+    ];
+    var showHint = function (txt) {
+      s.setState({ hint: txt, hintKey: s.state.hintKey + 1 });
+      clearTimeout(s.h);
+      s.h = setTimeout(function () { s.setState({ hint: '' }); }, 1800);
+    };
+    var tools = T.map(function (t, i) {
+      var on = (t.k === 'hl' && s.state.hl) || (t.k === 'note' && s.state.note);
+      return {
+        label: t.label, d: t.d, d2: t.d2,
+        bg: on ? 'rgba(255,255,255,.10)' : 'transparent',
+        iconBg: on ? '#FFFFFF' : '#2C2C33', iconFg: on ? '#1B1B1F' : '#FFFFFF',
+        flashClass: s.state.flash === i ? 'flash' : '',
+        pick: function () {
+          var patch = { flash: i };
+          if (t.k === 'hl') { patch.hl = !s.state.hl; showHint(patch.hl ? 'Highlighter on' : 'Highlighter off'); }
+          else if (t.k === 'note') { patch.note = !s.state.note; showHint(patch.note ? 'Note added' : 'Note removed'); }
+          else showHint(t.hint);
+          s.setState(patch);
+          clearTimeout(s.t);
+          s.t = setTimeout(function () { s.setState({ flash: -1 }); }, 520);
+        }
+      };
+    });
+    return {
+      tools: tools,
+      panelW: '278px',
+      panelH: o ? '304px' : '60px',
+      panelR: o ? '32px' : '30px',
+      barOpacity: o ? '0' : '1', barBlur: o ? 'blur(8px)' : 'blur(0px)', barHidden: o ? 'true' : 'false', barTab: o ? '-1' : '0',
+      gridOpacity: o ? '1' : '0', gridBlur: o ? 'blur(0px)' : 'blur(10px)', gridScale: o ? 'scale(1)' : 'scale(.9)', gridEvents: o ? 'auto' : 'none', gridHidden: o ? 'false' : 'true', gridTab: o ? '0' : '-1',
+      btnBg: o ? '#3A3A42' : 'linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%)',
+      plusRot: o ? 'rotate(45deg)' : 'rotate(0deg)',
+      btnLabel: o ? 'Close tools' : 'Open study tools',
+      expanded: o ? 'true' : 'false',
+      markBg: this.state.hl ? '#E3EEFF' : 'transparent',
+      hlPressed: this.state.hl ? 'true' : 'false',
+      hlBarBg: this.state.hl ? 'rgba(255,255,255,.14)' : 'transparent',
+      hasNote: this.state.note,
+      hasHint: !!this.state.hint, hintText: this.state.hint,
+      toggleHl: function () { s.setState({ hl: !s.state.hl }); },
+      toggle: function () { s.setState({ open: !s.state.open, btnKey: s.state.btnKey + 1 }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

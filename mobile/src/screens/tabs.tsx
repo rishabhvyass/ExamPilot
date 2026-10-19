@@ -1,9 +1,12 @@
+import { TimeRangePicker } from '../components/TimeRangePicker';
+import { StudyIsland } from '../components/StudyIsland';
+import { BlurIn } from '../kit/components/BlurIn';
+import { FocusReaderSheet, readingLines } from '../components/FocusReaderSheet';
+import { MaterialView } from '../components/surface';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, Pressable, ScrollView, TextInput, View } from 'react-native';
 import Animated, {
   FadeIn,
-  FadeInDown,
-  FadeOut,
   LinearTransition,
   ZoomIn,
 } from 'react-native-reanimated';
@@ -13,7 +16,6 @@ import { StudyBlockPicker } from '../components/rangepicker';
 import { ChoiceGroup } from '../components/choicegroup';
 import { TimeField } from '../components/examsheet';
 import { useNavigation } from '@react-navigation/native';
-import { pick, types } from '@react-native-documents/picker';
 import {
   AnimatedCheckbox,
   ArrowButton,
@@ -59,7 +61,6 @@ import {
 } from '../lib/dates';
 import micro from '../data/seed/microcopy.json';
 
-const fade = FadeInDown.duration(260);
 
 /* ---------- 06 Today ---------- */
 export function Today() {
@@ -206,6 +207,7 @@ export function Today() {
         />
       }
     >
+      <StudyIsland exam={nextSubj?.code} days={n} complete={allDone} />
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <Pressable
           style={{
@@ -229,8 +231,8 @@ export function Today() {
           label="Open study assistant"
           onPress={() => nav.navigate('Assistant')}
         />
-        <IconButton icon="search" label="Search" />
-        <IconButton icon="more-horizontal" label="More" />
+        <IconButton icon="search" label="Search study materials" onPress={() => nav.navigate('Materials', {})} />
+        <IconButton icon="more-horizontal" label="Account options" onPress={profileMenu} />
       </View>
       <ScreenHeader eyebrow={greeting()} title={'Your Exam\nWeek'} />
       {islandSupported && activity && (
@@ -415,9 +417,8 @@ export function Today() {
               ))}
             </View>
             {allDone ? (
-              <Animated.View
+              <BlurIn soft delay={0}><MaterialView
                 key="done"
-                entering={FadeInDown.duration(360)}
                 style={{
                   marginTop: 16,
                   flexDirection: 'row',
@@ -449,7 +450,7 @@ export function Today() {
                     {micro.checklist.allDoneSub}
                   </Txt>
                 </View>
-              </Animated.View>
+              </MaterialView></BlurIn>
             ) : (
               <Animated.View
                 key="foot"
@@ -661,7 +662,7 @@ export function Calendar() {
                   gap: 2,
                 }}
               >
-                <View
+                <MaterialView
                   style={[
                     {
                       width: 36,
@@ -686,7 +687,7 @@ export function Calendar() {
                   >
                     {dayNum(d)}
                   </Txt>
-                </View>
+                </MaterialView>
                 <View style={{ height: 6, flexDirection: 'row', gap: 2 }}>
                   {ex.map(e => (
                     <View
@@ -767,20 +768,19 @@ export function Calendar() {
           label="Add study session"
           tone="dark"
           onPress={() => {
-            setForm({ ...form, date: sel });
+            setForm({ ...form, date: sel, endDate: sel });
             setSheet(true);
           }}
         />
       </View>
-      <Animated.View
-        key={sel}
-        entering={fade}
+      <BlurIn
+        key={sel} soft delay={0}
         style={{ marginTop: 12, gap: 10 }}
       >
         {examsOn(sel).map(e => {
           const c = SUBJ[colorOf(e.subjectId)];
           return (
-            <View
+            <MaterialView
               key={e.id}
               style={{
                 flexDirection: 'row',
@@ -793,7 +793,7 @@ export function Calendar() {
                 ...SHEEN,
               }}
             >
-              <View
+              <MaterialView
                 style={{
                   width: 52,
                   height: 52,
@@ -806,7 +806,7 @@ export function Calendar() {
                 <Txt style={{ fontSize: 13, fontWeight: 600, color: '#fff' }}>
                   {fmtTimeShort(e.time).replace(':00', '')}
                 </Txt>
-              </View>
+              </MaterialView>
               <View style={{ flex: 1 }}>
                 <Txt numberOfLines={1} style={TYPE.bodyStrong}>
                   {e.title}
@@ -815,7 +815,7 @@ export function Calendar() {
                   Exam · {fmtTime(e.time)}
                 </Txt>
               </View>
-            </View>
+            </MaterialView>
           );
         })}
         {sessOn(sel).map(x => {
@@ -875,7 +875,7 @@ export function Calendar() {
             </Txt>
           </View>
         )}
-      </Animated.View>
+      </BlurIn>
       <BottomSheet
         open={sheet}
         onClose={() => setSheet(false)}
@@ -899,6 +899,7 @@ export function Calendar() {
             onChange={r => setForm({ ...form, date: r.start, endDate: r.end })}
             examDates={state.exams.map(e => e.date)}
           />
+          <TimeRangePicker start={form.start} end={form.end} onChange={(start, end) => setForm({ ...form, start, end })} />
           <TimeField
             label="Start time"
             value={form.start}
@@ -951,6 +952,7 @@ export function Subjects() {
 function SubjectsBody() {
   const nav = useNav();
   const { state, update } = useStore();
+  const [focusNote, setFocusNote] = useState(false);
   const [picked, setId] = useState(state.subjects[0].id);
   const sj = state.subjects.find(x => x.id === picked) ?? state.subjects[0];
   const id = sj.id;
@@ -978,28 +980,7 @@ function SubjectsBody() {
           : s,
       ),
     }));
-  const addPdf = async () => {
-    try {
-      const [f] = await pick({ type: [types.pdf] });
-      update(x => ({
-        ...x,
-        materials: [
-          ...x.materials,
-          {
-            id: 'u' + Date.now(),
-            subjectId: id,
-            type: 'pdf',
-            name: f.name ?? 'Document.pdf',
-            pages: 6,
-            sizeKb: Math.round((f.size ?? 0) / 1024),
-            isSample: false,
-          },
-        ],
-      }));
-    } catch {
-      /* cancelled */
-    }
-  };
+  const addPdf = () => nav.navigate('Materials', { subjectId: id });
   return (
     <Screen tabs>
       <TopBar />
@@ -1015,9 +996,9 @@ function SubjectsBody() {
         value={id}
         onChange={setId}
       />
-      <Animated.View
+      <BlurIn
         key={id}
-        entering={fade}
+        ms={520} amount={40} rise={0} delay={0}
         style={{ marginTop: 12, gap: 14 }}
       >
         <HeroCard
@@ -1034,7 +1015,7 @@ function SubjectsBody() {
           ]}
           action={
             exam && (
-              <View
+              <MaterialView
                 style={{
                   height: 52,
                   flexDirection: 'row',
@@ -1049,7 +1030,7 @@ function SubjectsBody() {
                 <Txt style={{ color: '#fff', fontWeight: 600, fontSize: 15 }}>
                   {dayNum(exam.date)} {monthShort(exam.date)}
                 </Txt>
-              </View>
+              </MaterialView>
             )
           }
           footer={
@@ -1107,6 +1088,7 @@ function SubjectsBody() {
                 {note.isSample ? 'Sample note: ' : ''}
                 {note.body ?? note.name}
               </Txt>
+              <SecondaryButton label="Focus read" icon="book-open" onPress={() => setFocusNote(true)} />
             </View>
           )}
           <View style={{ marginTop: 12, gap: 8 }}>
@@ -1188,7 +1170,8 @@ function SubjectsBody() {
               onPress={() => setId(x.id)}
             />
           ))}
-      </Animated.View>
+      </BlurIn>
+    <FocusReaderSheet open={focusNote} onClose={() => setFocusNote(false)} title={note?.name ?? sj.name} lines={readingLines(note?.body ?? note?.name ?? "")} subjectId={id} />
     </Screen>
   );
 }
@@ -1251,7 +1234,7 @@ export function Questions() {
         value={f}
         onChange={setF}
       />
-      <View
+      <MaterialView
         style={{
           marginTop: 12,
           borderRadius: 34,
@@ -1288,8 +1271,8 @@ export function Questions() {
           tint
           h={8}
         />
-      </View>
-      <View style={{ marginTop: 14, gap: 12 }}>
+      </MaterialView>
+      <BlurIn key={f} soft delay={0} style={{ marginTop: 14, gap: 12 }}>
         {list.map(q => {
           const isOpen = open === q.id;
           return (
@@ -1340,14 +1323,14 @@ export function Questions() {
                     {q.question}
                   </Txt>
                 </View>
-                <View
+                <MaterialView
                   style={{
                     width: 40,
                     height: 40,
                     borderRadius: 20,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: isOpen ? C.ink : C.surfaceMuted,
+                    ...(isOpen ? INK : CLAY),
                   }}
                 >
                   <Icon
@@ -1355,13 +1338,10 @@ export function Questions() {
                     size={20}
                     color={isOpen ? '#fff' : C.ink}
                   />
-                </View>
+                </MaterialView>
               </Pressable>
               {isOpen && (
-                <Animated.View
-                  entering={FadeIn.delay(80).duration(200)}
-                  exiting={FadeOut.duration(120)}
-                >
+                <BlurIn soft rise={0} delay={0}>
                   <View
                     style={{
                       marginTop: 16,
@@ -1400,7 +1380,7 @@ export function Questions() {
                       {q.revised ? '✓ Revised' : 'Mark as revised'}
                     </Txt>
                   </Press>
-                </Animated.View>
+                </BlurIn>
               )}
             </Animated.View>
           );
@@ -1420,7 +1400,7 @@ export function Questions() {
             onPress={() => setAdding(true)}
           />
         )}
-      </View>
+      </BlurIn>
       <FormSheet
         open={adding}
         onClose={() => setAdding(false)}

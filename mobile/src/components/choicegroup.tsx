@@ -1,8 +1,10 @@
+import { AnimatedMaterialView } from './surface';
+import { spring } from '../kit/motion';
 // Single-choice group with the login switch's motion: one glossy black pill springs to the
 // measured frame of the selected option (works across wrapped rows too), and labels swap colour.
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, ScrollView, View, type ViewStyle } from 'react-native';
-import Animated, {
+import {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -12,7 +14,7 @@ import { C, INK } from '../theme';
 import { Haptics } from '../kit/compat';
 import { Icon, Txt } from './ui';
 
-const SPRING = { stiffness: 400, damping: 36 };
+const SPRING = spring.layout;
 type Frame = { x: number; y: number; w: number; h: number };
 type Size = 'chip' | 'circle' | 'small';
 const ITEM: Record<Size, ViewStyle> = {
@@ -99,7 +101,7 @@ export function ChoiceGroup<T extends string | number>({
         alignItems: 'center',
       }}
     >
-      <Animated.View
+      <AnimatedMaterialView
         pointerEvents="none"
         style={[
           { position: 'absolute', left: 0, top: 0, borderRadius: 999, ...INK },

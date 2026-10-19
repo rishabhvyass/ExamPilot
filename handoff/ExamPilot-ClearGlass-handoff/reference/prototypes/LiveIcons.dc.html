@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ExamPilot — Live subject icons</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#1B1B1F}a:hover{color:#000000}
+.tile{transition:transform 260ms cubic-bezier(.3,1.3,.45,1)}
+.tile:hover{transform:translateY(-6px) scale(1.03)}
+.icon{position:relative;width:150px;height:150px;border-radius:42px;overflow:hidden;box-shadow:0 18px 34px rgba(15,23,42,.16),inset 0 2px 0 rgba(255,255,255,.6),inset 0 -6px 12px rgba(0,0,0,.08)}
+.live .knobA,.tile:hover .knobA{animation:twistA 2.4s cubic-bezier(.5,0,.3,1.4) infinite}
+.live .knobB,.tile:hover .knobB{animation:twistB 2.4s cubic-bezier(.5,0,.3,1.4) infinite}
+.live .knobC,.tile:hover .knobC{animation:twistC 2.4s cubic-bezier(.5,0,.3,1.4) infinite}
+.live .led,.tile:hover .led{animation:led 1.5s steps(1) infinite}
+.live .sweep,.tile:hover .sweep{animation:sweep 2.6s linear infinite}
+.live .blip,.tile:hover .blip{animation:blip 2.6s ease-out infinite}
+.live .px,.tile:hover .px{animation:heat 2.2s ease-in-out infinite}
+.live .key,.tile:hover .key{animation:keypress 2.4s cubic-bezier(.3,1.4,.45,1) infinite}
+.live .cloud,.tile:hover .cloud{animation:drift 7s ease-in-out infinite}
+.live .bob,.tile:hover .bob{animation:bob 3s ease-in-out infinite}
+.live .eyes,.tile:hover .eyes{animation:blink 3.4s ease-in-out infinite}
+.eyes{transform-box:fill-box;transform-origin:center}
+@keyframes twistA{0%,15%{transform:rotate(0)}35%,60%{transform:rotate(70deg)}80%,100%{transform:rotate(0)}}
+@keyframes twistB{0%,25%{transform:rotate(-35deg)}45%,70%{transform:rotate(40deg)}90%,100%{transform:rotate(-35deg)}}
+@keyframes twistC{0%,35%{transform:rotate(20deg)}55%,80%{transform:rotate(-55deg)}100%{transform:rotate(20deg)}}
+@keyframes led{0%{background:#475063;box-shadow:none}50%{background:#DDD0FF;box-shadow:0 0 10px 2px rgba(221,208,255,.9)}}
+@keyframes sweep{to{transform:rotate(360deg)}}
+@keyframes blip{0%,30%{opacity:0;transform:scale(.4)}40%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.6)}}
+@keyframes heat{0%,100%{opacity:.25;transform:scale(.86)}50%{opacity:1;transform:scale(1)}}
+@keyframes keypress{0%,40%{transform:translateY(0);box-shadow:0 10px 0 #8BB5FF,0 16px 24px rgba(30,58,138,.25)}50%,60%{transform:translateY(8px);box-shadow:0 2px 0 #8BB5FF,0 4px 10px rgba(30,58,138,.2)}75%,100%{transform:translateY(0);box-shadow:0 10px 0 #8BB5FF,0 16px 24px rgba(30,58,138,.25)}}
+@keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(14px)}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-5px) rotate(2deg)}}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+button:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){.live *{animation:none!important}.tile{transition:none}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+</style>
+</helmet>
+<div style="width: 1100px; height: 560px; box-sizing: border-box; padding: 48px 56px; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; display: flex; flex-direction: column; gap: 34px">
+<header style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-size: 36px; font-weight: 600; letter-spacing: -0.02em">Live subject icons</h1>
+<p style="margin: 0; max-width: 620px; font-size: 16px; line-height: 1.5; color: #5B6475">Soft, tactile icons that come alive on hover or when their subject is in focus. Used on subject cards, the study island and the home screen.</p>
+</div>
+<button type="button" onClick="{{toggle}}" aria-pressed="{{pressed}}" style="height: 48px; padding: 0 22px; border-radius: 999px; border: 0; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18); color: #FFFFFF; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer">{{toggleLabel}}</button>
+</header>
+
+<div class="{{liveClass}}" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px">
+
+<figure class="tile" style="margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px">
+<div class="icon" role="img" aria-label="Software Engineering icon: control panel with turning knobs" style="background: linear-gradient(160deg, #EDF0F5 0%, #C0C7D3 100%)">
+<span class="knobA" style="position: absolute; left: 18px; top: 18px; width: 50px; height: 50px; border-radius: 999px; background: radial-gradient(circle at 35% 30%, #FFFFFF, #D3DCEA); box-shadow: 0 6px 10px rgba(15,23,42,.2); display: flex; align-items: center; justify-content: center"><span style="width: 6px; height: 34px; border-radius: 3px; background: #BAC1CE"></span></span>
+<span class="knobB" style="position: absolute; left: 62px; top: 52px; width: 42px; height: 42px; border-radius: 999px; background: radial-gradient(circle at 35% 30%, #FFFFFF, #D3DCEA); box-shadow: 0 6px 10px rgba(15,23,42,.2); display: flex; align-items: center; justify-content: center"><span style="width: 30px; height: 6px; border-radius: 3px; background: #BAC1CE"></span></span>
+<span class="knobC" style="position: absolute; left: 20px; top: 84px; width: 46px; height: 46px; border-radius: 999px; background: radial-gradient(circle at 35% 30%, #A9C9FF, #2563EB); box-shadow: 0 6px 12px rgba(30,58,138,.35); display: flex; align-items: center; justify-content: center"><span style="width: 28px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.55); transform: rotate(-35deg)"></span></span>
+<span style="position: absolute; right: 18px; top: 20px; display: flex; flex-direction: column; gap: 10px">
+<span class="led" style="width: 11px; height: 11px; border-radius: 999px; background: #475063; animation-delay: 0s"></span>
+<span class="led" style="width: 11px; height: 11px; border-radius: 999px; background: #475063; animation-delay: .3s"></span>
+<span class="led" style="width: 11px; height: 11px; border-radius: 999px; background: #475063; animation-delay: .6s"></span>
+<span class="led" style="width: 11px; height: 11px; border-radius: 999px; background: #475063; animation-delay: .9s"></span>
+<span class="led" style="width: 11px; height: 11px; border-radius: 999px; background: #475063; animation-delay: 1.2s"></span>
+</span>
+</div>
+<figcaption style="text-align: center; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 600">Software Eng.</span><span style="font-size: 13px; color: #6B7385">Knobs turn · LEDs chase</span></figcaption>
+</figure>
+
+<figure class="tile" style="margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px">
+<div class="icon" role="img" aria-label="Algorithms icon: radar sweeping for a target" style="background: linear-gradient(160deg, #CDD6E6 0%, #94A3BD 100%)">
+<span style="position: absolute; inset: 14px; border-radius: 999px; overflow: hidden">
+<span class="sweep" style="position: absolute; inset: 0; border-radius: 999px; background: conic-gradient(from 0deg, rgba(220,235,255,.95) 0deg, rgba(220,235,255,.35) 40deg, rgba(220,235,255,0) 80deg, rgba(220,235,255,0) 360deg)"></span>
+</span>
+<span style="position: absolute; inset: 14px; border-radius: 999px; border: 2px solid rgba(255,255,255,.55)"></span>
+<span style="position: absolute; inset: 36px; border-radius: 999px; border: 2px solid rgba(255,255,255,.4)"></span>
+<span style="position: absolute; inset: 56px; border-radius: 999px; border: 2px solid rgba(255,255,255,.3)"></span>
+<span style="position: absolute; left: 74px; top: 14px; width: 2px; height: 122px; background: rgba(255,255,255,.25)"></span>
+<span style="position: absolute; top: 74px; left: 14px; height: 2px; width: 122px; background: rgba(255,255,255,.25)"></span>
+<span style="position: absolute; left: 66px; top: 66px; width: 18px; height: 18px; border-radius: 999px; background: #EFF5FF; box-shadow: 0 0 14px 4px rgba(220,235,255,.9)"></span>
+<span class="blip" style="position: absolute; left: 104px; top: 46px; width: 10px; height: 10px; border-radius: 999px; background: #FFFFFF; animation-delay: .4s"></span>
+<span class="blip" style="position: absolute; left: 40px; top: 102px; width: 8px; height: 8px; border-radius: 999px; background: #FFFFFF; animation-delay: 1.6s"></span>
+</div>
+<figcaption style="text-align: center; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 600">Algorithms</span><span style="font-size: 13px; color: #6B7385">Radar sweep · search</span></figcaption>
+</figure>
+
+<figure class="tile" style="margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px">
+<div class="icon" role="img" aria-label="Data Structures icon: glowing grid of blocks" style="background: linear-gradient(160deg, #FAFCFF 0%, #ECF3FF 100%)">
+<div style="position: absolute; inset: 12px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3px">
+<sc-for list="{{pixels}}" as="p" hint-placeholder-count="25"><span class="px" style="border-radius: 5px; background: {{p.c}}; animation-delay: {{p.d}}; opacity: {{p.o}}"></span></sc-for>
+</div>
+</div>
+<figcaption style="text-align: center; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 600">Data Structures</span><span style="font-size: 13px; color: #6B7385">Blocks warm in waves</span></figcaption>
+</figure>
+
+<figure class="tile" style="margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px">
+<div class="icon" role="img" aria-label="Questions icon: glass key with a question mark" style="background: linear-gradient(160deg, #EEF4FF 0%, #C3D8FF 100%)">
+<span class="key" style="position: absolute; left: 24px; top: 20px; width: 102px; height: 98px; border-radius: 30px; background: linear-gradient(170deg, #F3F7FF 0%, #D6E6FF 100%); box-shadow: 0 10px 0 #8BB5FF, 0 16px 24px rgba(30,58,138,.25); display: flex; align-items: center; justify-content: center; font-size: 56px; font-weight: 600; color: #2563EB">?</span>
+</div>
+<figcaption style="text-align: center; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 600">Questions</span><span style="font-size: 13px; color: #6B7385">Key presses down</span></figcaption>
+</figure>
+
+<figure class="tile" style="margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px">
+<div class="icon" role="img" aria-label="ExamPilot app icon: Pilo the cloud buddy on a blue sky" style="background: linear-gradient(160deg, #4C93F3 0%, #3B78E7 50%, #7DBDF8 100%); box-shadow: 0 18px 34px rgba(59,120,231,.30), inset 0 0 0 3px rgba(255,255,255,.45)">
+<span class="cloud" style="position: absolute; left: -24px; bottom: -14px; width: 90px; height: 54px; border-radius: 999px; background: #FFFFFF; filter: blur(8px); opacity: .85"></span>
+<span class="cloud" style="position: absolute; right: -20px; top: -10px; width: 86px; height: 56px; border-radius: 999px; background: #E6F2FF; filter: blur(9px); opacity: .9; animation-delay: -3s"></span>
+<span class="bob" style="position: absolute; left: 21px; top: 30px; width: 108px; height: 90px">
+<svg width="108" height="90" viewBox="0 0 120 100" aria-hidden="true">
+<path d="M30 86C14 86 4 75 4 61c0-12 9-21 21-22 2-16 16-29 33-29 14 0 26 8 31 21h5c13 0 23 11 23 25 0 15-11 30-25 30z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="14" stroke-linejoin="round"></path>
+<path d="M30 86C14 86 4 75 4 61c0-12 9-21 21-22 2-16 16-29 33-29 14 0 26 8 31 21h5c13 0 23 11 23 25 0 15-11 30-25 30z" fill="#E4F0FF" stroke="#3E7BE0" stroke-width="5" stroke-linejoin="round"></path>
+<g class="eyes"><rect x="49" y="40" width="8" height="14" rx="4" fill="#2D5FB8"></rect><rect x="66" y="40" width="8" height="14" rx="4" fill="#2D5FB8"></rect></g>
+<path d="M48 61q13 11 26 0" fill="none" stroke="#2D5FB8" stroke-width="4.5" stroke-linecap="round"></path>
+<circle cx="40" cy="60" r="5" fill="#F9A8D4" opacity=".9"></circle><circle cx="82" cy="60" r="5" fill="#F9A8D4" opacity=".9"></circle>
+</svg>
+</span>
+</div>
+<figcaption style="text-align: center; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 600">App icon · Pilo</span><span style="font-size: 13px; color: #6B7385">Clouds drift · Pilo blinks</span></figcaption>
+</figure>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":560}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { live: true };
+  }
+  renderVals() {
+    var s = this;
+    var C = ['#BBF0D3', '#DDD0FF', '#C7DCFF', '#3B82F6', '#FCD34D'];
+    var pixels = [];
+    for (var r = 0; r < 5; r++) for (var c = 0; c < 5; c++) {
+      var dist = Math.abs(r - 3) + Math.abs(c - 2);
+      var col = dist <= 1 ? C[3] : dist === 2 ? C[1] : dist === 3 ? C[0] : C[2];
+      pixels.push({ c: col, d: (dist * 0.18) + 's', o: dist > 4 ? '.35' : '1' });
+    }
+    return {
+      pixels: pixels,
+      liveClass: this.state.live ? 'live' : '',
+      pressed: this.state.live ? 'true' : 'false',
+      toggleLabel: this.state.live ? 'Pause motion' : 'Play motion',
+      toggle: function () { s.setState({ live: !s.state.live }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

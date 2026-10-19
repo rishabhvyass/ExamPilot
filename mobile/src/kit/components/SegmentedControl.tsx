@@ -2,11 +2,12 @@
 // White pill track (6px padding, hairline); the selected option sits on a glossy black slider that springs
 // (400/34) between options; its label turns white.
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View, type LayoutChangeEvent } from "react-native";
+import { StyleSheet, Text, View, type LayoutChangeEvent } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
-import { LinearGradient } from "../compat";
+import { Surface } from "./Surface";
+import { PressableScale } from "./PressableScale";
 import { spring } from "../motion";
-import { color, fontFamily, surface } from "../theme";
+import { color, fontFamily } from "../theme";
 
 type Option<T extends string> = { value: T; label: string };
 
@@ -26,13 +27,13 @@ export function SegmentedControl<T extends string>({ options, value, onChange }:
 
   return (
     <View accessibilityRole="tablist" style={styles.track}>
-      <Animated.View pointerEvents="none" style={[styles.slider, { boxShadow: surface.ink.boxShadow }, slider]}>
-        <LinearGradient colors={[...surface.ink.colors]} locations={[...surface.ink.locations]} style={[StyleSheet.absoluteFill, { borderRadius: 9999 }]} />
+      <Animated.View pointerEvents="none" style={[styles.slider, slider]}>
+        <Surface kind="ink" style={StyleSheet.absoluteFill} />
       </Animated.View>
       {options.map((o) => {
         const on = o.value === value;
         return (
-          <Pressable
+          <PressableScale
             key={o.value}
             accessibilityRole="tab"
             accessibilityState={{ selected: on }}
@@ -44,7 +45,7 @@ export function SegmentedControl<T extends string>({ options, value, onChange }:
             style={styles.option}
           >
             <Text style={{ fontFamily: fontFamily[600], fontSize: 16, color: on ? "#FFFFFF" : color.inkMuted }}>{o.label}</Text>
-          </Pressable>
+          </PressableScale>
         );
       })}
     </View>

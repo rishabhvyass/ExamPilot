@@ -1,3 +1,4 @@
+import { MaterialView } from './surface';
 // Study-block picker: tap a start day, tap an end day, and a band joins them. Presets fill it in one tap.
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
@@ -197,7 +198,7 @@ export function StudyBlockPicker({
                   }}
                 />
               )}
-              <View
+              <MaterialView
                 style={[
                   {
                     alignSelf: 'center',
@@ -231,7 +232,7 @@ export function StudyBlockPicker({
                     }}
                   />
                 )}
-              </View>
+              </MaterialView>
             </Pressable>
           );
         })}

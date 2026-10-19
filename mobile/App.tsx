@@ -1,3 +1,4 @@
+import { VerifyEmail } from './src/screens/verification';
 import { StatusBar, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -42,6 +43,7 @@ function Root() {
         <Stack.Screen name="Splash" component={Splash} options={{ animation: 'fade' }} />
         <Stack.Screen name="Intro" component={Intro} options={{ animation: 'fade' }} />
         <Stack.Screen name="Login" component={Login} options={{ animation: 'fade' }} />
+        <Stack.Screen name="VerifyEmail" component={VerifyEmail} options={{ animation: 'fade' }} />
         <Stack.Screen name="Details" component={Details} options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="Admit" component={AdmitCard} options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="Plan" component={PlanReady} options={{ animation: 'slide_from_right' }} />

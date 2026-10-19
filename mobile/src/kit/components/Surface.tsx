@@ -7,6 +7,7 @@
 // Glass = iOS BlurView (expo-blur, tint "light") + translucent white gradient. On Android a blur needs a
 // BlurTargetView around whatever is behind the card; on a white page that blur is invisible anyway, so
 // Android draws the gradient at 90 % white instead (cheaper, looks the same).
+import { useReducedMotion } from "react-native-reanimated";
 import type { ReactNode } from "react";
 import { Platform, StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
 import { LinearGradient } from "../compat";
@@ -33,7 +34,10 @@ type Props = {
 };
 
 export function Surface({ kind, subject, radius = 9999, style, children, pointerEvents }: Props) {
+  const reduce = useReducedMotion();
   const s = surface[kind];
+  const flat = StyleSheet.flatten(style) ?? {};
+  const corners = { borderRadius: flat.borderRadius ?? radius, borderTopLeftRadius: flat.borderTopLeftRadius, borderTopRightRadius: flat.borderTopRightRadius, borderBottomLeftRadius: flat.borderBottomLeftRadius, borderBottomRightRadius: flat.borderBottomRightRadius };
   const { outer, inset } = splitShadow(s.boxShadow);
   const diagonal = kind === "glass" || kind === "sheen";
   const dir = diagonal ? angle160 : angle180;
@@ -42,9 +46,9 @@ export function Surface({ kind, subject, radius = 9999, style, children, pointer
 
   return (
     <View pointerEvents={pointerEvents} style={[{ borderRadius: radius, boxShadow: outer }, style]}>
-      <View pointerEvents="none" style={[StyleSheet.absoluteFill, { borderRadius: radius, overflow: "hidden" }]}>
+      <View pointerEvents="none" style={[StyleSheet.absoluteFill, { ...corners, overflow: "hidden" }]}>
         {kind === "sheen" && subject && <View style={[StyleSheet.absoluteFill, { backgroundColor: subjects[subject].fill }]} />}
-        {isGlass && !glassAndroid && <BlurView intensity={surface.glass.blurIntensity} tint="light" style={StyleSheet.absoluteFill} />}
+        {isGlass && !glassAndroid && !reduce && <BlurView intensity={surface.glass.blurIntensity} tint="light" style={StyleSheet.absoluteFill} />}
         <LinearGradient
           colors={glassAndroid ? ["rgba(255,255,255,0.94)", "rgba(250,251,253,0.9)"] : [...s.colors]}
           locations={[...s.locations]}
@@ -53,7 +57,7 @@ export function Surface({ kind, subject, radius = 9999, style, children, pointer
           style={StyleSheet.absoluteFill}
         />
       </View>
-      {inset ? <View pointerEvents="none" style={[StyleSheet.absoluteFill, { borderRadius: radius, boxShadow: inset }]} /> : null}
+      {inset ? <View pointerEvents="none" style={[StyleSheet.absoluteFill, { ...corners, boxShadow: inset }]} /> : null}
       {children}
     </View>
   );

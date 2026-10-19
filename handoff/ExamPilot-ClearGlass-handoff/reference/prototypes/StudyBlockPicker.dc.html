@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ExamPilot — Study block picker</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+.band{transition:background-color 140ms ease,border-radius 140ms ease}
+.dot{transition:background-color 180ms ease,color 180ms ease,transform 260ms cubic-bezier(.3,1.4,.45,1),box-shadow 180ms ease}
+.day:hover .dot{box-shadow:inset 0 0 0 1.5px #C7DCFF}
+.day:active .dot{transform:scale(.88)}
+.ul{transition:left 380ms cubic-bezier(.3,1.3,.45,1),width 380ms cubic-bezier(.3,1.3,.45,1)}
+.badge{animation:badge 300ms cubic-bezier(.2,.9,.25,1.3) both}
+.val{animation:val 280ms cubic-bezier(.2,.8,.2,1) both}
+.chip{transition:background-color 180ms ease,color 180ms ease,transform 140ms ease}
+.chip:active{transform:scale(.95)}
+@keyframes badge{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+@keyframes val{from{opacity:0;transform:translateY(6px);filter:blur(3px)}to{opacity:1;transform:none;filter:blur(0)}}
+button:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){.band,.dot,.ul,.chip{transition:none}.badge,.val{animation:none}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+</style>
+</helmet>
+<div style="width: 700px; height: 700px; box-sizing: border-box; padding: 40px; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; display: flex; gap: 36px; align-items: flex-start">
+
+<div style="width: 170px; display: flex; flex-direction: column; gap: 10px; padding-top: 10px">
+<span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; color: #6B7385">CALENDAR</span>
+<h1 style="margin: 0; font-size: 30px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em">Plan a study block</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #5B6475">Tap a start day, slide to an end day. The band follows your finger. Presets fill it in one tap.</p>
+</div>
+
+<section aria-label="Study block" style="width: 414px; border-radius: 32px; background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: 0 24px 50px rgba(15,23,42,.14); padding: 8px">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px 14px">
+<span style="font-size: 17px; font-weight: 600">Study block</span>
+<sc-for list="{{badges}}" as="b" hint-placeholder-count="1"><span class="badge" role="status" style="height: 30px; padding: 0 12px; border-radius: 999px; background: {{b.bg}}; color: {{b.fg}}; display: flex; align-items: center; font-size: 13px; font-weight: 700">{{b.text}}</span></sc-for>
+</div>
+<div style="background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); border-radius: 26px; padding: 16px 16px 12px">
+<div style="position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding-bottom: 12px; border-bottom: 1px solid #F6F7F9">
+<button type="button" onClick="{{pickStart}}" style="border: 0; background: transparent; font: inherit; color: inherit; text-align: left; padding: 0 0 10px; cursor: pointer"><span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #6B7385">START</span><sc-for list="{{startVal}}" as="v" hint-placeholder-count="1"><span class="val" style="display: block; font-size: 19px; font-weight: 600; margin-top: 2px; color: {{v.c}}">{{v.t}}</span></sc-for></button>
+<button type="button" onClick="{{pickEnd}}" style="border: 0; background: transparent; font: inherit; color: inherit; text-align: left; padding: 0 0 10px 16px; border-left: 1px solid #F6F7F9; cursor: pointer"><span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #6B7385">END</span><sc-for list="{{endVal}}" as="v" hint-placeholder-count="1"><span class="val" style="display: block; font-size: 19px; font-weight: 600; margin-top: 2px; color: {{v.c}}">{{v.t}}</span></sc-for></button>
+<span class="ul" aria-hidden="true" style="position: absolute; bottom: 10px; left: {{ulLeft}}; width: 56px; height: 3px; border-radius: 999px; background: #2563EB"></span>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 4px 8px"><span style="font-size: 17px; font-weight: 600">October 2026</span><span style="display: flex; gap: 10px; font-size: 12px; color: #5B6475"><span style="display: flex; align-items: center; gap: 5px"><span style="width: 6px; height: 6px; border-radius: 999px; background: #7C3AED"></span>Exam</span></span></div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; font-size: 12px; font-weight: 600; color: #6B7385; padding-bottom: 6px" aria-hidden="true"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+<div role="grid" aria-label="October 2026" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); row-gap: 4px" onMouseLeave="{{leave}}">
+<sc-for list="{{cells}}" as="c" hint-placeholder-count="35">
+<div class="band" style="height: 44px; background: {{c.band}}; border-radius: {{c.radius}}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{c.real}}" hint-placeholder-val="{{true}}">
+<button type="button" class="day" onClick="{{c.pick}}" onMouseEnter="{{c.hover}}" disabled="{{c.disabled}}" aria-label="{{c.label}}" aria-pressed="{{c.pressed}}" style="width: 44px; height: 44px; border: 0; padding: 0; background: transparent; font: inherit; cursor: {{c.cursor}}; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span class="dot" style="width: 38px; height: 38px; border-radius: 999px; background: {{c.dotBg}}; color: {{c.fg}}; font-size: 15px; font-weight: {{c.weight}}; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1">{{c.n}}<sc-if value="{{c.exam}}" hint-placeholder-val="{{false}}"><span style="width: 5px; height: 5px; border-radius: 999px; background: {{c.examDot}}; margin-top: 3px"></span></sc-if></span>
+</button>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 6px; padding: 12px 8px 6px">
+<sc-for list="{{presets}}" as="p" hint-placeholder-count="4"><button type="button" class="chip" onClick="{{p.pick}}" aria-pressed="{{p.pressed}}" style="height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid {{p.border}}; background: {{p.bg}}; color: {{p.fg}}; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">{{p.label}}</button></sc-for>
+<button type="button" onClick="{{clear}}" style="margin-left: auto; height: 34px; padding: 0 8px; border: 0; background: transparent; font: inherit; font-size: 13px; font-weight: 600; color: #6B7385; cursor: pointer">Clear</button>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":700,"height":700}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { s: 18, e: 20, hover: null, field: 'start', preset: 'exam' };
+  }
+  renderVals() {
+    var self = this, st = this.state;
+    var TODAY = 18, EXAMS = { 21: 'linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%)', 22: '#7C3AED', 23: '#10B981' };
+    var DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    var offset = 3; // 1 Oct 2026 is a Thursday (Mon-start grid)
+    var s = st.s, e = st.e != null ? st.e : (st.s != null && st.hover != null && st.hover >= st.s ? st.hover : null);
+    var cells = [];
+    for (var i = 0; i < 35; i++) {
+      (function (idx) {
+        var n = idx - offset + 1, real = n >= 1 && n <= 31, col = idx % 7;
+        var inR = real && s != null && e != null && n >= s && n <= e;
+        var isEnd = real && (n === s || (e != null && n === e));
+        var L = inR && (n === s || col === 0) ? '22px' : '0px';
+        var R = inR && (n === e || col === 6) ? '22px' : '0px';
+        var past = real && n < TODAY;
+        cells.push({
+          real: real, n: real ? n : '',
+          band: inR ? (st.e == null ? '#EBF2FF' : '#E2EDFF') : 'transparent',
+          radius: L + ' ' + R + ' ' + R + ' ' + L,
+          dotBg: isEnd ? 'linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%)' : 'transparent',
+          fg: isEnd ? '#FFFFFF' : past ? '#CBD2DC' : inR ? '#1E3A8A' : '#1B1B1F',
+          weight: isEnd || inR ? '700' : '500',
+          exam: !!EXAMS[n], examDot: isEnd ? '#FFFFFF' : (EXAMS[n] || 'transparent'),
+          disabled: past, cursor: past ? 'default' : 'pointer',
+          pressed: isEnd ? 'true' : 'false',
+          label: real ? DAYS[col] + ' ' + n + ' October' + (EXAMS[n] ? ', exam day' : '') : '',
+          pick: function () {
+            if (past) return;
+            if (st.field === 'start' || st.s == null || (st.s != null && st.e != null)) self.setState({ s: n, e: null, field: 'end', preset: null });
+            else if (n < st.s) self.setState({ s: n, preset: null });
+            else self.setState({ e: n, field: 'start', hover: null, preset: null });
+          },
+          hover: function () { if (!past && self.state.e == null && self.state.s != null) self.setState({ hover: n }); }
+        });
+      })(i);
+    }
+    var fmt = function (n) { return n == null ? null : 'Oct ' + n; };
+    var count = s != null && e != null ? e - s + 1 : 0;
+    var badge = st.e == null ? (st.s == null ? { text: 'Pick a start day', bg: '#EEF0F4', fg: '#5B6475' } : { text: count ? count + (count === 1 ? ' day' : ' days') + '…' : 'Pick an end day', bg: '#EEF0F4', fg: '#5B6475' }) : { text: count + (count === 1 ? ' day' : ' days'), bg: '#DCEBFF', fg: '#1E3A8A' };
+    badge.key = badge.text;
+    var P = [
+      { id: 'weekend', label: 'Weekend', s: 24, e: 25 },
+      { id: '3d', label: '3 days', s: 24, e: 26 },
+      { id: 'week', label: '1 week', s: 24, e: 30 },
+      { id: 'exam', label: 'Until exam', s: 18, e: 20 }
+    ];
+    return {
+      cells: cells,
+      badges: [badge],
+      startVal: [{ t: fmt(st.s) || 'Add day', c: st.s == null ? '#A0A8B8' : '#1B1B1F', k: st.s }],
+      endVal: [{ t: fmt(st.e) || 'Add day', c: st.e == null ? '#A0A8B8' : '#1B1B1F', k: st.e }],
+      ulLeft: st.field === 'end' ? 'calc(50% + 16px)' : '0px',
+      pickStart: function () { self.setState({ field: 'start' }); },
+      pickEnd: function () { if (self.state.s != null) self.setState({ field: 'end', e: null }); },
+      leave: function () { if (self.state.e == null) self.setState({ hover: null }); },
+      clear: function () { self.setState({ s: null, e: null, hover: null, field: 'start', preset: null }); },
+      presets: P.map(function (p) {
+        var on = st.preset === p.id;
+        return { label: p.label, pressed: on ? 'true' : 'false', bg: on ? 'linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%)' : '#FFFFFF', fg: on ? '#FFFFFF' : '#1B1B1F', border: on ? '#1B1B1F' : '#E8EBF0',
+          pick: function () { self.setState({ s: p.s, e: p.e, hover: null, field: 'start', preset: p.id }); } };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

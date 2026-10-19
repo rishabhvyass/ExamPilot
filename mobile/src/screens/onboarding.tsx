@@ -1,3 +1,8 @@
+import { useRoute, type RouteProp } from '@react-navigation/native';
+import type { RootParams } from '../navigation';
+import { SegmentedControl } from '../kit/components/SegmentedControl';
+import { BlurIn } from '../kit/components/BlurIn';
+import { MaterialView, AnimatedMaterialView } from '../components/surface';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, View, useWindowDimensions } from 'react-native';
 import Animated, {
@@ -102,9 +107,9 @@ function Bloom({
     transform: [{ scale: 0.6 + 0.4 * v.value }],
   }));
   return (
-    <Animated.View style={[{ position: 'absolute' }, style, a]}>
+    <AnimatedMaterialView style={[{ position: 'absolute' }, style, a]}>
       {children}
-    </Animated.View>
+    </AnimatedMaterialView>
   );
 }
 function Letter({ c, i }: { c: string; i: number }) {
@@ -361,27 +366,17 @@ export function Splash() {
 export function Login() {
   const nav = useNav();
   const { signIn } = useStore();
-  const [mode, setMode] = useState<'in' | 'up'>('in');
+  const loginRoute = useRoute<RouteProp<RootParams, 'Login'>>();
+  const [mode, setMode] = useState<'in' | 'up'>(loginRoute.params?.mode ?? 'in');
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [show, setShow] = useState(false);
   const [err, setErr] = useState('');
-  const [segW, setSegW] = useState(0);
-  const x = useSharedValue(0);
-  useEffect(() => {
-    x.value = withSpring(mode === 'in' ? 0 : 1, {
-      stiffness: 400,
-      damping: 36,
-    });
-  }, [mode, x]);
-  const ind = useAnimatedStyle(() => ({
-    transform: [{ translateX: x.value * (segW / 2 - 6) }],
-  }));
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState('');
   const finish = (s: State | null) =>
     s &&
-    nav.reset({ index: 0, routes: [{ name: s.onboarded ? 'Main' : 'Details' }] });
+    nav.reset({ index: 0, routes: [{ name: s.onboarded ? 'Main' : mode === 'up' ? 'VerifyEmail' : 'Details' }] });
   const run = async (fn: () => Promise<{ user: User } | null>) => {
     if (busy) return;
     setErr('');
@@ -423,7 +418,7 @@ export function Login() {
         <Illo name="login-corner-art" width={200} height={200} />
       </View>
       <View style={{ paddingTop: 24 }}>
-        <View
+        <MaterialView
           style={{
             width: 52,
             height: 52,
@@ -434,7 +429,7 @@ export function Login() {
           }}
         >
           <Icon name="logo-plane" size={26} color="#fff" />
-        </View>
+        </MaterialView>
         <Txt
           style={[
             TYPE.onboard,
@@ -448,56 +443,10 @@ export function Login() {
             ? 'Pick up where you left off.'
             : 'It takes about a minute.'}
         </Txt>
-        <View
-          onLayout={e => setSegW(e.nativeEvent.layout.width)}
-          style={{
-            marginTop: 28,
-            flexDirection: 'row',
-            backgroundColor: C.surface,
-            boxShadow: SHADOW.soft,
-            borderRadius: 999,
-            padding: 6,
-          }}
-        >
-          <Animated.View
-            style={[
-              {
-                position: 'absolute',
-                top: 6,
-                bottom: 6,
-                left: 6,
-                width: segW / 2 - 6,
-                borderRadius: 999,
-                ...INK,
-              },
-              ind,
-            ]}
-          />
-          {(['in', 'up'] as const).map(m => (
-            <Pressable
-              key={m}
-              accessibilityRole="button"
-              accessibilityState={{ selected: mode === m }}
-              onPress={() => {
-                setMode(m);
-                setErr('');
-              }}
-              style={{
-                flex: 1,
-                height: 48,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Txt
-                style={{ fontWeight: 600, color: mode === m ? '#fff' : C.ink }}
-              >
-                {m === 'in' ? 'Sign in' : 'Create account'}
-              </Txt>
-            </Pressable>
-          ))}
+        <View style={{ marginTop: 28 }}>
+          <SegmentedControl options={[{ value: 'in', label: 'Sign in' }, { value: 'up', label: 'Create account' }]} value={mode} onChange={m => { setMode(m); setErr(''); }} />
         </View>
-        <View style={{ gap: 12, marginTop: 20 }}>
+        <BlurIn replayKey={mode} delay={0} style={{ gap: 12, marginTop: 20 }}>
           <Rise i={0}>
             <Field
               label="Email"
@@ -518,19 +467,7 @@ export function Login() {
               placeholder="••••••••"
               autoCapitalize="none"
               trailing={
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={show ? 'Hide password' : 'Show password'}
-                  onPress={() => setShow(!show)}
-                  style={{
-                    width: 44,
-                    height: 44,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Icon name={show ? 'eye-off' : 'eye'} size={20} />
-                </Pressable>
+                <IconButton icon={show ? 'eye-off' : 'eye'} label={show ? 'Hide password' : 'Show password'} size={44} pressed={show} onPress={() => setShow(!show)} />
               }
             />
           </Rise>
@@ -584,9 +521,10 @@ export function Login() {
                 busy ? 'One moment…' : mode === 'in' ? 'Sign in' : 'Create account'
               }
               onPress={submit}
+              disabled={busy}
             />
           </Rise>
-        </View>
+        </BlurIn>
         <View
           style={{
             flexDirection: 'row',
@@ -675,7 +613,7 @@ export function Details() {
           i={0}
           style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}
         >
-          <Animated.View
+          <AnimatedMaterialView
             style={[
               {
                 width: 72,
@@ -692,7 +630,7 @@ export function Details() {
             <Txt style={{ fontSize: 24, fontWeight: 600, color: SUBJ.se.text }}>
               {initials}
             </Txt>
-          </Animated.View>
+          </AnimatedMaterialView>
           <Txt style={TYPE.eyebrow}>
             Nice to meet you{p.firstName ? `, ${p.firstName}` : ''}!
           </Txt>
@@ -1169,7 +1107,7 @@ export function AdmitCard() {
             }}
           >
             <Bob>
-              <View
+              <MaterialView
                 style={{
                   width: 80,
                   height: 80,
@@ -1181,7 +1119,7 @@ export function AdmitCard() {
                 }}
               >
                 <Icon name="upload" size={32} color={SUBJ.se.text} />
-              </View>
+              </MaterialView>
             </Bob>
             <Txt style={TYPE.section}>Upload admit card</Txt>
             <Txt style={{ fontSize: 15, color: C.inkMuted }}>
@@ -1504,7 +1442,7 @@ export function PlanReady() {
             Array.from({ length: 14 }).map((_, i) => (
               <BurstDot key={i} i={i} />
             ))}
-          <Animated.View
+          <AnimatedMaterialView
             entering={FadeInDown.springify().stiffness(500).damping(31)}
             style={{
               position: 'absolute',
@@ -1530,7 +1468,7 @@ export function PlanReady() {
                 animatedProps={tickProps}
               />
             </Svg>
-          </Animated.View>
+          </AnimatedMaterialView>
         </View>
         <Txt
           accessibilityRole="header"
@@ -1622,7 +1560,7 @@ export function PlanReady() {
               {state.exams
                 .filter(e => e.date === d)
                 .map(e => (
-                  <View
+                  <MaterialView
                     key={e.id}
                     style={{
                       flexDirection: 'row',
@@ -1646,14 +1584,14 @@ export function PlanReady() {
                       {code(e.subjectId)} exam ·{' '}
                       {fmtTimeShort(e.time).replace(':00', '')}
                     </Txt>
-                  </View>
+                  </MaterialView>
                 ))}
               {plan
                 .filter(p => p.date === d)
                 .map(p => {
                   const c = SUBJ[colorOf(p.subjectId)];
                   return (
-                    <View
+                    <MaterialView
                       key={p.id}
                       style={{
                         backgroundColor: c.fill,
@@ -1666,7 +1604,7 @@ export function PlanReady() {
                       <Txt style={[TYPE.micro, { color: c.text }]}>
                         {code(p.subjectId)} · {hours(p)}h
                       </Txt>
-                    </View>
+                    </MaterialView>
                   );
                 })}
             </View>

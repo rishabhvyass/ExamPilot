@@ -5,7 +5,7 @@
 // Reduce motion: no goo, the pill just resizes.
 import type { ReactNode } from "react";
 import { useEffect } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, View, useWindowDimensions } from "react-native";
 import Animated, { FadeIn, FadeOut, useDerivedValue, useReducedMotion, useSharedValue, withSpring } from "react-native-reanimated";
 import { Blur, Canvas, Circle, ColorMatrix, Group, Paint, RoundedRect } from "@shopify/react-native-skia";
 import { spring } from "../motion";
@@ -13,11 +13,14 @@ import { fontFamily } from "../theme";
 
 export type IslandState = { kind: "idle" } | { kind: "message"; icon?: ReactNode; text: string; trailing?: ReactNode };
 
-const CW = 390, CH = 76; // canvas
-const IDLE = { w: 126, h: 36 }, OPEN = { w: 340, h: 56 };
+const CH = 76;
+const IDLE = { w: 126, h: 36 };
 
 export function GooeyIsland({ state, onPress }: { state: IslandState; onPress?: () => void }) {
   const reduce = useReducedMotion();
+  const { width } = useWindowDimensions();
+  const CW = Math.min(390, width - 40);
+  const OPEN = { w: Math.min(340, CW - 16), h: 56 };
   const open = state.kind === "message";
   const w = useSharedValue(IDLE.w);
   const h = useSharedValue(IDLE.h);

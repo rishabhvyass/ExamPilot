@@ -1,0 +1,89 @@
+/* ExamPilot — surface & button classes for the "Clear Glass" look.
+   Needs design-tokens/tokens.css loaded first.
+   Use these classes directly, or copy the values into Tailwind arbitrary values / components. */
+
+/* ── 1. Soft clay button (all buttons) ───────────────────────────── */
+.ep-clay {
+  background: var(--ep-clay-bg);
+  box-shadow: var(--ep-clay-shadow);
+  color: var(--ep-ink-button);
+  border: 0;
+  border-radius: var(--ep-r-pill);
+  transition:
+    transform 180ms var(--ep-ease-standard),
+    box-shadow 220ms ease,
+    filter 220ms ease,
+    background 220ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.ep-clay:hover { transform: translateY(-1px); box-shadow: var(--ep-clay-shadow-hover); }
+.ep-clay:active { transform: scale(.96); filter: blur(.6px); }
+
+/* ── 2. Pressed-in groove (selected tab / segment / toggled button) ─ */
+.ep-recess {
+  background: var(--ep-recess-bg);
+  box-shadow: var(--ep-recess-shadow);
+  color: var(--ep-ink-button);
+  border-radius: var(--ep-r-pill);
+}
+
+/* ── 3. Dock: the white bar that holds a group of buttons ────────── */
+.ep-dock {
+  background: var(--ep-dock-bg);
+  box-shadow: var(--ep-dock-shadow);
+  border-radius: var(--ep-r-pill);
+}
+
+/* ── 4. Glossy black (arrow chip, selected chip, logo tile) ─────── */
+.ep-ink {
+  background: var(--ep-ink-gloss);
+  box-shadow: var(--ep-ink-gloss-shadow);
+  color: #FFFFFF;
+}
+
+/* ── 5. Glass panel (white cards on the white ground) ──────────── */
+.ep-glass {
+  background: var(--ep-glass-panel-bg);
+  -webkit-backdrop-filter: var(--ep-glass-blur);
+  backdrop-filter: var(--ep-glass-blur);
+  box-shadow: var(--ep-glass-panel-shadow);
+}
+
+/* ── 6. Tinted subject card with glass sheen ───────────────────── */
+.ep-tint { box-shadow: var(--ep-sheen-shadow); }
+.ep-tint--se  { background: var(--ep-sheen), var(--ep-se-fill); }
+.ep-tint--daa { background: var(--ep-sheen), var(--ep-daa-fill); }
+.ep-tint--dds { background: var(--ep-sheen), var(--ep-dds-fill); }
+
+/* ── 7. Field ──────────────────────────────────────────────────── */
+.ep-field {
+  background: var(--ep-input);
+  border-radius: var(--ep-r-input);
+  padding: 12px 18px;
+  transition: box-shadow 180ms ease, background-color 180ms ease;
+}
+.ep-field:focus-within { background: #FFFFFF; box-shadow: 0 0 0 2px var(--ep-ink); }
+
+/* ── 8. Progressive edge blur (top / bottom of scrolling text) ──── */
+/* Put <div class="ep-edge-blur ep-edge-blur--top"><span></span><span></span><span></span><i></i></div>
+   as the LAST child of a position:relative scroll container (see components/ProgressiveBlur.tsx). */
+.ep-edge-blur { position: absolute; left: 0; right: 0; height: 120px; pointer-events: none; z-index: 2; }
+.ep-edge-blur > span, .ep-edge-blur > i { position: absolute; inset: 0; }
+.ep-edge-blur--top { top: 0; }
+.ep-edge-blur--top > span:nth-child(1) { backdrop-filter: blur(2px);  -webkit-backdrop-filter: blur(2px);  mask: linear-gradient(180deg,#000 60%,transparent); -webkit-mask: linear-gradient(180deg,#000 60%,transparent); }
+.ep-edge-blur--top > span:nth-child(2) { bottom: 30px; backdrop-filter: blur(5px);  -webkit-backdrop-filter: blur(5px);  mask: linear-gradient(180deg,#000 45%,transparent); -webkit-mask: linear-gradient(180deg,#000 45%,transparent); }
+.ep-edge-blur--top > span:nth-child(3) { bottom: 60px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); mask: linear-gradient(180deg,#000 30%,transparent); -webkit-mask: linear-gradient(180deg,#000 30%,transparent); }
+.ep-edge-blur--top > i { background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,0)); }
+.ep-edge-blur--bottom { bottom: 0; height: 110px; }
+.ep-edge-blur--bottom > span:nth-child(1) { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); mask: linear-gradient(0deg,#000 60%,transparent); -webkit-mask: linear-gradient(0deg,#000 60%,transparent); }
+.ep-edge-blur--bottom > span:nth-child(2) { top: 30px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); mask: linear-gradient(0deg,#000 40%,transparent); -webkit-mask: linear-gradient(0deg,#000 40%,transparent); }
+.ep-edge-blur--bottom > span:nth-child(3) { display: none; }
+.ep-edge-blur--bottom > i { background: linear-gradient(0deg, rgba(247,247,248,.95), rgba(247,247,248,0)); }
+
+/* ── Focus ring (never remove) ─────────────────────────────────── */
+:where(a, button, [role="tab"], [role="checkbox"]):focus-visible { outline: 3px solid var(--ep-ink); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ep-clay, .ep-field { transition: none; }
+  .ep-clay:active { filter: none; }
+}

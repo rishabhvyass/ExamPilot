@@ -1,0 +1,195 @@
+/* ExamPilot "Clear Glass" — every CSS animation used in the design, with one name each.
+   NEW in Clear Glass: every entrance animation also goes from blur(8–12px) to sharp ("blur-in"),
+   and every button blurs very slightly (0.6px) while pressed.
+   Use these for CSS-only pieces (loaders, scan line, typing dots). Interactive motion
+   (tabs, checkbox, sheets, page turns) should use motion-variants.ts with Motion for React. */
+
+/* ---------- Press & hover (all buttons) ---------- */
+.ep-press { transition: transform 180ms cubic-bezier(.2,0,0,1), box-shadow 220ms ease, filter 220ms ease, background 220ms ease; }
+.ep-press:hover { transform: translateY(-1px); }
+.ep-press:active, .ep-press:hover:active { transform: scale(.96); filter: blur(.6px); }
+
+/* ---------- Screen entrance (every tab screen) ---------- */
+.ep-page-in { animation: ep-page-in 360ms cubic-bezier(.2,.8,.2,1) both; }
+@keyframes ep-page-in { from { opacity: 0; transform: translateY(10px); filter: blur(10px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+/* Staggered rise (onboarding fields, cards). Add .ep-d1 … .ep-d5 for 60ms steps. */
+.ep-rise { opacity: 0; animation: ep-rise 480ms cubic-bezier(.05,.7,.1,1) forwards; }
+.ep-d1 { animation-delay: 60ms; } .ep-d2 { animation-delay: 120ms; } .ep-d3 { animation-delay: 180ms; }
+.ep-d4 { animation-delay: 240ms; } .ep-d5 { animation-delay: 300ms; }
+@keyframes ep-rise { from { opacity: 0; transform: translateY(12px); filter: blur(10px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+.ep-fade-up { animation: ep-fade-up 260ms cubic-bezier(.05,.7,.1,1) both; }
+@keyframes ep-fade-up { from { opacity: 0; transform: translateY(8px); filter: blur(8px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+/* ---------- Tab bar: active groove grows, label slides in (groove = .ep-recess from surfaces.css) ---------- */
+.ep-tab-pill { overflow: hidden; white-space: nowrap; animation: ep-tab-in 520ms cubic-bezier(.2,.9,.25,1.04) both; }
+.ep-tab-label { animation: ep-tab-label 320ms 180ms cubic-bezier(.05,.7,.1,1) both; }
+@keyframes ep-tab-in { from { max-width: 56px; } to { max-width: 320px; } }
+@keyframes ep-tab-label { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Checkbox: pop + tick draws ---------- */
+.ep-pop { animation: ep-pop 260ms cubic-bezier(.2,0,0,1); }
+@keyframes ep-pop { 0% { transform: scale(.9); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.ep-draw path { stroke-dasharray: 24; stroke-dashoffset: 24; animation: ep-draw 220ms 60ms ease-out forwards; }
+@keyframes ep-draw { to { stroke-dashoffset: 0; } }
+
+/* ---------- Progress ---------- */
+.ep-grow-x { transform-origin: left; animation: ep-grow-x 600ms 200ms cubic-bezier(.2,.8,.2,1) both; }
+@keyframes ep-grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.ep-grow-y { transform-origin: bottom; animation: ep-grow-y 800ms cubic-bezier(.2,.8,.2,1) both; } /* chart bars, stagger 120ms */
+@keyframes ep-grow-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+/* ---------- Splash (Intro) sequence: ~1.9s total ---------- */
+.ep-bloom { opacity: 0; transform: scale(.6); animation: ep-bloom 900ms cubic-bezier(.2,.9,.25,1.08) forwards; }  /* circles: 0 / 140 / 280ms */
+.ep-ring { opacity: 0; transform: scale(.85); animation: ep-bloom 1100ms cubic-bezier(.2,.8,.2,1) forwards; }      /* rings: 0 / 120ms */
+@keyframes ep-bloom { to { opacity: 1; transform: scale(1); } }
+.ep-orbit { animation: ep-orbit 14s linear infinite; }                                                              /* two small dots orbit */
+@keyframes ep-orbit { to { transform: rotate(360deg); } }
+.ep-mark-bg { opacity: 0; transform: scale(.7); animation: ep-bloom 500ms 300ms cubic-bezier(.2,.9,.25,1.1) forwards; }
+.ep-mark path { stroke-dasharray: 60; stroke-dashoffset: 60; animation: ep-draw 700ms 500ms cubic-bezier(.6,0,.2,1) forwards; }
+.ep-letter { display: inline-block; opacity: 0; transform: translateY(22px); animation: ep-letter 600ms cubic-bezier(.05,.7,.1,1) forwards; } /* delay 700ms + i*45ms */
+@keyframes ep-letter { from { opacity: 0; transform: translateY(22px); filter: blur(12px); } to { opacity: 1; transform: none; filter: blur(0); } }
+.ep-load-bar { transform: scaleX(0); transform-origin: left; animation: ep-grow-x 1500ms 400ms cubic-bezier(.4,0,.2,1) forwards; }
+/* Tagline fades at 1200ms, CTA at 1700ms (use .ep-fade with animation-delay) */
+.ep-fade { opacity: 0; animation: ep-fade 600ms cubic-bezier(.05,.7,.1,1) forwards; }
+@keyframes ep-fade { from { opacity: 0; transform: translateY(10px); filter: blur(8px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+/* Earlier static splash: gentle float */
+.ep-float { animation: ep-float 6s ease-in-out infinite; }
+@keyframes ep-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+/* ---------- Admit card scan ---------- */
+.ep-bob { animation: ep-bob 2.4s ease-in-out infinite; }                       /* upload badge idles */
+@keyframes ep-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.ep-scan { position: absolute; left: 0; right: 0; top: 8%; height: 3px; background: #1B1B1F;
+  box-shadow: 0 0 18px 6px rgba(59,130,246,.55); animation: ep-scan 1.6s cubic-bezier(.45,0,.55,1) infinite alternate; }
+@keyframes ep-scan { from { top: 8%; } to { top: 88%; } }
+.ep-shine { animation: ep-shine 1.4s ease-in-out infinite; }                  /* skeleton rows pulse */
+@keyframes ep-shine { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+.ep-dot { animation: ep-dot 1.2s ease-in-out infinite; }                      /* "Reading your exam dates..." */
+@keyframes ep-dot { 0%,80%,100% { opacity: .25; } 40% { opacity: 1; } }
+
+/* ---------- Celebration burst (plan ready, PDF finished) ---------- */
+/* Each piece sets --x / --y (end offset) and its own animation-delay. */
+.ep-burst { position: absolute; left: 50%; top: 50%; border-radius: 999px; opacity: 0;
+  animation: ep-burst 1100ms cubic-bezier(.15,.8,.3,1) forwards; }
+@keyframes ep-burst { 0% { opacity: 1; transform: translate(-50%,-50%) scale(.4); } 70% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1); } }
+.ep-badge { animation: ep-badge 700ms cubic-bezier(.2,.9,.25,1.25) both; }
+@keyframes ep-badge { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ---------- Bottom sheet ---------- */
+.ep-sheet { animation: ep-sheet 420ms cubic-bezier(.2,.9,.25,1.02) both; }
+@keyframes ep-sheet { from { transform: translateY(100%); } to { transform: none; } }
+.ep-scrim { animation: ep-scrim 260ms ease both; }
+@keyframes ep-scrim { from { opacity: 0; } to { opacity: 1; } }
+.ep-fab-breathe { animation: ep-fab 2.8s ease-in-out infinite; }
+@keyframes ep-fab { 0%,100% { box-shadow: 0 10px 26px rgba(0,0,0,.14); } 50% { box-shadow: 0 14px 34px rgba(0,0,0,.22); } }
+
+/* ---------- Assistant chat ---------- */
+.ep-msg { animation: ep-msg 360ms cubic-bezier(.2,.9,.25,1.05) both; }
+@keyframes ep-msg { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+.ep-typing span { display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: #6B7385; animation: ep-bounce 1s ease-in-out infinite; }
+.ep-typing span:nth-child(2) { animation-delay: .15s; } .ep-typing span:nth-child(3) { animation-delay: .3s; }
+@keyframes ep-bounce { 0%,80%,100% { transform: translateY(0); opacity: .4; } 40% { transform: translateY(-5px); opacity: 1; } }
+.ep-glow { animation: ep-glow 3s ease-in-out infinite; }                       /* assistant avatar */
+@keyframes ep-glow { 0%,100% { transform: rotate(0) scale(1); } 50% { transform: rotate(12deg) scale(1.06); } }
+
+/* ---------- PDF reader ---------- */
+.ep-turn-next { animation: ep-turn-next 420ms cubic-bezier(.2,.8,.2,1) both; }
+.ep-turn-prev { animation: ep-turn-prev 420ms cubic-bezier(.2,.8,.2,1) both; }
+@keyframes ep-turn-next { from { opacity: 0; transform: translateX(40px) rotate(2deg); } to { opacity: 1; transform: none; } }
+@keyframes ep-turn-prev { from { opacity: 0; transform: translateX(-40px) rotate(-2deg); } to { opacity: 1; transform: none; } }
+.ep-rocket { transition: left 500ms cubic-bezier(.2,.8,.2,1); }
+.ep-progress-fill { transition: width 500ms cubic-bezier(.2,.8,.2,1); }
+.ep-cheer { animation: ep-cheer 600ms cubic-bezier(.2,.9,.25,1.3) both; }
+@keyframes ep-cheer { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: none; } }
+
+/* ---------- Login ---------- */
+.ep-seg-indicator { transition: transform 360ms cubic-bezier(.2,.9,.25,1.05); }
+.ep-field { transition: box-shadow 180ms ease, background-color 180ms ease; }
+.ep-field:focus-within { box-shadow: 0 0 0 2px #1B1B1F; background: #FFFFFF; }
+
+/* ---------- Blur reader (your reference clip) ---------- */
+/* Track of paragraphs: move it with transform so the focused line sits in the middle. */
+.ep-reader-track { transition: transform 900ms cubic-bezier(.65,0,.25,1); }
+/* Each paragraph: focus = ink 700 sharp; ±1 = #6E6E74 0.4px blur; ±2+ = #A6A6AC 1.6px blur. */
+.ep-reader-line { transition: color 700ms ease, filter 700ms ease, opacity 700ms ease, font-weight 700ms ease; }
+/* Switching mode (Notes / Ask / Saved): whole list blurs out → in */
+.ep-blur-swap { animation: ep-blur-swap 520ms cubic-bezier(.2,.8,.2,1) both; }
+@keyframes ep-blur-swap { from { opacity: 0; filter: blur(14px); transform: scale(.98); } to { opacity: 1; filter: blur(0); transform: none; } }
+/* Highlighter that wipes in under the focused line */
+.ep-highlight { background: linear-gradient(transparent 60%, rgba(0,0,0,.08) 60%) left / 0% 100% no-repeat; transition: background-size 700ms cubic-bezier(.6,0,.3,1); }
+.ep-highlight.is-on { background-size: 100% 100%; }
+/* Sliding groove under the selected toolbar button */
+.ep-groove-slide { transition: left 420ms cubic-bezier(.3,1.25,.45,1), transform 420ms cubic-bezier(.3,1.25,.45,1); }
+
+/* ---------- M1 Email code pill ---------- */
+.ep-digit { animation: ep-digit 260ms cubic-bezier(.2,.9,.25,1.2) both; }
+@keyframes ep-digit { from { opacity: 0; filter: blur(4px); transform: scale(.6) translateY(4px); } to { opacity: 1; filter: blur(0); transform: none; } }
+.ep-morph { animation: ep-morph 360ms cubic-bezier(.2,.8,.2,1) both; }
+@keyframes ep-morph { from { opacity: 0; filter: blur(6px); transform: scale(.96); } to { opacity: 1; filter: blur(0); transform: none; } }
+.ep-caret { animation: ep-caret 1s steps(1) infinite; }
+@keyframes ep-caret { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
+.ep-shake { animation: ep-shake 460ms cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes ep-shake { 10%,90% { transform: translateX(-2px); } 20%,80% { transform: translateX(4px); } 30%,50%,70% { transform: translateX(-7px); } 40%,60% { transform: translateX(7px); } }
+.ep-spin { animation: ep-spin 800ms linear infinite; }
+@keyframes ep-spin { to { transform: rotate(360deg); } }
+
+/* ---------- M2 Study island (gooey) ---------- */
+/* Gooey merge: wrap the two shapes in an element with  filter: url(#ep-goo)  — see components/GooeyIsland.tsx */
+.ep-island { transition: width 520ms cubic-bezier(.3,1.25,.45,1), height 520ms cubic-bezier(.3,1.25,.45,1), border-radius 520ms cubic-bezier(.3,1.25,.45,1); }
+.ep-island-in { animation: ep-island-in 360ms 160ms cubic-bezier(.05,.7,.1,1) both; }
+@keyframes ep-island-in { from { opacity: 0; filter: blur(6px); transform: translateX(-6px); } to { opacity: 1; filter: blur(0); transform: none; } }
+
+/* ---------- M3 Onboarding carousel ---------- */
+.ep-drop { animation: ep-drop 760ms cubic-bezier(.2,.9,.25,1.12) both; }            /* set --r0 / --r1 rotation */
+@keyframes ep-drop { from { opacity: 0; transform: translateY(-120px) rotate(var(--r0,0deg)); } to { opacity: 1; transform: translateY(0) rotate(var(--r1,0deg)); } }
+.ep-swing { transform-origin: 50% -20px; animation: ep-swing 900ms cubic-bezier(.2,.9,.25,1.1) both; }
+@keyframes ep-swing { 0% { opacity: 0; transform: translate(60px,-140px) rotate(28deg); } 60% { opacity: 1; transform: translate(0,6px) rotate(-6deg); } 100% { transform: rotate(-4deg); } }
+.ep-popin { animation: ep-popin 560ms cubic-bezier(.2,.9,.25,1.35) both; }
+@keyframes ep-popin { from { opacity: 0; transform: scale(.3); } to { opacity: 1; transform: scale(1); } }
+.ep-coin { transition: left 640ms cubic-bezier(.3,1.35,.45,1); }
+.ep-coinfall { animation: ep-coinfall 1100ms 500ms cubic-bezier(.5,0,.6,1.3) both; }
+@keyframes ep-coinfall { 0% { opacity: 0; transform: translateY(-190px) rotateY(0); } 15% { opacity: 1; } 80% { transform: translateY(0) rotateY(540deg); } 100% { opacity: 0; transform: translateY(26px) rotateY(720deg) scale(.6); } }
+.ep-cupbump { animation: ep-cupbump 500ms 1500ms cubic-bezier(.2,.9,.25,1.4) both; }
+@keyframes ep-cupbump { 40% { transform: scale(1.06,.94) translateY(4px); } 100% { transform: none; } }
+.ep-txt { animation: ep-txt 460ms cubic-bezier(.2,.8,.2,1) both; }
+@keyframes ep-txt { from { opacity: 0; filter: blur(6px); transform: translateY(8px); } to { opacity: 1; filter: blur(0); transform: none; } }
+
+/* ---------- M4 Quick add (blur menu) ---------- */
+.ep-veil { animation: ep-veil 260ms ease both; }                    /* full-screen backdrop-filter: blur(14px) */
+@keyframes ep-veil { from { opacity: 0; } to { opacity: 1; } }
+.ep-item-in { animation: ep-item-in 460ms cubic-bezier(.2,.9,.25,1.2) both; }   /* stagger 50ms, last item first */
+@keyframes ep-item-in { 0% { opacity: 0; transform: translate(14px,26px) scale(.3); filter: blur(4px); } 60% { opacity: 1; filter: blur(0); } 100% { opacity: 1; transform: none; } }
+.ep-item-out { animation: ep-item-out 220ms ease both; }
+@keyframes ep-item-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translate(10px,18px) scale(.4); filter: blur(3px); } }
+.ep-toast { animation: ep-toast 2.2s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes ep-toast { 0% { opacity: 0; transform: translateY(-14px) scale(.96); } 12% { opacity: 1; transform: none; } 85% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-8px); } }
+
+/* ---------- M5 PDF tools dock (bar → grid) ---------- */
+.ep-dock-morph { transition: width 520ms cubic-bezier(.3,1.2,.45,1), height 520ms cubic-bezier(.3,1.2,.45,1), border-radius 520ms cubic-bezier(.3,1.2,.45,1); }
+.ep-tool-in { animation: ep-tool-in 420ms cubic-bezier(.3,1.5,.45,1) both; }    /* stagger 35ms */
+@keyframes ep-tool-in { from { opacity: 0; transform: scale(.4); filter: blur(4px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+/* ---------- M7 Live subject icons ---------- */
+.ep-blink { transform-box: fill-box; transform-origin: center; animation: ep-blink 3.6s ease-in-out infinite; }
+@keyframes ep-blink { 0%,90%,100% { transform: scaleY(1); } 94% { transform: scaleY(.1); } }
+.ep-sweep { animation: ep-sweep 2.4s linear infinite; }
+@keyframes ep-sweep { to { transform: rotate(360deg); } }
+.ep-heat { animation: ep-heat 1.6s ease-in-out infinite; }
+@keyframes ep-heat { 0%,100% { opacity: .25; transform: scale(.86); } 50% { opacity: 1; transform: scale(1); } }
+
+/* ---------- M8 Study block picker ---------- */
+.ep-val { animation: ep-val 300ms cubic-bezier(.2,.8,.2,1) both; }
+@keyframes ep-val { from { opacity: 0; transform: translateY(6px); filter: blur(3px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+/* ---------- Reduced motion: everything settles to its final frame ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; animation-delay: 0ms !important; transition: none !important; }
+  .ep-orbit, .ep-float, .ep-bob, .ep-scan, .ep-shine, .ep-dot, .ep-glow, .ep-fab-breathe, .ep-typing span, .ep-caret, .ep-spin, .ep-blink, .ep-sweep, .ep-heat { animation: none !important; }
+  .ep-reader-line { filter: none !important; }
+  .ep-press:active { filter: none; }
+  .ep-burst { display: none; }
+}

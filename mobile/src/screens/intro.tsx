@@ -1,13 +1,17 @@
+import { dropIn } from '../kit/motion';
+import { MaterialView } from '../components/surface';
 // Onboarding carousel (handoff board M3): three swipeable slides, a progress track with a star knob, back / next.
 import { useRef, useState } from 'react';
 import { ScrollView, View, useWindowDimensions } from 'react-native';
 import Animated, {
   useAnimatedStyle,
+  useAnimatedScrollHandler,
+  useReducedMotion,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Icon, IconButton, Press, Txt } from '../components/ui';
+import { Icon, IconButton, Press, Txt, PrimaryButton, SecondaryButton } from '../components/ui';
 import { GlassCard, Surface } from '../components/surface';
 import { C, INK, SUBJ, TYPE, type SubjectColor } from '../theme';
 import { useNav } from '../navigation';
@@ -23,7 +27,7 @@ function PlanArt() {
   return (
     <View style={{ flex: 1, justifyContent: 'center' }}>
       {DATES.map(([d, m, name, c, rot], i) => (
-        <View
+        <Animated.View entering={dropIn(i * 140, parseInt(rot, 10))}
           key={d}
           style={{
             marginLeft: i === 1 ? 70 : i === 2 ? 22 : 0,
@@ -54,7 +58,7 @@ function PlanArt() {
               {name}
             </Txt>
           </GlassCard>
-        </View>
+        </Animated.View>
       ))}
       <Surface
         kind="ink"
@@ -87,7 +91,7 @@ function CalmArt() {
       {rows.map(([t, done, c]) => (
         <GlassCard key={t} radius={26} padding={14}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-            <View
+            <MaterialView
               style={[
                 {
                   width: 28,
@@ -102,7 +106,7 @@ function CalmArt() {
               ]}
             >
               {done && <Icon name="check" size={16} color="#fff" />}
-            </View>
+            </MaterialView>
             <Txt style={{ flex: 1, fontWeight: 600, opacity: done ? 0.5 : 1 }}>
               {t}
             </Txt>
@@ -166,6 +170,7 @@ const SLIDES = [
 
 export function Intro() {
   const nav = useNav();
+  const reduce = useReducedMotion();
   const { state } = useStore();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
@@ -174,8 +179,9 @@ export function Intro() {
   const [trackW, setTrackW] = useState(0);
   const knob = useSharedValue(0);
   const last = i === SLIDES.length - 1;
+  const onScroll = useAnimatedScrollHandler(e => { knob.value = Math.max(0, Math.min(1, e.contentOffset.x / (width * (SLIDES.length - 1)))); });
   const goTo = (n: number) => {
-    scroll.current?.scrollTo({ x: n * width, animated: true });
+    scroll.current?.scrollTo({ x: n * width, animated: !reduce });
     setI(n);
     knob.value = withSpring(n / (SLIDES.length - 1), { stiffness: 300, damping: 31 });
   };
@@ -194,7 +200,9 @@ export function Intro() {
   const fill = useAnimatedStyle(() => ({ width: 22 + knob.value * Math.max(0, trackW - 44) }));
   return (
     <View style={{ flex: 1, backgroundColor: C.ground }}>
-      <ScrollView
+      <Animated.ScrollView
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         ref={scroll}
         horizontal
         pagingEnabled
@@ -235,7 +243,7 @@ export function Intro() {
             </View>
           </View>
         ))}
-      </ScrollView>
+      </Animated.ScrollView>
       <View
         style={{
           flexDirection: 'row',
@@ -298,6 +306,10 @@ export function Intro() {
           onPress={() => (last ? finish() : goTo(i + 1))}
         />
       </View>
+      {last && <View style={{ paddingHorizontal: 24, gap: 12, paddingBottom: insets.bottom + 16 }}>
+        <PrimaryButton label="Create account" onPress={() => nav.reset({ index: 0, routes: [{ name: 'Login', params: { mode: 'up' } }] })} />
+        <SecondaryButton label="Log in" onPress={finish} />
+      </View>}
       {!last && (
         <Press
           accessibilityRole="button"

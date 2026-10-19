@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ExamPilot reference — design-system-board</title>
+<!-- Static snapshot of the design prototype (Tokens.dc.html) in its first state. Reference only: rebuild as React components. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+body{margin:0;background:#FFFFFF}
+a{color:#1B1B1F}a:hover{color:#000000}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+
+</style>
+</head>
+<body>
+
+
+<div style="width: 2270px; height: 1120px; box-sizing: border-box; padding: 72px; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; display: flex; flex-direction: column; gap: 40px">
+
+<header style="display: flex; justify-content: space-between; align-items: flex-end; gap: 40px">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 18px; font-weight: 500; color: #5B6475">ExamPilot design system</span>
+<h1 style="margin: 0; font-weight: 600; font-size: 72px; line-height: 1; letter-spacing: -0.03em">Clear Glass</h1>
+<p style="margin: 0; max-width: 820px; font-size: 20px; line-height: 1.5; color: #5B6475">Pure white ground, frosted-glass cards and glassy buttons. Each object keeps a colour that fits it: blue for SE, violet for DAA, green for DDS, amber for deadlines.</p>
+</div>
+<div style="display: flex; gap: 10px">
+<span style="font-size: 16px; font-weight: 500; background: #FFFFFF; border-radius: 999px; padding: 12px 20px">All text pairs pass WCAG AA</span>
+<span style="font-size: 16px; font-weight: 500; background: #FFFFFF; border-radius: 999px; padding: 12px 20px">Respects reduced motion</span>
+</div>
+</header>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; flex: 1">
+
+<section style="background: #FFFFFF; border-radius: 40px; padding: 32px; display: flex; flex-direction: column; gap: 22px">
+<h2 style="margin: 0; font-weight: 600; font-size: 30px; letter-spacing: -0.02em">Colour</h2>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 76px; border-radius: 999px; background: #FFFFFF"></span><span style="font-size: 14px; font-weight: 600">Ground</span><span style="font-size: 13px; color: #5B6475">#FFFFFF</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 76px; border-radius: 999px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #E8EBF0"></span><span style="font-size: 14px; font-weight: 600">Card</span><span style="font-size: 13px; color: #5B6475">#FFFFFF</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 76px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); "></span><span style="font-size: 14px; font-weight: 600">Ink</span><span style="font-size: 13px; color: #5B6475">#1B1B1F · 14.5</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 76px; border-radius: 999px; background: #5B6475"></span><span style="font-size: 14px; font-weight: 600">Muted</span><span style="font-size: 13px; color: #5B6475">#5B6475 · 5.8</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="height: 76px; border-radius: 999px; background: #C7DCFF"></span><span style="font-size: 14px; font-weight: 600">Splash</span><span style="font-size: 13px; color: #5B6475">#C7DCFF</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 14px; font-weight: 600; color: #5B6475">Subjects · fill / text / mark</span>
+<div style="display: flex; align-items: center; gap: 14px; background: #DCEBFF; color: #1E3A8A; border-radius: 999px; padding: 8px 22px 8px 8px"><span style="width: 48px; height: 48px; border-radius: 999px; background: #2563EB"></span><span style="flex: 1; font-size: 17px; font-weight: 600; color: #1B1B1F">Software Engineering</span><span style="font-size: 14px">#DCEBFF / #1E3A8A · 7.4</span></div>
+<div style="display: flex; align-items: center; gap: 14px; background: #EDE5FF; color: #5B21B6; border-radius: 999px; padding: 8px 22px 8px 8px"><span style="width: 48px; height: 48px; border-radius: 999px; background: #7C3AED"></span><span style="flex: 1; font-size: 17px; font-weight: 600; color: #1B1B1F">Algorithms</span><span style="font-size: 14px">#EDE5FF / #5B21B6 · 6.8</span></div>
+<div style="display: flex; align-items: center; gap: 14px; background: #D9F5E6; color: #065F46; border-radius: 999px; padding: 8px 22px 8px 8px"><span style="width: 48px; height: 48px; border-radius: 999px; background: #10B981"></span><span style="flex: 1; font-size: 17px; font-weight: 600; color: #1B1B1F">Data Structures</span><span style="font-size: 14px">#D9F5E6 / #065F46 · 6.7</span></div>
+</div>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #5B6475">Large areas stay pale and low in saturation. Calendar marks use the deeper tone (all ≥ 3:1 on white), and every subject also carries a text label, so colour is never the only signal. No red anywhere.</p>
+</section>
+
+<section style="background: #FFFFFF; border-radius: 40px; padding: 32px; display: flex; flex-direction: column; gap: 22px">
+<h2 style="margin: 0; font-weight: 600; font-size: 30px; letter-spacing: -0.02em">Type &amp; shape</h2>
+<div style="display: flex; flex-direction: column; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid #F6F7F9">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px"><span style="font-weight: 600; font-size: 52px; line-height: 1; letter-spacing: -0.03em">Your Exam Week</span><span style="font-size: 14px; color: #5B6475">Urbanist 600 · 46</span></div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px"><span style="font-weight: 600; font-size: 28px; letter-spacing: -0.02em">Software Engineering</span><span style="font-size: 14px; color: #5B6475">600 · 28 / 24</span></div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px"><span style="font-size: 17px; font-weight: 500">Waterfall vs Agile — key differences</span><span style="font-size: 14px; color: #5B6475">500 · 17 body</span></div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px"><span style="font-size: 15px; color: #5B6475">Wednesday, 21 October at 2:00 PM</span><span style="font-size: 14px; color: #5B6475">400 · 15 caption</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 14px; font-weight: 600; color: #5B6475">Radius</span>
+<div style="display: flex; gap: 14px; align-items: flex-end">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="width: 76px; height: 60px; border-radius: 22px; background: #FFFFFF"></span><span style="font-size: 13px; color: #5B6475">22 inset</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="width: 88px; height: 70px; border-radius: 28px; background: #FFFFFF"></span><span style="font-size: 13px; color: #5B6475">28 panel</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="width: 100px; height: 80px; border-radius: 34px; background: #FFFFFF"></span><span style="font-size: 13px; color: #5B6475">34 card</span></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="width: 120px; height: 56px; border-radius: 999px; background: #FFFFFF"></span><span style="font-size: 13px; color: #5B6475">pill row / chip</span></div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 14px; font-weight: 600; color: #5B6475">Buttons</span>
+<div style="display: flex; gap: 10px; align-items: center; background: #FFFFFF; border-radius: 30px; padding: 14px">
+<span style="height: 52px; padding: 0 22px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18); color: #FFFFFF; display: flex; align-items: center; font-size: 16px; font-weight: 600">Primary</span>
+<span style="height: 52px; padding: 0 22px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px #CBD2DC; display: flex; align-items: center; font-size: 16px; font-weight: 500">Chip</span>
+<span style="width: 56px; height: 56px; border-radius: 999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></span>
+<span style="width: 52px; height: 52px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"></path></svg></span>
+</div>
+</div>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #5B6475">Spacing on a 4px grid; 20px screen gutters, 14px between cards. Every target is at least 44px, and icon buttons are 56px.</p>
+</section>
+
+<section style="background: #FFFFFF; border-radius: 40px; padding: 32px; display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-weight: 600; font-size: 30px; letter-spacing: -0.02em">Motion &amp; voice</h2>
+<div style="display: flex; flex-direction: column">
+<div style="display: grid; grid-template-columns: 150px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid #F6F7F9; font-size: 16px"><span style="font-weight: 600">Splash</span><span style="color: #5B6475">rise 12px · 520ms · 120ms stagger · art floats gently</span></div>
+<div style="display: grid; grid-template-columns: 150px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid #F6F7F9; font-size: 16px"><span style="font-weight: 600">Tab change</span><span style="color: #5B6475">fade + 8px rise · 240ms in, 140ms out</span></div>
+<div style="display: grid; grid-template-columns: 150px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid #F6F7F9; font-size: 16px"><span style="font-weight: 600">Nav pill</span><span style="color: #5B6475">black pill slides via shared layoutId</span></div>
+<div style="display: grid; grid-template-columns: 150px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid #F6F7F9; font-size: 16px"><span style="font-weight: 600">Checkbox</span><span style="color: #5B6475">pop 1 → 1.12 → 1 · tick draws in ~220ms</span></div>
+<div style="display: grid; grid-template-columns: 150px 1fr; gap: 12px; padding: 11px 0; font-size: 16px"><span style="font-weight: 600">Press</span><span style="color: #5B6475">scale 0.97 · spring 500 / 30</span></div>
+</div>
+<div style="background: linear-gradient(160deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%), #DCEBFF; box-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(255,255,255,.6), 0 12px 30px rgba(15,23,42,.06); color: #1E3A8A; border-radius: 26px; padding: 16px 18px; font-size: 15px; line-height: 1.6">
+<strong style="font-weight: 600; color: #1B1B1F">Reduced motion</strong>: MotionConfig reducedMotion="user" makes movement and scale instant, while fades and the tick still play. The splash float and stagger turn off completely.
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; font-size: 15px; line-height: 1.45">
+<div style="background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  color: #FFFFFF; border-radius: 22px; padding: 12px 16px"><strong style="font-weight: 600">Say</strong><br>“3 days to prepare”</div>
+<div style="background: #FFFFFF; color: #5B6475; border-radius: 22px; padding: 12px 16px"><strong style="font-weight: 600">Not</strong><br>“Only 3 days left!”</div>
+<div style="background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  color: #FFFFFF; border-radius: 22px; padding: 12px 16px"><strong style="font-weight: 600">Say</strong><br>“Missed yesterday? We’ve moved it to today.”</div>
+<div style="background: #FFFFFF; color: #5B6475; border-radius: 22px; padding: 12px 16px"><strong style="font-weight: 600">Not</strong><br>“You broke your streak.”</div>
+</div>
+</section>
+
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 600; font-size: 20px">Dates, not ticking clocks</span><span style="font-size: 16px; line-height: 1.55; color: #5B6475">Time pressure lowers scores. Show whole days and “Wed, 21 Oct · 2 PM”, never seconds.</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 600; font-size: 20px">Done first, left second</span><span style="font-size: 16px; line-height: 1.55; color: #5B6475">Small wins make good days, so stat columns lead with what’s revised.</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 600; font-size: 20px">No streaks to lose</span><span style="font-size: 16px; line-height: 1.55; color: #5B6475">Counters only go up. A missed day is a pause, not a failure.</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-weight: 600; font-size: 20px">Three to five a day</span><span style="font-size: 16px; line-height: 1.55; color: #5B6475">Short lists feel doable. Recall practice is nudged over rereading.</span></div>
+</div>
+
+</div>
+
+</body>
+</html>

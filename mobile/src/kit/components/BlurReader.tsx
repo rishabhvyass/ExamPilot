@@ -13,7 +13,7 @@
 // native `filter: blur()` style; older Android shows colour only.
 import { useEffect, useRef, useState } from "react";
 import { Platform, Pressable, StyleSheet, Text, View, type LayoutChangeEvent } from "react-native";
-import Animated, { useDerivedValue, useAnimatedStyle, useReducedMotion, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
+import Animated, { interpolateColor, useDerivedValue, useAnimatedStyle, useReducedMotion, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { BlurVeil } from "../compat";
 import { LinearGradient } from "../compat";
 import { BlurIn } from "./BlurIn";
@@ -32,10 +32,12 @@ const TOOLBAR = 96;
 
 function Line({ text, distance, highlight, onPress, onLayout, reduce }: { text: string; distance: number; highlight: boolean; onPress: () => void; onLayout: (e: LayoutChangeEvent) => void; reduce: boolean }) {
   const look = readerLine(distance);
+  const distanceValue = useSharedValue(Math.min(2, distance));
   const op = useSharedValue(look.opacity);
   const blur = useSharedValue(reduce ? 0 : look.blur);
   const hl = useSharedValue(highlight ? 1 : 0);
   useEffect(() => {
+    distanceValue.value = withTiming(Math.min(2, distance), { duration: duration.readerLine, easing: ease.inOut });
     op.value = withTiming(look.opacity, { duration: duration.readerLine, easing: ease.inOut });
     blur.value = withTiming(reduce ? 0 : look.blur, { duration: duration.readerLine, easing: ease.inOut });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,14 +49,15 @@ function Line({ text, distance, highlight, onPress, onLayout, reduce }: { text: 
 
   const wrap = useAnimatedStyle(() => ({ opacity: op.value, ...(androidFilter ? { filter: [{ blur: blur.value }] } : {}) }));
   const veil = useDerivedValue(() => blur.value * 11); // 0.4px → ~4, 1.6px → ~18
+  const textColor = useAnimatedStyle(() => ({ color: interpolateColor(distanceValue.value, [0, 1, 2], [color.inkButton, color.readerNear, color.readerFar]) }));
   const marker = useAnimatedStyle(() => ({ transform: [{ scaleX: hl.value }] }));
 
   return (
     <Pressable onPress={onPress} onLayout={onLayout} accessibilityRole="text" accessibilityState={{ selected: distance === 0 }}>
       <Animated.View style={[{ marginBottom: 22 }, wrap]}>
         <Animated.View pointerEvents="none" style={[styles.marker, { transformOrigin: "left" }, marker]} />
-        <Text style={{ fontFamily: fontFamily[look.weight], fontSize: 17, lineHeight: 25.5, color: look.color }}>{text}</Text>
-        {Platform.OS === "ios" && !reduce && distance > 0 && (
+        <Animated.Text maxFontSizeMultiplier={1.3} style={[{ fontFamily: fontFamily[look.weight], fontSize: 17, lineHeight: 25.5 }, textColor]}>{text}</Animated.Text>
+        {Platform.OS === "ios" && !reduce && distance > 0 && distance <= 2 && (
           <BlurVeil level={veil} max={18} style={StyleSheet.absoluteFill} />
         )}
       </Animated.View>
@@ -62,19 +65,20 @@ function Line({ text, distance, highlight, onPress, onLayout, reduce }: { text: 
   );
 }
 
-export function BlurReader({ modes, height = 600 }: { modes: ReaderMode[]; height?: number }) {
+export function BlurReader({ modes, height = 600, onHighlight }: { modes: ReaderMode[]; height?: number; onHighlight?: (text: string) => void }) {
   const reduce = useReducedMotion();
   const [modeIdx, setModeIdx] = useState(0);
   const [focus, setFocus] = useState(0);
   const [paused, setPaused] = useState(false);
   const [highlight, setHighlight] = useState(false);
   const layouts = useRef<Record<number, { y: number; h: number }>>({});
-  const lines = modes[modeIdx].lines;
-  const viewport = height - TOOLBAR;
+  const currentMode = modes[modeIdx] ?? modes[0];
+  const lines = currentMode?.lines ?? [];
+  const viewport = Math.max(120, height - TOOLBAR);
 
   // auto-advance
   useEffect(() => {
-    if (paused || reduce) return;
+    if (paused || reduce || lines.length < 2) return;
     const t = setInterval(() => setFocus((f) => (f + 1) % lines.length), duration.readerStep);
     return () => clearInterval(t);
   }, [paused, reduce, lines.length]);
@@ -113,6 +117,7 @@ export function BlurReader({ modes, height = 600 }: { modes: ReaderMode[]; heigh
     if (i === modeIdx) return;
     layouts.current = {};
     setModeIdx(i);
+    setHighlight(false);
     setFocus(0);
   };
 
@@ -125,7 +130,7 @@ export function BlurReader({ modes, height = 600 }: { modes: ReaderMode[]; heigh
         onTouchCancel={() => setPaused(false)}
         accessibilityLiveRegion="polite"
       >
-        <BlurIn key={modes[modeIdx].id} amount={BLUR.swap} ms={duration.blurSwap} delay={0} rise={0} style={StyleSheet.absoluteFill}>
+        <BlurIn key={currentMode?.id} amount={BLUR.swap} ms={duration.blurSwap} delay={0} rise={0} style={StyleSheet.absoluteFill}>
           <Animated.View style={[{ position: "absolute", left: 26, right: 26, top: 0 }, track]}>
             {lines.map((t, i) => (
               <Line
@@ -144,8 +149,9 @@ export function BlurReader({ modes, height = 600 }: { modes: ReaderMode[]; heigh
             ))}
           </Animated.View>
         </BlurIn>
-        <ProgressiveBlur side="top" height={130} />
-        <ProgressiveBlur side="bottom" height={130} />
+        {!lines.length && <Text accessibilityRole="text" style={{ margin: 26, color: color.inkMuted, fontFamily: fontFamily[500] }}>{currentMode?.id === "saved" ? "No saved lines yet. Highlight a line while reading." : currentMode?.id === "ask" ? "Your study assistant replies will appear here." : "No readable text is available."}</Text>}
+        <ProgressiveBlur side="top" height={100} />
+        <ProgressiveBlur side="bottom" height={100} />
       </View>
 
       {/* toolbar */}
@@ -161,7 +167,7 @@ export function BlurReader({ modes, height = 600 }: { modes: ReaderMode[]; heigh
             </PressableScale>
           ))}
         </Surface>
-        <PressableScale amount="small" onPress={() => setHighlight((h) => !h)} accessibilityLabel="Highlight focus line" accessibilityState={{ selected: highlight }}>
+        <PressableScale amount="small" onPress={() => { setHighlight(h => !h); if (!highlight && lines[focus]) onHighlight?.(lines[focus]); }} accessibilityLabel="Highlight focus line" accessibilityState={{ selected: highlight }}>
           <Surface kind={highlight ? "recess" : "clay"} style={{ width: 60, height: 60, alignItems: "center", justifyContent: "center" }}>
             <Animated.View style={penStyle}>
               <GlossIcon d={ICON.pen} size={22} stroke />

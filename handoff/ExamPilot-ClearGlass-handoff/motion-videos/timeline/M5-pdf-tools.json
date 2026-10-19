@@ -1,0 +1,219 @@
+{
+ "board": "MotionPdfTools.dc.html",
+ "viewport": [
+  390,
+  844
+ ],
+ "actions": [
+  {
+   "t": 1000,
+   "action": "tap [aria-label=\"Highlight\"]"
+  },
+  {
+   "t": 2267,
+   "action": "tap [aria-label=\"Open study tools\"]"
+  },
+  {
+   "t": 4533,
+   "action": "tap [aria-label=\"Close tools\"]"
+  }
+ ],
+ "animations": [
+  {
+   "t": 1133,
+   "kind": "CSSTransition",
+   "name": "transform",
+   "el": "button[Highlight] 45x45",
+   "dur": 140,
+   "delay": 0,
+   "iter": 1,
+   "easing": "cubic-bezier(0.2, 0, 0, 1)",
+   "props": "transform",
+   "from": "transform:none",
+   "to": "transform:scale(0.92)"
+  },
+  {
+   "t": 1133,
+   "kind": "CSSTransition",
+   "name": "opacity",
+   "el": "div 43x43",
+   "dur": 180,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "opacity",
+   "from": "opacity:0",
+   "to": "opacity:1"
+  },
+  {
+   "t": 1133,
+   "kind": "CSSTransition",
+   "name": "transform",
+   "el": "div 43x43",
+   "dur": 180,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "transform",
+   "from": "transform:scale(0.6)",
+   "to": "transform:scale(1)"
+  },
+  {
+   "t": 1300,
+   "kind": "CSSTransition",
+   "name": "opacity",
+   "el": "div 52x52",
+   "dur": 179.44814142541867,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "opacity",
+   "from": "opacity:0.996934",
+   "to": "opacity:0"
+  },
+  {
+   "t": 1300,
+   "kind": "CSSTransition",
+   "name": "transform",
+   "el": "div 52x52",
+   "dur": 180,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "transform",
+   "from": "transform:scale(0.998774)",
+   "to": "transform:scale(1.4)"
+  },
+  {
+   "t": 2400,
+   "kind": "CSSTransition",
+   "name": "transform",
+   "el": "button[Open study tools] 60x60",
+   "dur": 360,
+   "delay": 0,
+   "iter": 1,
+   "easing": "cubic-bezier(0.3, 1.4, 0.45, 1)",
+   "props": "transform",
+   "from": "transform:none",
+   "to": "transform:scale(0.88)"
+  },
+  {
+   "t": 2400,
+   "kind": "CSSTransition",
+   "name": "opacity",
+   "el": "div 70x70",
+   "dur": 180,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "opacity",
+   "from": "opacity:0",
+   "to": "opacity:1"
+  },
+  {
+   "t": 2400,
+   "kind": "CSSTransition",
+   "name": "transform",
+   "el": "div 70x70",
+   "dur": 180,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "transform",
+   "from": "transform:scale(1.4)",
+   "to": "transform:scale(1)"
+  },
+  {
+   "t": 2567,
+   "kind": "CSSTransition",
+   "name": "opacity",
+   "el": "div 50x50",
+   "dur": 179.44814142541878,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "opacity",
+   "from": "opacity:0.996934",
+   "to": "opacity:0"
+  },
+  {
+   "t": 2567,
+   "kind": "CSSTransition",
+   "name": "transform",
+   "el": "div 50x50",
+   "dur": 179.44814142541878,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "transform",
+   "from": "transform:scale(1.00123)",
+   "to": "transform:scale(1.4)"
+  },
+  {
+   "t": 4667,
+   "kind": "CSSTransition",
+   "name": "transform",
+   "el": "button[Close tools] 60x60",
+   "dur": 360,
+   "delay": 0,
+   "iter": 1,
+   "easing": "cubic-bezier(0.3, 1.4, 0.45, 1)",
+   "props": "transform",
+   "from": "transform:none",
+   "to": "transform:scale(0.88)"
+  },
+  {
+   "t": 4667,
+   "kind": "CSSTransition",
+   "name": "opacity",
+   "el": "div 70x70",
+   "dur": 180,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "opacity",
+   "from": "opacity:0",
+   "to": "opacity:1"
+  },
+  {
+   "t": 4667,
+   "kind": "CSSTransition",
+   "name": "transform",
+   "el": "div 70x70",
+   "dur": 180,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "transform",
+   "from": "transform:scale(1.4)",
+   "to": "transform:scale(1)"
+  },
+  {
+   "t": 4833,
+   "kind": "CSSTransition",
+   "name": "opacity",
+   "el": "div 50x50",
+   "dur": 179.44814142541856,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "opacity",
+   "from": "opacity:0.996934",
+   "to": "opacity:0"
+  },
+  {
+   "t": 4833,
+   "kind": "CSSTransition",
+   "name": "transform",
+   "el": "div 50x50",
+   "dur": 179.44814142541856,
+   "delay": 0,
+   "iter": 1,
+   "easing": "ease",
+   "props": "transform",
+   "from": "transform:scale(1.00123)",
+   "to": "transform:scale(1.4)"
+  }
+ ],
+ "duration_ms": 6700
+}

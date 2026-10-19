@@ -1,0 +1,23 @@
+// ExamPilot "Clear Glass" — React Native kit. Copy native/ into your app (e.g. src/ui/) and import from here.
+export * from "./theme";
+export * from "./motion";
+export { Surface, splitShadow } from "./components/Surface";
+export { PressableScale } from "./components/PressableScale";
+export { Icon, GlossIcon, ICON, READER_ICONS } from "./components/Icon";
+export { SoftButton, ArrowChip } from "./components/SoftButton";
+export { IconButton } from "./components/IconButton";
+export { GlassCard, SubjectCard, StatPanel, SubjectTag } from "./components/GlassCard";
+export { BlurIn } from "./components/BlurIn";
+export { Screen } from "./components/Screen";
+export { ProgressiveBlur } from "./components/ProgressiveBlur";
+export { TabBar } from "./components/TabBar";
+export { SegmentedControl } from "./components/SegmentedControl";
+export { FilterChips } from "./components/FilterChips";
+export { AnimatedCheckbox } from "./components/AnimatedCheckbox";
+export { BlurReader, type ReaderMode } from "./components/BlurReader";
+export { SplashIntro } from "./components/SplashIntro";
+export { CodePill } from "./components/CodePill";
+export { QuickAddMenu, type QuickAction } from "./components/QuickAddMenu";
+export { ToolDock, type Tool } from "./components/ToolDock";
+export { GooeyIsland, type IslandState } from "./components/GooeyIsland";
+export { CelebrateLayer, type CelebrateHandle } from "./components/Celebrate";

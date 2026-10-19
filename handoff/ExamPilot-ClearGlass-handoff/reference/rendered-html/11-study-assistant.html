@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ExamPilot reference — 11-study-assistant</title>
+<!-- Static snapshot of the design prototype (Assistant.dc.html) in its first state. Reference only: rebuild as React components. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+body{margin:0;background:#FFFFFF}
+a{color:#1B1B1F}a:hover{color:#000000}
+.press{transition:transform 140ms cubic-bezier(.2,0,0,1),background-color 160ms ease}
+.press:hover{transform:translateY(-1px)}
+.press:active{transform:scale(.96)}
+.msg{animation:msg 360ms cubic-bezier(.2,.9,.25,1.05) both}
+.bar{transform-origin:bottom;animation:bar 800ms cubic-bezier(.2,.8,.2,1) both}
+.dot{display:inline-block;width:8px;height:8px;border-radius:999px;background:#6B7385;animation:bounce 1s ease-in-out infinite}
+.dot2{animation-delay:.15s}.dot3{animation-delay:.3s}
+.glow{animation:glow 3s ease-in-out infinite}
+.list{scroll-behavior:smooth}
+.list::-webkit-scrollbar{width:0}
+@keyframes msg{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes bar{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-5px);opacity:1}}
+@keyframes glow{0%,100%{transform:rotate(0deg) scale(1)}50%{transform:rotate(12deg) scale(1.06)}}
+input{font:inherit;color:inherit;border:0;outline:0;background:transparent;width:100%}
+input::placeholder{color:#8A92A3}
+button:focus-visible,a:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.list{scroll-behavior:auto}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+
+</style>
+</head>
+<body>
+
+
+<div style="width: 390px; height: 1160px; position: relative; overflow: hidden; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box; display: flex; flex-direction: column">
+
+<header style="padding: 60px 20px 12px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; gap: 12px">
+<a href="Main.dc.html" class="press" aria-label="Back" style="flex: none; width: 52px; height: 52px; border-radius: 999px; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<span class="glow" aria-hidden="true" style="flex: none; width: 52px; height: 52px; border-radius: 20px; background: #C7DCFF; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 24 24" fill="#1B1B1F"><path d="M12 2l2.2 5.8L20 10l-5.8 2.2L12 18l-2.2-5.8L4 10l5.8-2.2z"></path><circle cx="19" cy="18" r="2"></circle></svg></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 20px; font-weight: 600">Study buddy</span>
+<span style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: #5B6475"><span style="width: 8px; height: 8px; border-radius: 999px; background: #10B981"></span>Knows your plan &amp; materials</span>
+</span>
+</div>
+<span style="align-self: flex-start; font-size: 13px; font-weight: 600; color: #5B6475; border: 1px solid #E2E6EC; border-radius: 999px; padding: 5px 12px">Sample conversation · AI not connected yet</span>
+</header>
+
+<div class="list" style="flex: 1; overflow-y: auto; padding: 4px 20px 16px; display: flex; flex-direction: column; gap: 12px">
+
+
+
+<div class="msg" style="align-self: flex-start; max-width: 86%; display: flex; flex-direction: column; gap: 8px"><div style="background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); border-radius: 26px 26px 26px 8px; padding: 12px 16px; font-size: 16px; line-height: 1.5">Hi! I can plan your week, quiz you, or explain anything from your notes. What would help right now?</div></div>
+
+
+
+
+
+
+
+<div class="msg" style="align-self: flex-end; max-width: 78%; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  color: #FFFFFF; border-radius: 26px 26px 8px 26px; padding: 12px 16px; font-size: 16px; line-height: 1.45">Make a plan for DAA before the exam</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="msg" style="align-self: flex-start; width: 92%; background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); border-radius: 26px 26px 26px 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 16px; line-height: 1.5">Here’s a calm plan for <strong style="font-weight: 600">DAA</strong> before Thursday:</span>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: center; gap: 10px; background: #EDE5FF; border-radius: 18px; padding: 10px 12px"><span style="flex: none; width: 42px; font-size: 13px; font-weight: 700; color: #5B21B6">MON</span><span style="flex: 1; font-size: 15px; font-weight: 500">Divide &amp; conquer + Master theorem</span><span style="font-size: 13px; color: #5B21B6">1.5h</span></div>
+<div style="display: flex; align-items: center; gap: 10px; background: #EDE5FF; border-radius: 18px; padding: 10px 12px"><span style="flex: none; width: 42px; font-size: 13px; font-weight: 700; color: #5B21B6">TUE</span><span style="flex: 1; font-size: 15px; font-weight: 500">DP and greedy, 6 practice problems</span><span style="font-size: 13px; color: #5B21B6">1.5h</span></div>
+<div style="display: flex; align-items: center; gap: 10px; background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); border-radius: 18px; padding: 10px 12px"><span style="flex: none; width: 42px; font-size: 13px; font-weight: 700; color: #5B6475">WED</span><span style="flex: 1; font-size: 15px; font-weight: 500">Light recap of graphs after SE exam</span><span style="font-size: 13px; color: #5B6475">1h</span></div>
+</div>
+<button type="button" class="press" style="align-self: flex-start; display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 999px; border: 0; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); color: #FFFFFF; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="4"></rect><path d="M16 3v4M8 3v4M3 10h18"></path></svg>Add to calendar</button>
+</div>
+
+
+
+
+
+<div class="msg" style="align-self: flex-end; max-width: 78%; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  color: #FFFFFF; border-radius: 26px 26px 8px 26px; padding: 12px 16px; font-size: 16px; line-height: 1.45">Show my study hours by subject</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="msg" style="align-self: flex-start; width: 92%; background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); border-radius: 26px 26px 26px 8px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 16px; line-height: 1.5">Planned study hours this week:</span>
+<div role="img" aria-label="Bar chart: Software Engineering 4 hours, Algorithms 5 hours, Data Structures 1 hour" style="height: 150px; display: flex; align-items: flex-end; gap: 14px; padding: 0 6px; border-bottom: 1px solid #EEF0F4">
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end"><span style="font-size: 14px; font-weight: 700">4h</span><span class="bar" style="width: 100%; height: 80px; border-radius: 16px 16px 6px 6px; background: #2563EB"></span></div>
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end"><span style="font-size: 14px; font-weight: 700">5h</span><span class="bar" style="width: 100%; height: 100px; border-radius: 16px 16px 6px 6px; background: #7C3AED; animation-delay: 120ms"></span></div>
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end"><span style="font-size: 14px; font-weight: 700">1h</span><span class="bar" style="width: 100%; height: 20px; border-radius: 16px 16px 6px 6px; background: #10B981; animation-delay: 240ms"></span></div>
+</div>
+<div style="display: flex; gap: 14px; padding: 0 6px; font-size: 13px; font-weight: 600; color: #5B6475; text-align: center"><span style="flex: 1">SE</span><span style="flex: 1">DAA</span><span style="flex: 1">DDS</span></div>
+<span style="font-size: 15px; line-height: 1.5; color: #5B6475">Data Structures gets more time on Thursday evening, after the DAA exam.</span>
+</div>
+
+
+
+</div>
+
+<div style="padding: 10px 16px 28px; display: flex; flex-direction: column; gap: 10px; background: linear-gradient(to bottom, rgba(255,255,255,0), #FFFFFF 22%)">
+<div style="display: flex; gap: 8px; overflow-x: auto; padding: 2px 4px">
+<button type="button" class="press" style="flex: none; height: 42px; padding: 0 16px; border-radius: 999px; border: 1.5px solid #CBD2DC; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); font: inherit; font-size: 14px; font-weight: 600; color: #1B1B1F; cursor: pointer">Quiz me on AVL trees</button><button type="button" class="press" style="flex: none; height: 42px; padding: 0 16px; border-radius: 999px; border: 1.5px solid #CBD2DC; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); font: inherit; font-size: 14px; font-weight: 600; color: #1B1B1F; cursor: pointer">Explain Master theorem simply</button><button type="button" class="press" style="flex: none; height: 42px; padding: 0 16px; border-radius: 999px; border: 1.5px solid #CBD2DC; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); font: inherit; font-size: 14px; font-weight: 600; color: #1B1B1F; cursor: pointer">Summarise my SE PDF</button>
+</div>
+<form style="display: flex; align-items: center; gap: 8px; background: #FFFFFF; border-radius: 999px; padding: 6px; box-shadow: 0 10px 28px rgba(15,23,42,.10)">
+<button type="button" class="press" aria-label="Attach a file" style="flex: none; width: 48px; height: 48px; border-radius: 999px; border: 0; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5l-8.5 8.5a5 5 0 0 1-7-7L14 4.5a3.5 3.5 0 0 1 5 5L10.5 18a2 2 0 0 1-3-3L15 7.5"></path></svg></button>
+<label style="flex: 1"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Message</span><input type="text" placeholder="Ask anything about your exams…" value="" style="font-size: 16px; height: 48px"></label>
+<button type="submit" class="press" aria-label="Send" style="flex: none; width: 48px; height: 48px; border-radius: 999px; border: 0; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18); display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"></path></svg></button>
+</form>
+</div>
+</div>
+
+</body>
+</html>

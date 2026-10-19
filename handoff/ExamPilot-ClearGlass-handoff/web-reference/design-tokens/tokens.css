@@ -1,0 +1,102 @@
+/* ExamPilot — "Clear Glass" design tokens (v1 page, current)
+   Import once, at the top of your global stylesheet:  @import "./tokens.css";
+   Every value here is copied from the live design files in /reference/prototypes. */
+
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap");
+/* or self-host:  npm i @fontsource-variable/urbanist  →  import "@fontsource-variable/urbanist"; */
+
+:root {
+  /* ── Font ─────────────────────────────────────────── */
+  --ep-font: "Urbanist", "Urbanist Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* ── Ground & surfaces ────────────────────────────── */
+  --ep-ground: #FFFFFF;          /* page background — always pure white */
+  --ep-surface: #FFFFFF;
+  --ep-input: #F4F6FA;           /* text fields, note boxes */
+  --ep-surface-muted: #F6F7F9;   /* answer boxes, quiet rows */
+  --ep-skeleton: #EEF0F4;
+  --ep-line: #E8EBF0;            /* hairlines, empty progress segments */
+  --ep-line-2: #E2E6EC;          /* dividers, empty step bars */
+  --ep-line-strong: #CBD2DC;     /* outline chips, dashed "Add…" buttons */
+
+  /* ── Ink (text) ───────────────────────────────────── */
+  --ep-ink: #1B1B1F;             /* headings, body */
+  --ep-ink-button: #111113;      /* label on soft buttons */
+  --ep-ink-muted: #5B6475;       /* 5.9:1 on white */
+  --ep-ink-subtle: #6B7385;      /* 4.8:1 on white — captions only */
+  --ep-placeholder: #8A92A3;
+
+  /* ── Subjects: fill / deep fill / text / text-muted / mark ── */
+  --ep-se-fill: #DCEBFF;  --ep-se-deep: #BFD6FF;  --ep-se-text: #1E3A8A;  --ep-se-muted: #1E40AF;  --ep-se-mark: #2563EB;
+  --ep-daa-fill: #EDE5FF; --ep-daa-deep: #CDBBFF; --ep-daa-text: #5B21B6; --ep-daa-muted: #5B21B6; --ep-daa-mark: #7C3AED;
+  --ep-dds-fill: #D9F5E6; --ep-dds-deep: #9EE6C0; --ep-dds-text: #065F46; --ep-dds-muted: #065F46; --ep-dds-mark: #10B981;
+
+  /* ── Decorative art (circles on hero cards, splash) ── */
+  --ep-art-blue: #3B82F6;
+  --ep-art-violet: #DDD0FF;
+  --ep-art-green: #BBF0D3;
+  --ep-art-pink: #F9A8D4;
+  --ep-highlighter: #E3EEFF;
+
+  /* ── Status (never red for exams or deadlines) ───── */
+  --ep-info-bg: #E3EEF8;     --ep-info-text: #2C5577;
+  --ep-success-bg: #D9F5E6;  --ep-success-text: #065F46;
+  --ep-headsup-bg: #FEF3C7;  --ep-headsup-text: #92400E;
+  --ep-error-bg: #FEE2E2;    --ep-error-text: #B91C1C;   /* real errors only */
+
+  /* ── Soft "clay" buttons (from your reference clip) ── */
+  --ep-clay-bg: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%);
+  --ep-clay-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07);
+  --ep-clay-shadow-hover: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.05), 0 2px 4px rgba(0,0,0,.07), 0 14px 30px rgba(0,0,0,.09);
+  /* pressed-in groove — active tab, selected segment, toggled round button */
+  --ep-recess-bg: linear-gradient(180deg, #DEDEE1, #E9E9EB);
+  --ep-recess-shadow: inset 0 2px 6px rgba(0,0,0,.13), inset 0 -1px 0 rgba(255,255,255,.9);
+  /* container that holds a group of buttons (tab bar, reader toolbar) */
+  --ep-dock-bg: linear-gradient(180deg, #FFFFFF, #F0F0F2);
+  --ep-dock-shadow: inset 0 1px 0 #FFFFFF, 0 0 0 1px rgba(0,0,0,.05), 0 2px 4px rgba(0,0,0,.05), 0 16px 34px rgba(0,0,0,.10);
+  /* glossy black — arrow chips inside buttons, selected chips, logo tile, small selected toggles */
+  --ep-ink-gloss: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);
+  --ep-ink-gloss-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18);
+  --ep-ink-flat: #151517;          /* thin progress fills (≤ 8px tall) */
+
+  /* ── Glass ───────────────────────────────────────── */
+  --ep-glass-panel-bg: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55));
+  --ep-glass-panel-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07);
+  --ep-glass-blur: blur(22px) saturate(1.6);
+  /* tinted subject cards get a glass sheen on top of their fill */
+  --ep-sheen: linear-gradient(160deg, rgba(255,255,255,.6), rgba(255,255,255,0) 55%);
+  --ep-sheen-shadow: inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(255,255,255,.6), 0 12px 30px rgba(15,23,42,.06);
+
+  /* ── Shape ───────────────────────────────────────── */
+  --ep-r-input: 22px;
+  --ep-r-panel: 28px;
+  --ep-r-card: 34px;
+  --ep-r-sheet: 36px;
+  --ep-r-reader: 40px;
+  --ep-r-pill: 9999px;
+
+  /* ── Size ────────────────────────────────────────── */
+  --ep-btn-h: 62px;            /* primary pill: 62–64 */
+  --ep-btn-chip: 46px;         /* glossy arrow circle inside it: 46–48 */
+  --ep-icon-btn: 56px;         /* round soft buttons; 52 on onboarding, 44–48 small */
+  --ep-chip-h: 52px;
+  --ep-tab-h: 56px;
+  --ep-gutter: 20px;           /* tab screens; onboarding uses 24 */
+
+  /* ── Motion ──────────────────────────────────────── */
+  --ep-ease-standard: cubic-bezier(.2,0,0,1);
+  --ep-ease-decelerate: cubic-bezier(.05,.7,.1,1);
+  --ep-ease-smooth: cubic-bezier(.2,.8,.2,1);
+  --ep-ease-overshoot: cubic-bezier(.2,.9,.25,1.08);
+  --ep-ease-spring-css: cubic-bezier(.3,1.25,.45,1);
+  --ep-ease-scroll: cubic-bezier(.65,0,.25,1);
+  --ep-blur-in: 10px;          /* how blurry things start when they enter */
+}
+
+body {
+  margin: 0;
+  background: var(--ep-ground);
+  color: var(--ep-ink);
+  font-family: var(--ep-font);
+  -webkit-font-smoothing: antialiased;
+}

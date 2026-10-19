@@ -1,0 +1,132 @@
+{
+  "_note": "SAMPLE syllabus — label as sample in the UI until the student edits it.",
+  "subjects": [
+    {
+      "id": "se",
+      "code": "SE",
+      "name": "Software Engineering",
+      "color": "se",
+      "description": "Process models, requirements, design, testing and quality.",
+      "topics": [
+        {
+          "id": "se-1",
+          "name": "Software process models",
+          "done": true
+        },
+        {
+          "id": "se-2",
+          "name": "Requirements engineering",
+          "done": true
+        },
+        {
+          "id": "se-3",
+          "name": "Design & UML diagrams",
+          "done": true
+        },
+        {
+          "id": "se-4",
+          "name": "Testing strategies",
+          "done": true
+        },
+        {
+          "id": "se-5",
+          "name": "Project estimation (COCOMO)",
+          "done": false
+        },
+        {
+          "id": "se-6",
+          "name": "Maintenance & quality",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "daa",
+      "code": "DAA",
+      "name": "Design and Analysis of Algorithm",
+      "color": "daa",
+      "description": "Complexity, paradigms and graph algorithms.",
+      "topics": [
+        {
+          "id": "daa-1",
+          "name": "Asymptotic analysis",
+          "done": true
+        },
+        {
+          "id": "daa-2",
+          "name": "Divide & conquer",
+          "done": true
+        },
+        {
+          "id": "daa-3",
+          "name": "Greedy algorithms",
+          "done": true
+        },
+        {
+          "id": "daa-4",
+          "name": "Dynamic programming",
+          "done": false
+        },
+        {
+          "id": "daa-5",
+          "name": "Graph algorithms",
+          "done": false
+        },
+        {
+          "id": "daa-6",
+          "name": "Backtracking & branch-and-bound",
+          "done": false
+        },
+        {
+          "id": "daa-7",
+          "name": "NP-completeness",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "dds",
+      "code": "DDS",
+      "name": "Design of Data Structures",
+      "color": "dds",
+      "description": "Linear structures, trees, heaps, hashing and graphs.",
+      "topics": [
+        {
+          "id": "dds-1",
+          "name": "Arrays & linked lists",
+          "done": true
+        },
+        {
+          "id": "dds-2",
+          "name": "Stacks & queues",
+          "done": true
+        },
+        {
+          "id": "dds-3",
+          "name": "Trees & BST",
+          "done": false
+        },
+        {
+          "id": "dds-4",
+          "name": "AVL & B-trees",
+          "done": false
+        },
+        {
+          "id": "dds-5",
+          "name": "Heaps",
+          "done": false
+        },
+        {
+          "id": "dds-6",
+          "name": "Hashing",
+          "done": false
+        },
+        {
+          "id": "dds-7",
+          "name": "Graphs",
+          "done": false
+        }
+      ]
+    }
+  ]
+}

@@ -14,9 +14,7 @@ import { useReducedMotion } from "react-native-reanimated";
 const MaskedView = RNMaskedView as unknown as ComponentType<{ style?: StyleProp<ViewStyle>; maskElement: ReactElement; children?: ReactNode }>;
 
 const LAYERS = [
-  { intensity: 8, from: 0, to: 1 },
-  { intensity: 20, from: 0.35, to: 1 },
-  { intensity: 40, from: 0.7, to: 1 },
+  { intensity: 28, from: 0, to: 1 },
 ] as const;
 
 export function ProgressiveBlur({ side, height = 120 }: { side: "top" | "bottom"; height?: number }) {

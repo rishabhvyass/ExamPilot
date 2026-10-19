@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ExamPilot reference — 08-subjects</title>
+<!-- Static snapshot of the design prototype (Subjects.dc.html) in its first state. Reference only: rebuild as React components. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+body{margin:0;background:#FFFFFF}
+a{color:#1B1B1F}a:hover{color:#000000}
+.press{transition:transform 120ms cubic-bezier(.2,0,0,1),background-color 150ms ease}
+.press:active{transform:scale(0.97)}
+.pop{animation:pop 260ms cubic-bezier(.2,0,0,1)}
+.draw path{stroke-dasharray:24;stroke-dashoffset:24;animation:draw 220ms 60ms ease-out forwards}
+.fadeup{animation:fadeup 280ms cubic-bezier(.05,.7,.1,1)}
+@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.press:hover{transform:translateY(-1px)}.press:hover:active{transform:scale(.97)}
+main{animation:pagein 360ms cubic-bezier(.2,.8,.2,1) both}
+.tabpill{overflow:hidden;white-space:nowrap;animation:tabin 520ms cubic-bezier(.2,.9,.25,1.04) both}
+.tablabel{animation:tablabel 320ms 180ms cubic-bezier(.05,.7,.1,1) both}
+nav a:not(.tabpill){transition:background-color 180ms ease,transform 140ms cubic-bezier(.2,0,0,1)}
+nav a:not(.tabpill):hover{background:#FFFFFF}
+nav a:not(.tabpill):active{transform:scale(.92)}
+@keyframes pagein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes tabin{from{max-width:56px}to{max-width:320px}}
+@keyframes tablabel{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+button:focus-visible,a:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.draw path{stroke-dashoffset:0}}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+
+
+body{margin:0}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pagein{from{opacity:0;transform:translateY(10px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(10px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes letter{from{opacity:0;transform:translateY(22px);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.press{transition:transform 180ms cubic-bezier(.2,0,0,1),box-shadow 220ms ease,filter 220ms ease,background 220ms ease!important}
+.press:active{transform:scale(.96)!important;filter:blur(.6px)}
+
+</style>
+</head>
+<body>
+
+
+<div style="width: 390px; height: 1560px; position: relative; overflow: hidden; background: #FFFFFF; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box">
+<main style="padding: 60px 20px 128px; display: flex; flex-direction: column; gap: 14px">
+
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span aria-hidden="true" style="width: 56px; height: 56px; border-radius: 999px; background: #DCEBFF; color: #1E3A8A; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
+<span style="display: flex; gap: 8px">
+<button type="button" class="press" aria-label="Search topics" style="width: 56px; height: 56px; border-radius: 999px; border: 0; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); color: #1B1B1F; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button>
+<button type="button" class="press" aria-label="More" style="width: 56px; height: 56px; border-radius: 999px; border: 0; background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F2 60%, #E9E9EB 100%); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 -2px 5px rgba(0,0,0,.035), 0 0 0 1px rgba(0,0,0,.045), 0 1px 2px rgba(0,0,0,.06), 0 10px 24px rgba(0,0,0,.07); color: #1B1B1F; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</span>
+</div>
+
+<header style="display: flex; flex-direction: column; gap: 6px; padding: 14px 4px 6px">
+<span style="font-size: 20px; font-weight: 500; color: #5B6475">Sample syllabus</span>
+<h1 style="margin: 0; font-weight: 600; font-size: 46px; line-height: 1.02; letter-spacing: -0.03em">Your Custom<br>Syllabus</h1>
+</header>
+
+<div role="group" aria-label="Choose subject" style="display: flex; gap: 8px; align-items: center">
+<span aria-hidden="true" style="flex: none; width: 52px; height: 52px; border-radius: 999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M7 12h10M10 17h4"></path></svg></span>
+
+<button type="button" class="press" aria-pressed="true" style="height: 52px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #1B1B1F; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18); color: #FFFFFF; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">SE</button>
+
+
+
+<button type="button" class="press" aria-pressed="false" style="height: 52px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #CBD2DC; background: transparent; color: #1B1B1F; font: inherit; font-size: 16px; font-weight: 500; cursor: pointer">DAA</button>
+
+
+<button type="button" class="press" aria-pressed="false" style="height: 52px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #CBD2DC; background: transparent; color: #1B1B1F; font: inherit; font-size: 16px; font-weight: 500; cursor: pointer">DDS</button>
+
+</div>
+
+<section aria-label="Software Engineering" class="fadeup" style="display: flex; flex-direction: column; gap: 14px">
+<div>
+
+<div style="width: 100%; box-sizing: border-box; background: #DCEBFF; border-radius: 34px; padding: 8px 8px 10px; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; display: flex; flex-direction: column">
+<div style="padding: 18px 14px 18px 18px; display: flex; gap: 12px; align-items: flex-start">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-weight: 600; font-size: 28px; line-height: 1.1; letter-spacing: -0.02em">Software Engineering</h2>
+<span style="font-size: 15px; line-height: 1.45; color: #1E40AF">Process models, requirements, design, testing and quality.</span>
+</div>
+<button type="button" aria-label="Subject options" style="flex: none; width: 48px; height: 48px; border-radius: 999px; border: 1.5px solid rgba(27,27,31,0.2); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="#1B1B1F" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+</div>
+<div style="position: relative; height: 170px; border-radius: 28px; background: #BFD6FF; overflow: hidden; display: flex">
+<div style="width: 84px; padding: 16px 0 16px 18px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(27,27,31,0.12)">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; color: #1E40AF">Topics</span><span style="font-size: 40px; font-weight: 600; line-height: 1.05; letter-spacing: -0.02em">4/6</span></span>
+<span style="font-size: 13px; color: #1E40AF">revised</span>
+</div>
+<div style="width: 76px; padding: 16px 0 16px 16px; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; border-right: 1px solid rgba(27,27,31,0.12)">
+<span style="font-size: 14px; color: #1E40AF">PDFs</span>
+<span style="font-size: 40px; font-weight: 600; line-height: 1.05">2</span>
+</div>
+<div aria-hidden="true" style="position: relative; flex: 1">
+<span style="position: absolute; left: 10px; top: -26px; width: 110px; height: 110px; border-radius: 999px; background: #3B82F6"></span>
+<span style="position: absolute; left: 56px; top: 56px; width: 88px; height: 88px; border-radius: 999px; background: #DDD0FF"></span>
+<span style="position: absolute; left: -4px; top: 96px; width: 66px; height: 66px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.85)"></span>
+</div>
+<span style="position: absolute; right: 14px; bottom: 14px; height: 44px; padding: 0 16px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.25), 0 8px 18px rgba(0,0,0,.18); color: #FFFFFF; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="4"></rect><path d="M16 3v4M8 3v4M3 10h18"></path></svg>21 Oct</span>
+</div>
+<div style="display: flex; gap: 4px; padding: 12px 10px 6px" aria-hidden="true">
+
+<span style="flex: 1; height: 6px; border-radius: 999px; background: #151517; "></span>
+
+
+<span style="flex: 1; height: 6px; border-radius: 999px; background: #151517; "></span>
+
+
+<span style="flex: 1; height: 6px; border-radius: 999px; background: #151517; "></span>
+
+
+<span style="flex: 1; height: 6px; border-radius: 999px; background: #151517; "></span>
+
+
+
+<span style="flex: 1; height: 6px; border-radius: 999px; background: rgba(255,255,255,0.75)"></span>
+
+
+<span style="flex: 1; height: 6px; border-radius: 999px; background: rgba(255,255,255,0.75)"></span>
+
+</div>
+</div>
+</div>
+
+
+
+<div style="background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); border-radius: 34px; padding: 22px 20px 14px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<h2 style="margin: 0; font-weight: 600; font-size: 24px; letter-spacing: -0.02em">Topics</h2>
+<span style="font-size: 15px; color: #5B6475">4 of 6 topics revised</span>
+</div>
+<p style="margin: 0 0 4px; font-size: 15px; line-height: 1.45; color: #5B6475">Halfway there. The second half feels easier from here.</p>
+
+<button type="button" class="press" aria-pressed="true" style="display: flex; align-items: center; gap: 14px; min-height: 50px; padding: 4px 2px; border: 0; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer">
+<span class="pop draw" style="flex: none; width: 28px; height: 28px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span><span style="font-size: 17px; font-weight: 500; color: #6B7385; text-decoration: line-through; text-decoration-color: #A0A8B8">Software process models</span>
+
+</button>
+
+<button type="button" class="press" aria-pressed="true" style="display: flex; align-items: center; gap: 14px; min-height: 50px; padding: 4px 2px; border: 0; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer">
+<span class="pop draw" style="flex: none; width: 28px; height: 28px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span><span style="font-size: 17px; font-weight: 500; color: #6B7385; text-decoration: line-through; text-decoration-color: #A0A8B8">Requirements engineering</span>
+
+</button>
+
+<button type="button" class="press" aria-pressed="true" style="display: flex; align-items: center; gap: 14px; min-height: 50px; padding: 4px 2px; border: 0; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer">
+<span class="pop draw" style="flex: none; width: 28px; height: 28px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span><span style="font-size: 17px; font-weight: 500; color: #6B7385; text-decoration: line-through; text-decoration-color: #A0A8B8">Design &amp; UML diagrams</span>
+
+</button>
+
+<button type="button" class="press" aria-pressed="true" style="display: flex; align-items: center; gap: 14px; min-height: 50px; padding: 4px 2px; border: 0; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer">
+<span class="pop draw" style="flex: none; width: 28px; height: 28px; border-radius: 999px; background: linear-gradient(180deg, #4A4A4F 0%, #1C1C1F 55%, #0E0E10 100%);  display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span><span style="font-size: 17px; font-weight: 500; color: #6B7385; text-decoration: line-through; text-decoration-color: #A0A8B8">Testing strategies</span>
+
+</button>
+
+<button type="button" class="press" aria-pressed="false" style="display: flex; align-items: center; gap: 14px; min-height: 50px; padding: 4px 2px; border: 0; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer">
+
+<span style="flex: none; width: 28px; height: 28px; border-radius: 999px; border: 2px solid #C2C9D4; box-sizing: border-box"></span><span style="font-size: 17px; font-weight: 500; color: #1B1B1F">Project estimation (COCOMO)</span>
+</button>
+
+<button type="button" class="press" aria-pressed="false" style="display: flex; align-items: center; gap: 14px; min-height: 50px; padding: 4px 2px; border: 0; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer">
+
+<span style="flex: none; width: 28px; height: 28px; border-radius: 999px; border: 2px solid #C2C9D4; box-sizing: border-box"></span><span style="font-size: 17px; font-weight: 500; color: #1B1B1F">Maintenance &amp; quality</span>
+</button>
+
+</div>
+
+<div style="background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); border-radius: 34px; padding: 22px 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-weight: 600; font-size: 24px; letter-spacing: -0.02em">Notes &amp; PDFs</h2>
+<p style="margin: 0; background: linear-gradient(160deg, rgba(255,255,255,.78), rgba(248,250,253,.55)); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); box-shadow: inset 0 1px 0 #FFFFFF, inset 0 0 0 1px rgba(15,23,42,.07), 0 14px 36px rgba(15,23,42,.07); border-radius: 22px; padding: 14px 16px; font-size: 16px; line-height: 1.55">Sample note: Verification asks “are we building it right?”, validation asks “are we building the right thing?”</p>
+
+<div style="display: flex; align-items: center; gap: 12px; background: #FFFFFF; border-radius: 999px; padding: 6px 16px 6px 6px">
+<span style="flex: none; width: 44px; height: 44px; border-radius: 999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg></span>
+<span style="flex: 1; display: flex; flex-direction: column; min-width: 0"><span style="font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">SE_Unit3_Design_UML.pdf</span><span style="font-size: 13px; color: #5B6475">Sample · 2.1 MB</span></span>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; background: #FFFFFF; border-radius: 999px; padding: 6px 16px 6px 6px">
+<span style="flex: none; width: 44px; height: 44px; border-radius: 999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg></span>
+<span style="flex: 1; display: flex; flex-direction: column; min-width: 0"><span style="font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">SE_previous_papers.pdf</span><span style="font-size: 13px; color: #5B6475">Sample · 840 KB</span></span>
+</div>
+
+<button type="button" class="press" style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; border-radius: 999px; border: 1.5px dashed #CBD2DC; background: transparent; font: inherit; font-size: 16px; font-weight: 600; color: #1B1B1F; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add a PDF</button>
+</div>
+</section>
+
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 4px">
+<span style="padding: 0 4px; font-size: 15px; font-weight: 500; color: #5B6475">Also in your syllabus</span>
+
+<div>
+
+<button type="button" class="press" style="width: 100%; display: flex; align-items: center; gap: 14px; border: 0; background: #EDE5FF; border-radius: 999px; padding: 8px 20px 8px 8px; font: inherit; color: #1B1B1F; text-align: left; cursor: pointer"><span style="flex: none; width: 52px; height: 52px; border-radius: 999px; background: #CDBBFF; color: #5B21B6; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">DAA</span><span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Design and Analysis of Algorithm</span><span style="font-size: 14px; color: #5B21B6">3 of 7 topics revised</span></span></button>
+
+</div>
+
+<div>
+
+
+<button type="button" class="press" style="width: 100%; display: flex; align-items: center; gap: 14px; border: 0; background: #D9F5E6; border-radius: 999px; padding: 8px 20px 8px 8px; font: inherit; color: #1B1B1F; text-align: left; cursor: pointer"><span style="flex: none; width: 52px; height: 52px; border-radius: 999px; background: #9EE6C0; color: #065F46; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700">DDS</span><span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 16px; font-weight: 600">Design of Data Structures</span><span style="font-size: 14px; color: #065F46">2 of 7 topics revised</span></span></button>
+</div>
+
+</div>
+
+</main>
+
+<nav aria-label="Main" style="position: absolute; left: 20px; right: 20px; bottom: 24px; display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 999px; background: linear-gradient(180deg, #FFFFFF, #F0F0F2); box-shadow: inset 0 1px 0 #FFFFFF, 0 0 0 1px rgba(0,0,0,.05), 0 2px 4px rgba(0,0,0,.05), 0 16px 34px rgba(0,0,0,.10)">
+<a href="Main.dc.html" aria-label="Today" style="flex: none; width: 56px; height: 56px; border-radius: 999px; background: transparent; box-shadow: none; border: 1px solid #E8EBF0; box-sizing: border-box; color: #1B1B1F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path></svg></a>
+<a href="Calendar.dc.html" aria-label="Calendar" style="flex: none; width: 56px; height: 56px; border-radius: 999px; background: transparent; box-shadow: none; border: 1px solid #E8EBF0; box-sizing: border-box; color: #1B1B1F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="4"></rect><path d="M16 3v4M8 3v4M3 10h18"></path></svg></a>
+<a href="Subjects.dc.html" aria-current="page" class="tabpill" style="flex: 1; height: 56px; border-radius: 999px; color: #111113; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-size: 16px; font-weight: 600; background: linear-gradient(180deg, #DEDEE1, #E9E9EB); box-shadow: inset 0 2px 6px rgba(0,0,0,.13), inset 0 -1px 0 rgba(255,255,255,.9);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="7" cy="7" r="3.5"></circle><circle cx="17" cy="7" r="3.5"></circle><circle cx="7" cy="17" r="3.5"></circle><circle cx="17" cy="17" r="3.5"></circle></svg><span class="tablabel">Subjects</span></a>
+<a href="Questions.dc.html" aria-label="Questions" style="flex: none; width: 56px; height: 56px; border-radius: 999px; background: transparent; box-shadow: none; border: 1px solid #E8EBF0; box-sizing: border-box; color: #1B1B1F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="5"></rect><path d="M8 10h8M8 14h5"></path></svg></a>
+</nav>
+</div>
+
+</body>
+</html>
