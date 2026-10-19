@@ -1191,7 +1191,7 @@ export function PdfReader() {
       </View>
       {finished && (
         <Animated.View
-          entering={ZoomIn.springify().stiffness(400).damping(14)}
+          entering={ZoomIn.springify().stiffness(400).damping(28)}
           style={{
             marginTop: 16,
             borderRadius: 28,

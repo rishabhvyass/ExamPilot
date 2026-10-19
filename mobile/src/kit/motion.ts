@@ -20,16 +20,16 @@ export const ease = {
 /* ─────────────── Springs (stiffness / damping identical to the web spec, mass 1) ─────────────── */
 const s = (stiffness: number, damping: number): WithSpringConfig => ({ stiffness, damping, mass: 1, reduceMotion: ReduceMotion.System });
 export const spring = {
-  press: s(500, 30),
-  layout: s(400, 34), // tab groove, segmented slider, dock morph
-  progress: s(300, 30),
+  press: s(500, 40),
+  layout: s(400, 36), // tab groove, segmented slider, dock morph
+  progress: s(300, 31),
   sheet: s(380, 36),
-  pop: s(600, 18),
-  icon: s(500, 18),
-  pen: s(420, 16),
-  island: s(380, 26),
-  quickAdd: s(420, 24),
-  tool: s(500, 22),
+  pop: s(600, 34),
+  icon: s(500, 31),
+  pen: s(420, 29),
+  island: s(380, 33),
+  quickAdd: s(420, 33),
+  tool: s(500, 36),
 };
 
 /* ─────────────── Durations (ms) ─────────────── */
@@ -77,7 +77,7 @@ export const riseOut = new Keyframe({
 }).duration(160);
 
 /** Groove / dock / list re-layouts. */
-export const layout = LinearTransition.springify().stiffness(400).damping(34).reduceMotion(ReduceMotion.System);
+export const layout = LinearTransition.springify().stiffness(400).damping(36).reduceMotion(ReduceMotion.System);
 
 export const fadeIn = (ms = 260, delay = 0) => FadeIn.duration(ms).delay(delay).reduceMotion(ReduceMotion.System);
 export const fadeOut = (ms = 160) => FadeOut.duration(ms);

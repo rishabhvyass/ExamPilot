@@ -40,8 +40,8 @@ import { Haptics } from '../kit/compat';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const spring = {
-  press: { stiffness: 500, damping: 30 },
-  progress: { stiffness: 300, damping: 30 },
+  press: { stiffness: 500, damping: 40 },
+  progress: { stiffness: 300, damping: 31 },
 };
 
 /* ---------- Text: maps fontWeight to the right Urbanist file ---------- */

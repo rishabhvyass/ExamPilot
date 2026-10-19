@@ -33,7 +33,7 @@ const Tab = ({
   ) : (
     <View style={style}>{children}</View>
   );
-const layout = LinearTransition.springify().stiffness(400).damping(34);
+const layout = LinearTransition.springify().stiffness(400).damping(36);
 
 export function TabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();

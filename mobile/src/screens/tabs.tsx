@@ -1280,7 +1280,7 @@ export function Questions() {
                       color={colorOf(q.subjectId)}
                     />
                     {q.revised && (
-                      <Animated.View entering={ZoomIn.springify()}>
+                      <Animated.View entering={ZoomIn.springify().stiffness(300).damping(24)}>
                         <Txt style={[TYPE.micro, { color: SUBJ.dds.text }]}>
                           ✓ Revised
                         </Txt>

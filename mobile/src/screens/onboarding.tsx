@@ -370,7 +370,7 @@ export function Login() {
   useEffect(() => {
     x.value = withSpring(mode === 'in' ? 0 : 1, {
       stiffness: 400,
-      damping: 30,
+      damping: 36,
     });
   }, [mode, x]);
   const ind = useAnimatedStyle(() => ({
@@ -644,7 +644,7 @@ export function Details() {
   useEffect(() => {
     pop.value = withSequence(
       withTiming(0.85, { duration: 80 }),
-      withSpring(1, { stiffness: 600, damping: 18 }),
+      withSpring(1, { stiffness: 600, damping: 34 }),
     );
   }, [initials, pop]);
   const popStyle = useAnimatedStyle(() => ({
@@ -1364,7 +1364,7 @@ export function PlanReady() {
               <BurstDot key={i} i={i} />
             ))}
           <Animated.View
-            entering={FadeInDown.springify().stiffness(500).damping(14)}
+            entering={FadeInDown.springify().stiffness(500).damping(31)}
             style={{
               position: 'absolute',
               left: 8,

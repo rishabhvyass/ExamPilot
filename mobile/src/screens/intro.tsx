@@ -177,7 +177,7 @@ export function Intro() {
   const goTo = (n: number) => {
     scroll.current?.scrollTo({ x: n * width, animated: true });
     setI(n);
-    knob.value = withSpring(n / (SLIDES.length - 1), { stiffness: 300, damping: 30 });
+    knob.value = withSpring(n / (SLIDES.length - 1), { stiffness: 300, damping: 31 });
   };
   const finish = () =>
     nav.reset({
@@ -202,7 +202,7 @@ export function Intro() {
         onMomentumScrollEnd={e => {
           const n = Math.round(e.nativeEvent.contentOffset.x / width);
           setI(n);
-          knob.value = withSpring(n / (SLIDES.length - 1), { stiffness: 300, damping: 30 });
+          knob.value = withSpring(n / (SLIDES.length - 1), { stiffness: 300, damping: 31 });
         }}
         style={{ flex: 1 }}
       >

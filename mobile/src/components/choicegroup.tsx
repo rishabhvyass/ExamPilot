@@ -12,7 +12,7 @@ import { C, INK } from '../theme';
 import { Haptics } from '../kit/compat';
 import { Icon, Txt } from './ui';
 
-const SPRING = { stiffness: 400, damping: 30 };
+const SPRING = { stiffness: 400, damping: 36 };
 type Frame = { x: number; y: number; w: number; h: number };
 type Size = 'chip' | 'circle' | 'small';
 const ITEM: Record<Size, ViewStyle> = {
