@@ -960,60 +960,107 @@ export function AdmitCard() {
 
   const [error, setError] = useState('');
   const [undated, setUndated] = useState<string[]>([]);
-  /** Reads the file's text on-device, parses the timetable rows, and shows them for confirmation. */
-  const read = async (getLines: () => Promise<string[]>) => {
+  const [cards, setCards] = useState(0);
+  /**
+   * Reads each file's text on-device, parses the timetable rows and shows them for confirmation.
+   * `append` adds to the exams already found (another admit card); duplicates are dropped.
+   */
+  const read = async (
+    sources: (() => Promise<string[]>)[],
+    append: boolean,
+  ) => {
     setError('');
     setPhase('scanning');
     const started = Date.now();
-    try {
-      const { exams, undated: u } = parseAdmitCard(await getLines());
-      // Let the scan animation register even when reading is instant.
-      await new Promise<void>(r =>
-        setTimeout(r, Math.max(0, 1200 - (Date.now() - started))),
-      );
-      setUndated(u);
-      setFound(
-        exams.map((e, i) => ({
-          id: `a${Date.now()}-${i}`,
+    const failed: string[] = [];
+    const parsed = await Promise.all(
+      sources.map(get =>
+        get()
+          .then(lines => parseAdmitCard(lines))
+          .catch((e: Error) => {
+            failed.push(e.message);
+            return { exams: [], undated: [] as string[] };
+          }),
+      ),
+    );
+    // Let the scan animation register even when reading is instant.
+    await new Promise<void>(r =>
+      setTimeout(r, Math.max(0, 1200 - (Date.now() - started))),
+    );
+    const base = append ? found : [];
+    const key = (title: string, date: string) =>
+      `${title.trim().toLowerCase()}|${date}`;
+    const seen = new Set(base.map(x => key(x.title, x.date)));
+    const fresh: Found[] = [];
+    parsed.forEach((r, ci) =>
+      r.exams.forEach((e, i) => {
+        if (seen.has(key(e.name, e.date))) return;
+        seen.add(key(e.name, e.date));
+        fresh.push({
+          id: `a${Date.now()}-${ci}-${i}`,
           subjectId: '',
           title: e.name,
           date: e.date,
           time: e.time,
           flag: e.flag,
-        })),
+        });
+      }),
+    );
+    const all = [...base, ...fresh].sort((x, y) =>
+      (x.date + x.time).localeCompare(y.date + y.time),
+    );
+    const und = Array.from(
+      new Set([...(append ? undated : []), ...parsed.flatMap(r => r.undated)]),
+    );
+    setUndated(und);
+    setFound(all);
+    setCards(n => (append ? n : 0) + parsed.length - failed.length);
+    if (failed.length)
+      setError(
+        `${failed.length} file${failed.length > 1 ? 's' : ''} couldn’t be read. ${failed[0]}`,
       );
-      if (!exams.length)
-        setError(
-          'We couldn’t find exam dates in that file. Try a clearer photo, or add them yourself below.',
-        );
-      setPhase('results');
-    } catch (e) {
-      setError((e as Error).message || 'Couldn’t read that file.');
-      setPhase('idle');
-    }
+    else if (!all.length)
+      setError(
+        'We couldn’t find exam dates in that file. Try a clearer photo, or add them yourself below.',
+      );
+    else if (append && !fresh.length)
+      setError('No new exams in that card — they’re already in the list.');
+    setPhase(all.length || !failed.length ? 'results' : 'idle');
   };
-  const chooseFile = async () => {
+  const chooseFile = async (append = false) => {
     try {
-      const [file] = await pick({ type: [types.pdf, types.images] });
-      const [copy] = await keepLocalCopy({
-        files: [{ uri: file.uri, fileName: file.name ?? 'admit-card' }],
+      const files = await pick({
+        type: [types.pdf, types.images],
+        allowMultiSelection: true,
+      });
+      const copies = await keepLocalCopy({
+        files: files.map((file, i) => ({
+          uri: file.uri,
+          fileName: file.name ?? `admit-card-${i}`,
+        })) as [{ uri: string; fileName: string }],
         destination: 'cachesDirectory',
       });
-      const uri = copy.status === 'success' ? copy.localUri : file.uri;
-      const isPdf =
-        file.type === 'application/pdf' || /\.pdf$/i.test(file.name ?? uri);
-      read(async () =>
-        isPdf ? (await pdfText(uri)).pages : imageText(uri),
+      read(
+        files.map((file, i) => {
+          const copy = copies.find(c => c.sourceUri === file.uri) ?? copies[i];
+          const uri = copy?.status === 'success' ? copy.localUri : file.uri;
+          const isPdf =
+            file.type === 'application/pdf' ||
+            /\.pdf$/i.test(file.name ?? uri);
+          return async () =>
+            isPdf ? (await pdfText(uri)).pages : imageText(uri);
+        }),
+        append,
       );
     } catch {
       /* cancelled */
     }
   };
-  const takePhoto = async () => {
+  const takePhoto = async (append = false) => {
     try {
       const r = await launchCamera({ mediaType: 'photo', quality: 0.9 });
       const uri = r.assets?.[0]?.uri;
-      if (!r.didCancel && uri) read(() => imageText(uri));
+      if (!r.didCancel && uri) read([() => imageText(uri)], append);
       else if (r.errorCode === 'camera_unavailable')
         setError('No camera here — choose a PDF or photo instead.');
     } catch {
@@ -1051,7 +1098,10 @@ export function AdmitCard() {
           source: 'admit-card' as const,
         };
       });
-      return { ...x, subjects, exams };
+      // Keep exams from earlier admit cards; a re-scanned exam replaces its old copy.
+      const fresh = new Set(exams.map(e => `${e.subjectId}|${e.date}`));
+      const kept = x.exams.filter(e => !fresh.has(`${e.subjectId}|${e.date}`));
+      return { ...x, subjects, exams: [...kept, ...exams] };
     });
     nav.navigate('Plan');
   };
@@ -1102,11 +1152,11 @@ export function AdmitCard() {
             </Bob>
             <Txt style={TYPE.section}>Upload admit card</Txt>
             <Txt style={{ fontSize: 15, color: C.inkMuted }}>
-              PDF or a clear photo · up to 10 MB
+              PDFs or clear photos · pick several at once
             </Txt>
             <Press
               accessibilityRole="button"
-              onPress={chooseFile}
+              onPress={() => chooseFile()}
               style={{
                 marginTop: 8,
                 height: 56,
@@ -1124,7 +1174,7 @@ export function AdmitCard() {
               <SecondaryButton
                 icon="camera"
                 label="Take photo"
-                onPress={takePhoto}
+                onPress={() => takePhoto()}
               />
             </View>
           </Rise>
@@ -1174,6 +1224,11 @@ export function AdmitCard() {
             >
               {micro.admitCard.doneTitle.replace('{n}', String(found.length))}
             </Txt>
+            {cards > 1 && (
+              <Txt style={{ color: C.inkMuted, marginTop: -4 }}>
+                From {cards} admit cards
+              </Txt>
+            )}
           </Rise>
           {!!error && <InfoCard tone="headsup">{error}</InfoCard>}
           {undated.length > 0 && (
@@ -1239,7 +1294,12 @@ export function AdmitCard() {
               </DragRow>
             );
           })}
-          <Rise i={found.length + 1}>
+          <Rise i={found.length + 1} style={{ gap: 12 }}>
+            <SecondaryButton
+              icon="upload"
+              label="Add another admit card"
+              onPress={() => chooseFile(true)}
+            />
             <SecondaryButton
               variant="dashed"
               icon="plus"
@@ -1264,7 +1324,7 @@ export function AdmitCard() {
             }}
           >
             <Txt style={{ fontSize: 15, fontWeight: 600, color: C.inkMuted }}>
-              Upload a different file
+              Start over
             </Txt>
           </Pressable>
         </View>

@@ -72,6 +72,7 @@ export function Today() {
         'Your account',
       user?.email ?? state.profile.email,
       [
+        { text: 'Add admit card', onPress: () => nav.navigate('Admit') },
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Sign out',
@@ -182,6 +183,12 @@ export function Today() {
               label: 'Add topic',
               icon: <Icon name="plus" size={20} color="#fff" />,
               onSelect: () => setSheet(true),
+            },
+            {
+              id: 'admit',
+              label: 'Add admit card',
+              icon: <Icon name="upload" size={20} color="#fff" />,
+              onSelect: () => nav.navigate('Admit'),
             },
             {
               id: 'pdf',
