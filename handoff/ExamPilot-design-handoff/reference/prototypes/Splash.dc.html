@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ExamPilot — Welcome</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#C9C0DB}
+a{color:#1B1B1F}a:hover{color:#000000}
+.rise{opacity:0;animation:rise 520ms cubic-bezier(.05,.7,.1,1) forwards}
+.d1{animation-delay:80ms}.d2{animation-delay:200ms}.d3{animation-delay:320ms}.d4{animation-delay:440ms}
+.float{animation:float 6s ease-in-out infinite}
+.press{transition:transform 120ms cubic-bezier(.2,0,0,1)}
+.press:active{transform:scale(0.97)}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+a:focus-visible{outline:3px solid #1B1B1F;outline-offset:3px}
+@media (prefers-reduced-motion: reduce){.rise{opacity:1;animation:none}.float{animation:none}.press{transition:none}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #C9C0DB; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box; display: flex; flex-direction: column; padding: 64px 24px 40px">
+
+<div class="rise" style="display: flex; align-items: center; justify-content: space-between">
+<span style="display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 600">
+<span style="width: 36px; height: 36px; border-radius: 999px; background: #1B1B1F; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-7-7 18-2.5-8.5z"></path></svg></span>
+ExamPilot
+</span>
+<span style="font-size: 14px; font-weight: 500; color: #3E3557; background: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.8); border-radius: 999px; padding: 8px 14px">3 exams · 21–23 Oct</span>
+</div>
+
+<div class="float" aria-hidden="true" style="position: relative; flex: 1; margin: 12px 0">
+<span style="position: absolute; left: 50%; top: 50%; width: 300px; height: 300px; margin: -150px 0 0 -150px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.7)"></span>
+<span style="position: absolute; left: 50%; top: 50%; width: 210px; height: 210px; margin: -105px 0 0 -105px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.5)"></span>
+<span style="position: absolute; left: 62px; top: 92px; width: 138px; height: 138px; border-radius: 999px; background: #8C7BB5"></span>
+<span style="position: absolute; left: 160px; top: 140px; width: 126px; height: 126px; border-radius: 999px; background: #E9C4CC"></span>
+<span style="position: absolute; left: 108px; top: 210px; width: 100px; height: 100px; border-radius: 999px; background: #BFE0D8"></span>
+<span style="position: absolute; left: 236px; top: 92px; width: 44px; height: 44px; border-radius: 999px; background: #FFFFFF"></span>
+<span style="position: absolute; left: 58px; top: 268px; width: 24px; height: 24px; border-radius: 999px; background: #1B1B1F"></span>
+<span style="position: absolute; left: 206px; top: 196px; width: 64px; height: 64px; border-radius: 22px; background: rgba(255,255,255,0.82); display: flex; align-items: center; justify-content: center; color: #1B1B1F"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg></span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h1 class="rise d1" style="margin: 0; font-weight: 600; font-size: 52px; line-height: 1; letter-spacing: -0.03em">Study calm.<br>Exam ready.</h1>
+<p class="rise d2" style="margin: 0; font-size: 18px; line-height: 1.5; color: #3E3557">Your gentle companion for exam week. One topic at a time.</p>
+<div class="rise d3" style="display: flex; gap: 8px; padding-top: 4px" aria-hidden="true">
+<span style="width: 28px; height: 6px; border-radius: 999px; background: #1B1B1F"></span>
+<span style="width: 6px; height: 6px; border-radius: 999px; background: rgba(27,27,31,0.3)"></span>
+<span style="width: 6px; height: 6px; border-radius: 999px; background: rgba(27,27,31,0.3)"></span>
+</div>
+<a class="rise d4 press" href="Main.dc.html" style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 8px 0 28px; border-radius: 999px; background: #1B1B1F; color: #FFFFFF; text-decoration: none; font-size: 18px; font-weight: 600">
+Let's begin
+<span style="width: 48px; height: 48px; border-radius: 999px; background: #FFFFFF; color: #1B1B1F; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"></path></svg></span>
+</a>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

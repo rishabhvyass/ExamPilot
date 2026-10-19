@@ -1,0 +1,67 @@
+{
+  "greeting": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening",
+    "late": "Still up? A quick recap is plenty. Sleep is part of preparing too."
+  },
+  "countdown": {
+    "days": "{n} days to prepare",
+    "tomorrow": "Tomorrow, 2:00 PM",
+    "today": "Today, 2:00 PM — you’ve prepared for this."
+  },
+  "checklist": {
+    "progress": "{done} of {total} done",
+    "encourage": "One topic at a time.",
+    "allDone": "Nice work, you finished today’s revision!",
+    "allDoneSub": "Rest well — sleep helps it stick.",
+    "empty": "Nothing planned yet. Want to add one topic to start with?"
+  },
+  "milestones": {
+    "25": "A quarter of the way there. Good start.",
+    "50": "Halfway there. The second half feels easier from here.",
+    "75": "Three-quarters done. You’re closer than you think.",
+    "100": "Everything revised. Now rest and let it settle.",
+    "0": "One topic at a time."
+  },
+  "questions": {
+    "lt4": "Answer from memory first, then peek.",
+    "gte4": "Halfway! Each one makes the next easier.",
+    "all": "All revised. Now rest and let it settle."
+  },
+  "calendar": {
+    "empty": "Nothing planned. A free day is fine too.",
+    "sampleNote": "Study sessions are sample content."
+  },
+  "gentle": {
+    "missed": "Missed yesterday’s plan? No problem. We’ve moved it to today.",
+    "notStarted": "Heads-up: {subject} hasn’t been started yet. Want to begin with one small topic?",
+    "tip": "A 25-minute session is enough to make progress. Try recalling answers before you peek."
+  },
+  "admitCard": {
+    "idleTitle": "Add your admit card",
+    "idleSub": "We’ll read your exam timetable and build a calm study plan around it.",
+    "scanning": "Reading your exam dates…",
+    "doneTitle": "We found {n} exams",
+    "privacy": "We only read subjects, dates and times. You confirm everything, and you can delete the file anytime."
+  },
+  "plan": {
+    "title": "Your plan is ready",
+    "sub": "Built around your three exams, with lighter days right before each one."
+  },
+  "pdf": {
+    "finished": "You finished this PDF!",
+    "finishedSub": "Want 5 quick questions from it?"
+  },
+  "assistant": {
+    "hello": "Hi! I can plan your week, quiz you, or explain anything from your notes. What would help right now?",
+    "notConnected": "Sample conversation · AI not connected yet"
+  },
+  "never": [
+    "Only X days left!",
+    "Hurry",
+    "You broke your streak",
+    "Overdue (in red)",
+    "Ticking seconds countdown"
+  ]
+}

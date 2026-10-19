@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ExamPilot — Login</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EDECE8}
+a{color:#1B1B1F}a:hover{color:#000000}
+.press{transition:transform 140ms cubic-bezier(.2,0,0,1),box-shadow 200ms ease,background-color 160ms ease}
+.press:hover{transform:translateY(-1px)}
+.press:active{transform:scale(.97)}
+.field{transition:box-shadow 180ms ease,background-color 180ms ease}
+.field:focus-within{box-shadow:0 0 0 2px #1B1B1F;background:#FFFFFF}
+.seg{transition:transform 360ms cubic-bezier(.2,.9,.25,1.05)}
+.rise{opacity:0;animation:rise 480ms cubic-bezier(.05,.7,.1,1) forwards}
+.d1{animation-delay:60ms}.d2{animation-delay:120ms}.d3{animation-delay:180ms}.d4{animation-delay:240ms}.d5{animation-delay:300ms}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+input{font:inherit;color:inherit;border:0;outline:0;background:transparent;width:100%}
+input::placeholder{color:#8E8996}
+button:focus-visible,a:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.rise{opacity:1}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #EDECE8; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box">
+<div aria-hidden="true" style="position: absolute; right: -60px; top: -40px; width: 220px; height: 220px">
+<span style="position: absolute; left: 0; top: 40px; width: 130px; height: 130px; border-radius: 999px; background: #D6CDE6"></span>
+<span style="position: absolute; left: 80px; top: 90px; width: 110px; height: 110px; border-radius: 999px; background: #EBD3D7"></span>
+<span style="position: absolute; left: 60px; top: 10px; width: 54px; height: 54px; border-radius: 999px; border: 1.5px solid #FFFFFF"></span>
+</div>
+<main style="position: relative; padding: 72px 24px 32px; display: flex; flex-direction: column; gap: 18px">
+
+<span class="rise" style="width: 52px; height: 52px; border-radius: 18px; background: #1B1B1F; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-7-7 18-2.5-8.5z"></path></svg></span>
+
+<header class="rise d1" style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px">
+<h1 style="margin: 0; font-weight: 600; font-size: 42px; line-height: 1.04; letter-spacing: -0.03em">{{title}}</h1>
+<p style="margin: 0; font-size: 17px; line-height: 1.5; color: #5C5866">{{subtitle}}</p>
+</header>
+
+<div class="rise d2" role="group" aria-label="Account" style="position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); background: #FFFFFF; border-radius: 999px; padding: 6px">
+<span class="seg" aria-hidden="true" style="position: absolute; left: 6px; top: 6px; bottom: 6px; width: calc(50% - 6px); border-radius: 999px; background: #1B1B1F; transform: {{segX}}"></span>
+<button type="button" onClick="{{toSignIn}}" aria-pressed="{{signInPressed}}" style="position: relative; height: 48px; border: 0; background: transparent; border-radius: 999px; font: inherit; font-size: 16px; font-weight: 600; color: {{signInColor}}; cursor: pointer; transition: color 200ms ease">Sign in</button>
+<button type="button" onClick="{{toCreate}}" aria-pressed="{{createPressed}}" style="position: relative; height: 48px; border: 0; background: transparent; border-radius: 999px; font: inherit; font-size: 16px; font-weight: 600; color: {{createColor}}; cursor: pointer; transition: color 200ms ease">Create account</button>
+</div>
+
+<form class="rise d3" style="display: flex; flex-direction: column; gap: 12px" onSubmit="{{noSubmit}}">
+<label class="field" style="display: flex; flex-direction: column; gap: 4px; background: #F7F6F3; border-radius: 22px; padding: 12px 20px">
+<span style="font-size: 13px; font-weight: 600; color: #5C5866">Email</span>
+<input type="email" autocomplete="email" placeholder="you@college.edu" style="font-size: 17px; height: 26px">
+</label>
+<label class="field" style="display: flex; align-items: center; gap: 10px; background: #F7F6F3; border-radius: 22px; padding: 12px 10px 12px 20px">
+<span style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 13px; font-weight: 600; color: #5C5866">Password</span>
+<input type="{{pwType}}" autocomplete="current-password" placeholder="At least 8 characters" style="font-size: 17px; height: 26px">
+</span>
+<button type="button" onClick="{{togglePw}}" aria-label="{{pwLabel}}" class="press" style="flex: none; width: 44px; height: 44px; border-radius: 999px; border: 0; background: #FFFFFF; color: #1B1B1F; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<sc-if value="{{pwHidden}}" hint-placeholder-val="{{true}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></sc-if>
+<sc-if value="{{pwShown}}" hint-placeholder-val="{{false}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"></path><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7a9.8 9.8 0 0 0 5.4-1.6"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg></sc-if>
+</button>
+</label>
+<sc-if value="{{isSignIn}}" hint-placeholder-val="{{true}}"><a href="#" style="align-self: flex-end; font-size: 15px; font-weight: 600; text-decoration: none; padding: 4px 6px">Forgot password?</a></sc-if>
+</form>
+
+<a class="rise d4 press" href="Profile.dc.html" style="display: flex; align-items: center; justify-content: space-between; height: 62px; padding: 0 8px 0 28px; border-radius: 999px; background: #1B1B1F; color: #FFFFFF; text-decoration: none; font-size: 18px; font-weight: 600">
+{{cta}}
+<span style="width: 46px; height: 46px; border-radius: 999px; background: #FFFFFF; color: #1B1B1F; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+</a>
+
+<div class="rise d5" style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 12px; font-size: 14px; color: #77727F"><span style="flex: 1; height: 1px; background: #D9D5CD"></span>or<span style="flex: 1; height: 1px; background: #D9D5CD"></span></div>
+<a href="Profile.dc.html" class="press" style="display: flex; align-items: center; justify-content: center; gap: 12px; height: 60px; border-radius: 999px; background: #FFFFFF; border: 1px solid #747775; color: #1F1F1F; text-decoration: none; font-size: 17px; font-weight: 600">
+<span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 999px; border: 1.5px solid #D9D5CD; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700">G</span>
+Continue with Google
+</a>
+<p style="margin: 0; text-align: center; font-size: 13px; line-height: 1.5; color: #77727F">By continuing you agree to the Terms and Privacy Policy.</p>
+</div>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: 'in', pw: false };
+  }
+  renderVals() {
+    var self = this;
+    var signIn = this.state.mode === 'in';
+    return {
+      title: signIn ? 'Welcome back' : 'Let’s get you set up',
+      subtitle: signIn ? 'Sign in to pick up where you left off.' : 'Create an account to save your plan on every device.',
+      cta: signIn ? 'Sign in' : 'Create account',
+      isSignIn: signIn,
+      segX: signIn ? 'translateX(0)' : 'translateX(100%)',
+      signInColor: signIn ? '#FFFFFF' : '#1B1B1F',
+      createColor: signIn ? '#1B1B1F' : '#FFFFFF',
+      signInPressed: signIn ? 'true' : 'false',
+      createPressed: signIn ? 'false' : 'true',
+      toSignIn: function () { self.setState({ mode: 'in' }); },
+      toCreate: function () { self.setState({ mode: 'up' }); },
+      pwType: this.state.pw ? 'text' : 'password',
+      pwHidden: !this.state.pw, pwShown: this.state.pw,
+      pwLabel: this.state.pw ? 'Hide password' : 'Show password',
+      togglePw: function () { self.setState({ pw: !self.state.pw }); },
+      noSubmit: function (e) { if (e && e.preventDefault) e.preventDefault(); }
+    };
+  }
+}
+</script>
+</body>
+</html>

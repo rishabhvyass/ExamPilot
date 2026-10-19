@@ -1,0 +1,9 @@
+@import './styles/tokens.css';
+@import './styles/keyframes.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { margin: 0; font-family: var(--ep-font); -webkit-font-smoothing: antialiased; }
+button { font-family: inherit; cursor: pointer; }
+input, textarea { font-family: inherit; }

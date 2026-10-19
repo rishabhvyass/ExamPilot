@@ -111,12 +111,17 @@ function MaterialsBody() {
   const sj = state.subjects.find(x => x.id === picked) ?? state.subjects[0];
   const f = sj.id;
   const c = SUBJ[colorOf(sj.color)];
-  const add = (m: Omit<Material, 'id' | 'subjectId' | 'isSample'>) =>
+  const add = (...ms: Omit<Material, 'id' | 'subjectId' | 'isSample'>[]) =>
     update(x => ({
       ...x,
       materials: [
         ...x.materials,
-        { ...m, id: 'u' + Date.now(), subjectId: f, isSample: false },
+        ...ms.map((m, i) => ({
+          ...m,
+          id: `u${Date.now()}-${i}`,
+          subjectId: f,
+          isSample: false,
+        })),
       ],
     }));
   const meta = (m: Material) =>
@@ -131,30 +136,42 @@ function MaterialsBody() {
           : 'Link'
         : 'Note'
     }`;
+  /** Pick one or many files at once; PDFs are copied into the app so the reader can open them later. */
   const pickFile = async (kind: 'pdf' | 'image') => {
     try {
-      const [file] = await pick({
+      const files = await pick({
         type: [kind === 'pdf' ? types.pdf : types.images],
+        allowMultiSelection: true,
       });
       setSheet(false);
-      let uri: string | undefined;
-      if (kind === 'pdf') {
-        // Picker URIs are temporary; keep a copy inside the app so the reader can open it later.
-        const [copy] = await keepLocalCopy({
-          files: [{ uri: file.uri, fileName: file.name ?? 'Document.pdf' }],
-          destination: 'documentDirectory',
-        });
-        uri = copy.status === 'success' ? copy.localUri : file.uri;
+      if (kind === 'image') {
+        add(
+          ...files.map(file => ({
+            type: 'image' as const,
+            name: file.name ?? 'Photo of notes',
+            count: 1,
+          })),
+        );
+        return;
       }
+      // Picker URIs are temporary; keep copies inside the app.
+      const copies = await keepLocalCopy({
+        files: files.map(file => ({
+          uri: file.uri,
+          fileName: file.name ?? 'Document.pdf',
+        })) as [{ uri: string; fileName: string }],
+        destination: 'documentDirectory',
+      });
       add(
-        kind === 'pdf'
-          ? {
-              type: 'pdf',
-              name: file.name ?? 'Document.pdf',
-              sizeKb: Math.round((file.size ?? 0) / 1024),
-              uri,
-            }
-          : { type: 'image', name: file.name ?? 'Photo of notes', count: 1 },
+        ...files.map((file, i) => {
+          const copy = copies.find(c => c.sourceUri === file.uri) ?? copies[i];
+          return {
+            type: 'pdf' as const,
+            name: file.name ?? 'Document.pdf',
+            sizeKb: Math.round((file.size ?? 0) / 1024),
+            uri: copy?.status === 'success' ? copy.localUri : file.uri,
+          };
+        }),
       );
     } catch {
       /* cancelled */
@@ -167,7 +184,7 @@ function MaterialsBody() {
   ];
   const tiles: [string, string, string, string, () => void][] = [
     [
-      'Upload PDF',
+      'Upload PDFs',
       'file-pdf',
       SUBJ.se.fill,
       SUBJ.se.text,

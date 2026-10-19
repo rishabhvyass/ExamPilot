@@ -1,0 +1,61 @@
+{
+  "_note": "SAMPLE important questions.",
+  "questions": [
+    {
+      "id": "q1",
+      "subjectId": "se",
+      "question": "Compare the Waterfall and Agile process models.",
+      "answer": "Waterfall runs phases in a fixed order (requirements → design → build → test) and suits stable requirements, but problems surface late. Agile delivers in short iterations with continuous customer feedback, so it handles changing requirements well.",
+      "revised": true
+    },
+    {
+      "id": "q2",
+      "subjectId": "se",
+      "question": "What is the difference between verification and validation?",
+      "answer": "Verification: “are we building the product right?” — reviews, walkthroughs and inspections against the specification. Validation: “are we building the right product?” — testing the working software against user needs.",
+      "revised": false
+    },
+    {
+      "id": "q3",
+      "subjectId": "se",
+      "question": "Explain coupling and cohesion. Which should be high?",
+      "answer": "Cohesion is how closely related a module’s responsibilities are — aim for high. Coupling is how much modules depend on each other — aim for low. High cohesion and low coupling make code easier to change and test.",
+      "revised": true
+    },
+    {
+      "id": "q4",
+      "subjectId": "daa",
+      "question": "State the Master theorem and solve T(n) = 2T(n/2) + n.",
+      "answer": "For T(n) = aT(n/b) + f(n), compare f(n) with n^(log_b a). Here a = 2, b = 2, so n^(log₂2) = n, which matches f(n). That is case 2, giving T(n) = Θ(n log n).",
+      "revised": true
+    },
+    {
+      "id": "q5",
+      "subjectId": "daa",
+      "question": "Greedy vs dynamic programming — when does each work?",
+      "answer": "Greedy works when the problem has the greedy-choice property and optimal substructure; it makes one choice per step (e.g. activity selection). DP works when subproblems overlap; it stores sub-results to avoid recomputation (e.g. 0/1 knapsack).",
+      "revised": false
+    },
+    {
+      "id": "q6",
+      "subjectId": "daa",
+      "question": "Why does Dijkstra’s algorithm fail with negative edge weights?",
+      "answer": "It finalises a vertex as soon as it is removed from the queue, assuming no later path can be shorter. A negative edge can break that assumption. Bellman–Ford handles negative weights and detects negative cycles.",
+      "revised": false
+    },
+    {
+      "id": "q7",
+      "subjectId": "dds",
+      "question": "Explain the four rotations used to rebalance an AVL tree.",
+      "answer": "LL case → single right rotation. RR case → single left rotation. LR case → left rotation on the child, then right rotation. RL case → right rotation on the child, then left rotation. Afterwards every balance factor is −1, 0 or +1.",
+      "revised": false
+    },
+    {
+      "id": "q8",
+      "subjectId": "dds",
+      "question": "How does a hash table handle collisions?",
+      "answer": "Separate chaining keeps a list at each slot. Open addressing finds another slot by linear probing, quadratic probing or double hashing. Keeping the load factor low keeps average lookups close to O(1).",
+      "revised": false
+    }
+  ]
+}

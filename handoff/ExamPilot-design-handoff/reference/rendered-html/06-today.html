@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ExamPilot reference — 06-today</title>
+<!-- Static snapshot of the design prototype (Main.dc.html) in its first state. Reference only: rebuild as React components. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+body{margin:0;background:#EDECE8}
+a{color:#1B1B1F}a:hover{color:#000000}
+.press{transition:transform 120ms cubic-bezier(.2,0,0,1),background-color 150ms ease}
+.press:active{transform:scale(0.97)}
+.pop{animation:pop 260ms cubic-bezier(.2,0,0,1)}
+.draw path{stroke-dasharray:24;stroke-dashoffset:24;animation:draw 220ms 60ms ease-out forwards}
+.fadeup{animation:fadeup 260ms cubic-bezier(.05,.7,.1,1)}
+@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.press:hover{transform:translateY(-1px)}.press:hover:active{transform:scale(.97)}
+main{animation:pagein 360ms cubic-bezier(.2,.8,.2,1) both}
+.tabpill{overflow:hidden;white-space:nowrap;animation:tabin 520ms cubic-bezier(.2,.9,.25,1.04) both}
+.tablabel{animation:tablabel 320ms 180ms cubic-bezier(.05,.7,.1,1) both}
+nav a:not(.tabpill){transition:background-color 180ms ease,transform 140ms cubic-bezier(.2,0,0,1)}
+nav a:not(.tabpill):hover{background:#FFFFFF}
+nav a:not(.tabpill):active{transform:scale(.92)}
+@keyframes pagein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes tabin{from{max-width:56px}to{max-width:320px}}
+@keyframes tablabel{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+button:focus-visible,a:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.draw path{stroke-dashoffset:0}}
+
+</style>
+</head>
+<body>
+
+
+<div style="width: 390px; height: 1180px; position: relative; overflow: hidden; background: #EDECE8; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box">
+<main style="padding: 60px 20px 128px; display: flex; flex-direction: column; gap: 14px">
+
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span aria-hidden="true" style="width: 56px; height: 56px; border-radius: 999px; background: #D6CDE6; color: #3E3557; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
+<span style="display: flex; gap: 8px">
+<button type="button" class="press" aria-label="Search" style="width: 56px; height: 56px; border-radius: 999px; border: 0; background: #FFFFFF; color: #1B1B1F; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button>
+<button type="button" class="press" aria-label="More" style="width: 56px; height: 56px; border-radius: 999px; border: 0; background: #FFFFFF; color: #1B1B1F; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+</span>
+</div>
+
+<header style="display: flex; flex-direction: column; gap: 6px; padding: 14px 4px 8px">
+<span style="font-size: 20px; font-weight: 500; color: #5C5866">Good morning</span>
+<h1 style="margin: 0; font-weight: 600; font-size: 46px; line-height: 1.02; letter-spacing: -0.03em">Your Exam<br>Week</h1>
+</header>
+
+<section aria-label="Next exam" style="background: #D6CDE6; border-radius: 34px; padding: 8px; display: flex; flex-direction: column">
+<div style="padding: 18px 16px 18px 18px; display: flex; gap: 12px; align-items: flex-start">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 14px; font-weight: 600; color: #4A4260">Next exam</span>
+<h2 style="margin: 0; font-weight: 600; font-size: 28px; line-height: 1.1; letter-spacing: -0.02em">Software Engineering</h2>
+<span style="font-size: 15px; line-height: 1.45; color: #4A4260">Wednesday, 21 October at 2:00 PM</span>
+</div>
+<button type="button" class="press" aria-label="Exam options" style="flex: none; width: 48px; height: 48px; border-radius: 999px; border: 1.5px solid rgba(62,53,87,0.25); background: transparent; color: #1B1B1F; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+</div>
+<div style="position: relative; height: 176px; border-radius: 28px; background: #C5BADB; overflow: hidden; display: flex">
+<div style="width: 92px; padding: 18px 0 18px 20px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid rgba(62,53,87,0.18)">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; color: #4A4260">Days</span><span style="font-size: 54px; font-weight: 600; line-height: 1; letter-spacing: -0.03em">3</span></span>
+<span style="font-size: 13px; color: #4A4260">to prepare</span>
+</div>
+<div style="width: 92px; padding: 18px 0 18px 18px; display: flex; flex-direction: column; justify-content: flex-end; border-right: 1px solid rgba(62,53,87,0.18)">
+<span style="font-size: 14px; color: #4A4260">Topics</span>
+<span style="font-size: 40px; font-weight: 600; line-height: 1.05; letter-spacing: -0.02em">4/6</span>
+</div>
+<div aria-hidden="true" style="position: relative; flex: 1">
+<span style="position: absolute; left: 6px; top: -30px; width: 120px; height: 120px; border-radius: 999px; background: #8C7BB5"></span>
+<span style="position: absolute; left: 60px; top: 50px; width: 96px; height: 96px; border-radius: 999px; background: #E9C4CC"></span>
+<span style="position: absolute; left: -6px; top: 98px; width: 72px; height: 72px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.8)"></span>
+<span style="position: absolute; left: 30px; top: 70px; width: 18px; height: 18px; border-radius: 999px; background: #FFFFFF"></span>
+</div>
+<a href="Subjects.dc.html" class="press" aria-label="Open Software Engineering syllabus" style="position: absolute; right: 14px; bottom: 14px; width: 52px; height: 52px; border-radius: 999px; background: #1B1B1F; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"></path></svg></a>
+</div>
+</section>
+
+<a href="Calendar.dc.html" class="press" style="display: flex; align-items: center; gap: 14px; background: #EBD3D7; border-radius: 999px; padding: 8px 20px 8px 8px; text-decoration: none; color: #1B1B1F">
+<span style="flex: none; width: 52px; height: 52px; border-radius: 999px; background: #DDB5BD; color: #6B3440; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">DAA</span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Design and Analysis of Algorithm</span><span style="font-size: 14px; color: #6B3440">Thursday, 22 Oct · 2:00 PM</span></span>
+</a>
+<a href="Calendar.dc.html" class="press" style="display: flex; align-items: center; gap: 14px; background: #CFE6E0; border-radius: 999px; padding: 8px 20px 8px 8px; text-decoration: none; color: #1B1B1F">
+<span style="flex: none; width: 52px; height: 52px; border-radius: 999px; background: #A9D3C8; color: #24524A; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700">DDS</span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 16px; font-weight: 600">Design of Data Structures</span><span style="font-size: 14px; color: #24524A">Friday, 23 Oct · 2:00 PM</span></span>
+</a>
+
+<section aria-label="Today's revision" style="background: #FFFFFF; border-radius: 34px; padding: 22px 20px; display: flex; flex-direction: column; gap: 14px; margin-top: 4px">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 style="margin: 0; font-weight: 600; font-size: 24px; letter-spacing: -0.02em">Today's revision</h2>
+<span style="font-size: 15px; color: #5C5866">2 of 4 done</span>
+</div>
+<span style="font-size: 13px; font-weight: 500; color: #5C5866; border: 1px solid #D9D5CD; border-radius: 999px; padding: 6px 12px">Sample plan</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px" aria-hidden="true">
+
+<span class="pop" style="height: 8px; border-radius: 999px; background: #1B1B1F"></span>
+
+
+<span class="pop" style="height: 8px; border-radius: 999px; background: #1B1B1F"></span>
+
+
+
+<span style="height: 8px; border-radius: 999px; background: #ECEAE5"></span>
+
+
+<span style="height: 8px; border-radius: 999px; background: #ECEAE5"></span>
+
+</div>
+<div style="display: flex; flex-direction: column">
+
+<button type="button" class="press" aria-pressed="true" style="display: flex; align-items: center; gap: 14px; width: 100%; min-height: 60px; padding: 8px 4px; border: 0; border-radius: 18px; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer">
+
+<span class="pop draw" style="flex: none; width: 30px; height: 30px; border-radius: 999px; background: #1B1B1F; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span>
+
+
+<span style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<span style="font-size: 17px; font-weight: 500; line-height: 1.3; color: #77727F; text-decoration: line-through; text-decoration-color: #A9A4B0">Waterfall vs Agile — key differences</span>
+
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5C5866">
+<span style="background: #D6CDE6; color: #3E3557; border-radius: 999px; padding: 2px 9px; font-weight: 600">SE</span>
+
+
+<span>25 min</span>
+</span>
+</span>
+</button>
+
+<button type="button" class="press" aria-pressed="true" style="display: flex; align-items: center; gap: 14px; width: 100%; min-height: 60px; padding: 8px 4px; border: 0; border-radius: 18px; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer">
+
+<span class="pop draw" style="flex: none; width: 30px; height: 30px; border-radius: 999px; background: #1B1B1F; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></span>
+
+
+<span style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<span style="font-size: 17px; font-weight: 500; line-height: 1.3; color: #77727F; text-decoration: line-through; text-decoration-color: #A9A4B0">Recall 5 questions on UML diagrams</span>
+
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5C5866">
+<span style="background: #D6CDE6; color: #3E3557; border-radius: 999px; padding: 2px 9px; font-weight: 600">SE</span>
+
+
+<span>20 min</span>
+</span>
+</span>
+</button>
+
+<button type="button" class="press" aria-pressed="false" style="display: flex; align-items: center; gap: 14px; width: 100%; min-height: 60px; padding: 8px 4px; border: 0; border-radius: 18px; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer">
+
+
+<span style="flex: none; width: 30px; height: 30px; border-radius: 999px; border: 2px solid #BDB8AE; box-sizing: border-box"></span>
+
+<span style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+
+<span style="font-size: 17px; font-weight: 500; line-height: 1.3; color: #1B1B1F">Master theorem — 3 practice problems</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5C5866">
+
+<span style="background: #EBD3D7; color: #6B3440; border-radius: 999px; padding: 2px 9px; font-weight: 600">DAA</span>
+
+<span>25 min</span>
+</span>
+</span>
+</button>
+
+<button type="button" class="press" aria-pressed="false" style="display: flex; align-items: center; gap: 14px; width: 100%; min-height: 60px; padding: 8px 4px; border: 0; border-radius: 18px; background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer">
+
+
+<span style="flex: none; width: 30px; height: 30px; border-radius: 999px; border: 2px solid #BDB8AE; box-sizing: border-box"></span>
+
+<span style="flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+
+<span style="font-size: 17px; font-weight: 500; line-height: 1.3; color: #1B1B1F">AVL rotations — quick sketch recap</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5C5866">
+
+
+<span style="background: #CFE6E0; color: #24524A; border-radius: 999px; padding: 2px 9px; font-weight: 600">DDS</span>
+<span>15 min</span>
+</span>
+</span>
+</button>
+
+</div>
+
+
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<span style="font-size: 16px; color: #5C5866">One topic at a time.</span>
+<button type="button" class="press" style="display: flex; align-items: center; gap: 6px; min-height: 46px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #D9D5CD; background: transparent; font: inherit; font-size: 15px; font-weight: 600; color: #1B1B1F; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add topic</button>
+</div>
+
+</section>
+
+</main>
+
+<nav aria-label="Main" style="position: absolute; left: 20px; right: 20px; bottom: 24px; display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 999px; background: rgba(255,255,255,0.78); border: 1px solid #FFFFFF; box-shadow: 0 12px 32px rgba(40,30,60,0.14)">
+<a href="Main.dc.html" aria-current="page" class="tabpill" style="flex: 1; height: 56px; border-radius: 999px; background: #1B1B1F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-size: 16px; font-weight: 600"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path></svg><span class="tablabel">Today</span></a>
+<a href="Calendar.dc.html" aria-label="Calendar" style="flex: none; width: 56px; height: 56px; border-radius: 999px; background: #F4F2EE; border: 1px solid #E4E1DA; box-sizing: border-box; color: #1B1B1F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="4"></rect><path d="M16 3v4M8 3v4M3 10h18"></path></svg></a>
+<a href="Subjects.dc.html" aria-label="Subjects" style="flex: none; width: 56px; height: 56px; border-radius: 999px; background: #F4F2EE; border: 1px solid #E4E1DA; box-sizing: border-box; color: #1B1B1F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="7" cy="7" r="3.5"></circle><circle cx="17" cy="7" r="3.5"></circle><circle cx="7" cy="17" r="3.5"></circle><circle cx="17" cy="17" r="3.5"></circle></svg></a>
+<a href="Questions.dc.html" aria-label="Questions" style="flex: none; width: 56px; height: 56px; border-radius: 999px; background: #F4F2EE; border: 1px solid #E4E1DA; box-sizing: border-box; color: #1B1B1F; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="5"></rect><path d="M8 10h8M8 14h5"></path></svg></a>
+</nav>
+</div>
+
+</body>
+</html>

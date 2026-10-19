@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ExamPilot — Study materials</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EDECE8}
+a{color:#1B1B1F}a:hover{color:#000000}
+.press{transition:transform 140ms cubic-bezier(.2,0,0,1),background-color 160ms ease}
+.press:hover{transform:translateY(-1px)}
+.press:active{transform:scale(.97)}
+.item{transition:transform 180ms ease,box-shadow 180ms ease}
+.item:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(40,30,60,.08)}
+.fadeup{animation:fadeup 380ms cubic-bezier(.05,.7,.1,1) both}
+.sheet{animation:sheet 420ms cubic-bezier(.2,.9,.25,1.02) both}
+.scrim{animation:scrim 260ms ease both}
+.fab{animation:fab 2.8s ease-in-out infinite}
+@keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
+@keyframes scrim{from{opacity:0}to{opacity:1}}
+@keyframes fab{0%,100%{box-shadow:0 10px 26px rgba(27,27,31,.25)}50%{box-shadow:0 14px 34px rgba(27,27,31,.35)}}
+button:focus-visible,a:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 1060px; position: relative; overflow: hidden; background: #EDECE8; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box">
+<main style="padding: 60px 20px 120px; display: flex; flex-direction: column; gap: 14px">
+
+<div style="display: flex; align-items: center; justify-content: space-between">
+<a href="Subjects.dc.html" class="press" aria-label="Back to subjects" style="width: 56px; height: 56px; border-radius: 999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<button type="button" class="press" aria-label="Search materials" style="width: 56px; height: 56px; border-radius: 999px; border: 0; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button>
+</div>
+
+<header style="display: flex; flex-direction: column; gap: 6px; padding: 10px 4px 4px">
+<span style="font-size: 20px; font-weight: 500; color: #5C5866">{{count}} items · sample</span>
+<h1 style="margin: 0; font-weight: 600; font-size: 46px; line-height: 1.02; letter-spacing: -0.03em">Study<br>Materials</h1>
+</header>
+
+<div role="group" aria-label="Subject" style="display: flex; gap: 8px">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="3">
+<sc-if value="{{t.on}}" hint-placeholder-val="{{false}}"><button type="button" class="press" onClick="{{t.pick}}" aria-pressed="true" style="height: 52px; padding: 0 20px; border-radius: 999px; border: 0; background: #1B1B1F; color: #FFFFFF; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer">{{t.code}}</button></sc-if>
+<sc-if value="{{t.off}}" hint-placeholder-val="{{true}}"><button type="button" class="press" onClick="{{t.pick}}" aria-pressed="false" style="height: 52px; padding: 0 20px; border-radius: 999px; border: 1.5px solid #CFCAC1; background: transparent; color: #1B1B1F; font: inherit; font-size: 16px; font-weight: 500; cursor: pointer">{{t.code}}</button></sc-if>
+</sc-for>
+</div>
+
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+<section class="fadeup" style="display: flex; flex-direction: column; gap: 8px; animation-delay: {{g.delay}}">
+<h2 style="margin: 6px 4px 0; font-size: 15px; font-weight: 600; color: #5C5866">{{g.label}}</h2>
+<sc-for list="{{g.items}}" as="i" hint-placeholder-count="2">
+<a href="{{i.href}}" class="item" style="display: flex; align-items: center; gap: 14px; background: #FFFFFF; border-radius: 28px; padding: 10px 16px 10px 10px; text-decoration: none; color: #1B1B1F">
+<sc-if value="{{i.isPdf}}" hint-placeholder-val="{{true}}"><span style="flex: none; width: 52px; height: 52px; border-radius: 18px; background: {{tint}}; color: {{ink}}; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700">PDF</span></sc-if>
+<sc-if value="{{i.isImg}}" hint-placeholder-val="{{false}}"><span style="flex: none; width: 52px; height: 52px; border-radius: 18px; background: {{tint}}; color: {{ink}}; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="4"></rect><circle cx="9" cy="10" r="2"></circle><path d="M21 16l-5-5-9 9"></path></svg></span></sc-if>
+<sc-if value="{{i.isLink}}" hint-placeholder-val="{{false}}"><span style="flex: none; width: 52px; height: 52px; border-radius: 18px; background: {{tint}}; color: {{ink}}; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg></span></sc-if>
+<sc-if value="{{i.isNote}}" hint-placeholder-val="{{false}}"><span style="flex: none; width: 52px; height: 52px; border-radius: 18px; background: {{tint}}; color: {{ink}}; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M9 12h7M9 16h5"></path></svg></span></sc-if>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{i.name}}</span><span style="font-size: 14px; color: #5C5866">{{i.meta}}</span></span>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#77727F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+</sc-for>
+</section>
+</sc-for>
+
+</main>
+
+<button type="button" class="press fab" onClick="{{openSheet}}" style="position: absolute; right: 20px; bottom: 28px; height: 60px; padding: 0 24px 0 18px; border-radius: 999px; border: 0; background: #1B1B1F; color: #FFFFFF; font: inherit; font-size: 17px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add material</button>
+
+<sc-if value="{{sheet}}" hint-placeholder-val="{{false}}">
+<div class="scrim" onClick="{{closeSheet}}" style="position: absolute; inset: 0; background: rgba(27,27,31,0.32)"></div>
+<div class="sheet" role="dialog" aria-label="Add material" style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFFFFF; border-radius: 36px 36px 0 0; padding: 12px 20px 34px; display: flex; flex-direction: column; gap: 10px">
+<span aria-hidden="true" style="align-self: center; width: 44px; height: 5px; border-radius: 999px; background: #D9D5CD; margin-bottom: 6px"></span>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 style="margin: 0; font-weight: 600; font-size: 24px">Add to {{subjectName}}</h2>
+<button type="button" class="press" onClick="{{closeSheet}}" aria-label="Close" style="width: 44px; height: 44px; border-radius: 999px; border: 0; background: #F4F2EE; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<button type="button" class="press fadeup" style="height: 108px; border-radius: 28px; border: 0; background: #D6CDE6; font: inherit; color: #1B1B1F; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; padding: 16px; cursor: pointer; text-align: left"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg><span style="font-size: 16px; font-weight: 600">Upload PDF</span></button>
+<button type="button" class="press fadeup" style="animation-delay: 60ms; height: 108px; border-radius: 28px; border: 0; background: #EBD3D7; font: inherit; color: #1B1B1F; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; padding: 16px; cursor: pointer; text-align: left"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg><span style="font-size: 16px; font-weight: 600">Photo of notes</span></button>
+<button type="button" class="press fadeup" style="animation-delay: 120ms; height: 108px; border-radius: 28px; border: 0; background: #CFE6E0; font: inherit; color: #1B1B1F; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; padding: 16px; cursor: pointer; text-align: left"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg><span style="font-size: 16px; font-weight: 600">Video or link</span></button>
+<button type="button" class="press fadeup" style="animation-delay: 180ms; height: 108px; border-radius: 28px; border: 0; background: #F4F2EE; font: inherit; color: #1B1B1F; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; padding: 16px; cursor: pointer; text-align: left"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M9 12h7M9 16h5"></path></svg><span style="font-size: 16px; font-weight: 600">Write a note</span></button>
+</div>
+<p style="margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: #5C5866">Anything you add here can be used by the study assistant to answer your questions.</p>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1060}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { cur: 0, sheet: false };
+  }
+  renderVals() {
+    var self = this;
+    var SUBJ = [
+      { code: 'SE', name: 'Software Engineering', tint: '#D6CDE6', ink: '#3E3557', groups: [
+        { label: 'PDFs', items: [{ t: 'pdf', name: 'SE_Unit3_Design_UML.pdf', meta: '12 pages · 2.1 MB' }, { t: 'pdf', name: 'SE_previous_papers.pdf', meta: '8 pages · 840 KB' }] },
+        { label: 'Photos & notes', items: [{ t: 'img', name: 'Class notes — Testing', meta: '3 photos' }, { t: 'note', name: 'COCOMO formulas', meta: 'Note · edited today' }] },
+        { label: 'Videos & links', items: [{ t: 'link', name: 'Agile vs Waterfall lecture', meta: 'Video link · 18 min' }] } ] },
+      { code: 'DAA', name: 'Algorithms', tint: '#EBD3D7', ink: '#6B3440', groups: [
+        { label: 'PDFs', items: [{ t: 'pdf', name: 'DAA_DP_problems.pdf', meta: '20 pages · 1.4 MB' }] },
+        { label: 'Photos & notes', items: [{ t: 'note', name: 'Master theorem cases', meta: 'Note · yesterday' }] },
+        { label: 'Videos & links', items: [{ t: 'link', name: 'Dijkstra visualised', meta: 'Video link · 12 min' }] } ] },
+      { code: 'DDS', name: 'Data Structures', tint: '#CFE6E0', ink: '#24524A', groups: [
+        { label: 'PDFs', items: [{ t: 'pdf', name: 'DDS_Trees_cheatsheet.pdf', meta: '4 pages · 620 KB' }] },
+        { label: 'Photos & notes', items: [{ t: 'img', name: 'AVL rotations sketch', meta: '1 photo' }] } ] }
+    ];
+    var s = SUBJ[this.state.cur];
+    var count = 0;
+    var groups = s.groups.map(function (g, gi) {
+      return { label: g.label, delay: (gi * 90) + 'ms', items: g.items.map(function (i) {
+        count++;
+        return { name: i.name, meta: i.meta, isPdf: i.t === 'pdf', isImg: i.t === 'img', isLink: i.t === 'link', isNote: i.t === 'note', href: i.t === 'pdf' ? 'PdfReader.dc.html' : '#' };
+      }) };
+    });
+    return {
+      tabs: SUBJ.map(function (x, i) { return { code: x.code, on: i === self.state.cur, off: i !== self.state.cur, pick: function () { self.setState({ cur: i }); } }; }),
+      groups: groups, count: count, tint: s.tint, ink: s.ink, subjectName: s.name,
+      sheet: this.state.sheet,
+      openSheet: function () { self.setState({ sheet: true }); },
+      closeSheet: function () { self.setState({ sheet: false }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

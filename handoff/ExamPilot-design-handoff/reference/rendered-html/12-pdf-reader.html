@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ExamPilot reference — 12-pdf-reader</title>
+<!-- Static snapshot of the design prototype (PdfReader.dc.html) in its first state. Reference only: rebuild as React components. -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+body{margin:0;background:#EDECE8}
+a{color:#1B1B1F}a:hover{color:#000000}
+.press{transition:transform 140ms cubic-bezier(.2,0,0,1),background-color 160ms ease,opacity 160ms ease}
+.press:hover{transform:translateY(-1px)}
+.press:active{transform:scale(.95)}
+.turnR{animation:turnR 420ms cubic-bezier(.2,.8,.2,1) both}
+.turnL{animation:turnL 420ms cubic-bezier(.2,.8,.2,1) both}
+.fill{transition:width 500ms cubic-bezier(.2,.8,.2,1)}
+.rocket{transition:left 500ms cubic-bezier(.2,.8,.2,1)}
+.mark{transition:background-color 300ms ease}
+.cheer{animation:cheer 600ms cubic-bezier(.2,.9,.25,1.3) both}
+.spark{position:absolute;width:10px;height:10px;border-radius:999px;opacity:0;animation:spark 900ms ease-out forwards}
+.thumb{transition:transform 180ms ease,box-shadow 180ms ease}
+.thumb:hover{transform:translateY(-3px)}
+@keyframes turnR{from{opacity:0;transform:translateX(40px) rotate(2deg)}to{opacity:1;transform:none}}
+@keyframes turnL{from{opacity:0;transform:translateX(-40px) rotate(-2deg)}to{opacity:1;transform:none}}
+@keyframes cheer{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+@keyframes spark{0%{opacity:1;transform:translate(0,0) scale(.5)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1)}}
+button:focus-visible,a:focus-visible{outline:3px solid #1B1B1F;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.spark{display:none}}
+
+</style>
+</head>
+<body>
+
+
+<div style="width: 390px; height: 900px; position: relative; overflow: hidden; background: #EDECE8; font-family: 'Urbanist', system-ui, sans-serif; color: #1B1B1F; box-sizing: border-box; display: flex; flex-direction: column">
+
+<header style="padding: 56px 20px 10px; display: flex; align-items: center; gap: 12px">
+<a href="Materials.dc.html" class="press" aria-label="Back to materials" style="flex: none; width: 52px; height: 52px; border-radius: 999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">SE_Unit3_Design_UML.pdf</span><span style="font-size: 14px; color: #5C5866">Software Engineering · sample PDF</span></span>
+<button type="button" class="press" aria-pressed="true" aria-label="Highlight key line" style="flex: none; width: 52px; height: 52px; border-radius: 999px; border: 0; background: #1B1B1F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l-5 5v3h3l5-5"></path><path d="M14 4l6 6-8 8-6-6z"></path></svg></button>
+</header>
+
+<div style="padding: 4px 20px 0; display: flex; align-items: center; gap: 10px">
+<div aria-hidden="true" style="position: relative; flex: 1; height: 28px; display: flex; align-items: center">
+<span style="position: absolute; left: 0; right: 0; height: 6px; border-radius: 999px; background: #DAD6CF"></span>
+<span class="fill" style="position: absolute; left: 0; height: 6px; border-radius: 999px; background: #1B1B1F; width: 67%"></span>
+<span class="rocket" style="position: absolute; left: 67%; margin-left: -14px; width: 28px; height: 28px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 4px 10px rgba(40,30,60,.15); display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15c-1.5 1.3-2 5-2 5s3.7-.5 5-2"></path><path d="M9 12a22 22 0 0 1 11-9c0 3-1 8-9 11z"></path><path d="M9 12H5l2-4h4M12 15v4l4-2v-4"></path></svg></span>
+</div>
+<span style="flex: none; font-size: 14px; font-weight: 600; color: #5C5866">4 / 6</span>
+</div>
+
+<div style="flex: 1; position: relative; padding: 14px 20px 0; display: flex; flex-direction: column">
+
+
+
+
+
+
+
+
+<article class="turnR" aria-label="Page 4: UML class diagrams" style="flex: 1; background: #FFFFFF; border-radius: 28px; box-shadow: 0 16px 40px rgba(40,30,60,.10); padding: 26px 24px; display: flex; flex-direction: column; gap: 14px">
+<span style="font-size: 13px; font-weight: 600; color: #77727F">UNIT 3 · PAGE 4</span>
+<h2 style="margin: 0; font-size: 26px; font-weight: 600; line-height: 1.15; letter-spacing: -0.02em">UML class diagrams</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.65">A class box lists its name, attributes and operations. Lines between boxes show associations, with multiplicity at each end.</p>
+<p style="margin: 0; font-size: 16px; line-height: 1.65"><span class="mark" style="background: #E9DFF7; border-radius: 6px; padding: 1px 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone">One student can enrol in many courses.</span></p>
+
+<div aria-hidden="true" style="display: flex; align-items: center; gap: 8px; padding-top: 4px">
+<div style="flex: 1; border: 1.5px solid #1B1B1F; border-radius: 12px; overflow: hidden; font-size: 13px"><div style="background: #D6CDE6; padding: 6px 8px; font-weight: 700">Student</div><div style="padding: 6px 8px; border-top: 1.5px solid #1B1B1F">name, rollNo</div><div style="padding: 6px 8px; border-top: 1.5px solid #1B1B1F">enrol()</div></div>
+<span style="font-size: 13px; font-weight: 600; color: #5C5866">1..*</span>
+<div style="flex: 1; border: 1.5px solid #1B1B1F; border-radius: 12px; overflow: hidden; font-size: 13px"><div style="background: #CFE6E0; padding: 6px 8px; font-weight: 700">Course</div><div style="padding: 6px 8px; border-top: 1.5px solid #1B1B1F">code, credits</div><div style="padding: 6px 8px; border-top: 1.5px solid #1B1B1F">addStudent()</div></div>
+</div>
+
+
+</article>
+
+
+
+
+
+
+</div>
+
+<div style="padding: 14px 20px 0; display: flex; gap: 8px; justify-content: center" role="group" aria-label="Pages">
+
+
+<button type="button" class="thumb" aria-label="Page 1: Software design" style="width: 40px; height: 54px; border-radius: 10px; border: 1px solid #DAD6CF; background: #F7F6F3; font: inherit; font-size: 13px; color: #77727F; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px">1</button>
+
+
+<button type="button" class="thumb" aria-label="Page 2: Design principles" style="width: 40px; height: 54px; border-radius: 10px; border: 1px solid #DAD6CF; background: #F7F6F3; font: inherit; font-size: 13px; color: #77727F; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px">2</button>
+
+
+<button type="button" class="thumb" aria-label="Page 3: Cohesion and coupling" style="width: 40px; height: 54px; border-radius: 10px; border: 1px solid #DAD6CF; background: #F7F6F3; font: inherit; font-size: 13px; color: #77727F; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px">3</button>
+
+<button type="button" class="thumb" aria-label="Page 4: UML class diagrams" aria-current="page" style="width: 40px; height: 54px; border-radius: 10px; border: 2px solid #1B1B1F; background: #FFFFFF; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px">4</button>
+
+
+
+<button type="button" class="thumb" aria-label="Page 5: Sequence diagrams" style="width: 40px; height: 54px; border-radius: 10px; border: 1px solid #DAD6CF; background: #F7F6F3; font: inherit; font-size: 13px; color: #77727F; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px">5</button>
+
+
+<button type="button" class="thumb" aria-label="Page 6: Summary" style="width: 40px; height: 54px; border-radius: 10px; border: 1px solid #DAD6CF; background: #F7F6F3; font: inherit; font-size: 13px; color: #77727F; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px">6</button>
+
+</div>
+
+<div style="padding: 14px 20px 28px; display: flex; align-items: center; gap: 8px">
+<button type="button" class="press" aria-label="Previous page" style="flex: none; width: 56px; height: 56px; border-radius: 999px; border: 0; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+<a href="Assistant.dc.html" class="press" style="flex: 1; height: 56px; border-radius: 999px; background: #1B1B1F; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-size: 16px; font-weight: 600"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.2 5.8L20 10l-5.8 2.2L12 18l-2.2-5.8L4 10l5.8-2.2z"></path></svg>Ask about this page</a>
+<button type="button" class="press" aria-label="Next page" style="flex: none; width: 56px; height: 56px; border-radius: 999px; border: 0; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1B1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+
+</body>
+</html>
