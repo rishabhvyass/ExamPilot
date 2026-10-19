@@ -58,6 +58,14 @@ const stripSamples = (s: State): State => ({
   sessions: s.sessions.filter(x => !/^s\d+$/.test(x.id)),
   questions: s.questions.filter(q => !q.isSample),
   materials: s.materials.filter(m => !m.isSample),
+  // Canned replies from earlier builds pointed at sample files / sample subjects.
+  chat: s.chat.filter(
+    c =>
+      c.source?.materialId !== 'm1' &&
+      !['se', 'daa', 'dds'].includes(
+        c.block?.type === 'study_plan' ? c.block.subjectId ?? '' : '',
+      ),
+  ),
 });
 
 /**
@@ -87,12 +95,19 @@ export function StoreProvider({
       const remote = await loadUser(u.uid);
       let s: State;
       if (remote) {
-        s = stripSamples({ ...remote, splashSeen: dev.splashSeen, signedIn: true });
+        s = stripSamples({
+          ...remote,
+          splashSeen: dev.splashSeen,
+          signedIn: true,
+        });
       } else {
         s = {
           ...dev,
           signedIn: true,
-          profile: { ...dev.profile, email: dev.profile.email || u.email || '' },
+          profile: {
+            ...dev.profile,
+            email: dev.profile.email || u.email || '',
+          },
         };
         await migrate(u.uid, s);
       }
@@ -112,7 +127,9 @@ export function StoreProvider({
     let unsub: (() => void) | undefined;
     let alive = true;
     AsyncStorage.getItem(KEY)
-      .then(raw => (raw ? stripSamples({ ...seed(), ...JSON.parse(raw) }) : seed()))
+      .then(raw =>
+        raw ? stripSamples({ ...seed(), ...JSON.parse(raw) }) : seed(),
+      )
       .catch(() => seed())
       .then((s: State) => {
         if (!alive) return;

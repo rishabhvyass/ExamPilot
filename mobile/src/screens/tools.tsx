@@ -46,7 +46,7 @@ import { useStore } from '../data/store';
 import { useNav, type RootParams } from '../navigation';
 import { celebrate } from '../lib/celebrate';
 import { pdfText } from '../lib/pdfText';
-import { addDays, fmtShort, todayISO } from '../lib/dates';
+import { addDays, daysBetween, fmtShort, todayISO, weekday } from '../lib/dates';
 import { hours } from '../lib/plan';
 import type {
   ChartBlock,
@@ -445,50 +445,81 @@ function reply(q: string, state: State): Omit<ChatMessage, 'id' | 'role'> {
       },
     };
   }
-  if (t.includes('plan') || t.includes('week') || t.includes('daa')) {
+  const upcoming = [...state.exams]
+    .filter(e => e.date >= today)
+    .sort((x, y) => (x.date + x.time).localeCompare(y.date + y.time));
+  // Prefer the subject the student named ("plan DAA"), else the next exam.
+  const named = state.subjects.find(
+    x =>
+      t.includes(x.code.toLowerCase()) || t.includes(x.name.toLowerCase()),
+  );
+  const exam =
+    (named && upcoming.find(e => e.subjectId === named.id)) ?? upcoming[0];
+  const sj = named ?? state.subjects.find(x => x.id === exam?.subjectId);
+  if (t.includes('plan') || t.includes('week')) {
+    if (!exam || !sj)
+      return {
+        text: 'Add your admit card first and I’ll plan around your exam dates.',
+      };
+    const left = daysBetween(today, exam.date);
+    const todo = sj.topics.filter(x => !x.done).map(x => x.name);
+    const days = Math.max(1, Math.min(left, 4));
     return {
-      text: 'Here’s a calm plan for DAA before Thursday, lighter the evening before.',
+      text:
+        left <= 0
+          ? `${sj.name} is today — a short, calm recap is all you need.`
+          : `Here’s a calm plan for ${sj.code} before ${weekday(exam.date)}, lighter the evening before.`,
       block: {
         type: 'study_plan',
-        subjectId: 'daa',
-        title: 'Calm plan for DAA before Thursday',
-        sessions: [
-          {
-            date: addDays(today, 1),
-            topic: 'Divide & conquer + Master theorem',
-            hours: 1.5,
-          },
-          {
-            date: addDays(today, 2),
-            topic: 'DP and greedy, 6 practice problems',
-            hours: 1.5,
-          },
-          {
-            date: addDays(today, 3),
-            topic: 'Light recap of graphs after SE exam',
-            hours: 1,
-          },
-        ],
+        subjectId: sj.id,
+        title: `Plan for ${sj.name}`,
+        sessions: Array.from({ length: days }, (_, i) => {
+          const eve = i === days - 1 && left > 0;
+          return {
+            date: left <= 0 ? today : addDays(exam.date, -(days - i)),
+            topic: eve
+              ? 'Light recap, then rest'
+              : todo[i] ?? (todo.length ? 'Practice questions' : `Revise ${sj.name}`),
+            hours: eve ? 1 : 1.5,
+          };
+        }).filter(x => x.date >= today),
+        note: todo.length
+          ? undefined
+          : 'Add topics on the Subjects tab and I’ll plan them one by one.',
       },
     };
   }
-  if (
-    t.includes('uml') ||
-    t.includes('explain') ||
-    t.includes('quiz') ||
-    t.includes('page')
-  ) {
+  if (t.includes('quiz') || t.includes('explain') || t.includes('page')) {
+    const pool = state.questions.filter(
+      q => !q.revised && (!sj || q.subjectId === sj.id),
+    );
+    const q = pool[Math.floor(Math.random() * pool.length)];
+    const pdf = [...state.materials]
+      .reverse()
+      .find(m => m.type === 'pdf' && m.uri && (!sj || m.subjectId === sj.id));
+    const source = pdf
+      ? {
+          materialId: pdf.id,
+          label: `${pdf.name} · p.${state.pdf[pdf.id]?.page ?? 1}`,
+          page: state.pdf[pdf.id]?.page ?? 1,
+        }
+      : undefined;
+    if (!q)
+      return {
+        text: `No questions saved${
+          sj ? ` for ${sj.code}` : ''
+        } yet. Add the important ones on the Questions tab and I’ll quiz you from them.`,
+        source,
+      };
     return {
-      text: 'UML class diagrams show classes, their attributes and how they relate (association, inheritance, composition). Try sketching one for a library system from memory, then compare with your notes.',
-      source: {
-        materialId: 'm1',
-        label: 'SE_Unit3_Design_UML.pdf · p.4–6',
-        page: 4,
-      },
+      text: `Quick quiz: ${q.question}${
+        q.answer ? '\n\nThink it through, then check your answer on the Questions tab.' : ''
+      }`,
+      source,
     };
   }
   return {
-    text: 'I can plan your week, quiz you, or chart your study hours. Which would help most right now?',
+    text: 'I can plan your week, quiz you from your saved questions, or chart your study hours. Which would help most right now?',
   };
 }
 export function Assistant() {
@@ -715,7 +746,7 @@ export function Assistant() {
           contentContainerStyle={{ gap: 8, marginBottom: 12 }}
           keyboardShouldPersistTaps="handled"
         >
-          {['Plan my week', 'Quiz me on UML', 'Chart my study hours'].map(x => (
+          {['Plan my week', 'Quiz me', 'Chart my study hours'].map(x => (
             <Pressable
               key={x}
               accessibilityRole="button"
@@ -950,7 +981,11 @@ export function PdfReader() {
   const m = state.materials.find(x => x.id === id);
   const prog = state.pdf[id] ?? { page: 1, highlights: {} };
   const [total, setTotal] = useState(Math.max(1, m?.pages ?? 1));
-  const [page, setPage] = useState(Math.max(1, route.params.page ?? prog.page));
+  // The viewer owns its page: we only listen (onPageChanged) and jump through the ref.
+  // Feeding `page` back in as a prop fights the native swipe and loops.
+  const [startPage] = useState(Math.max(1, route.params.page ?? prog.page));
+  const [page, setPage] = useState(startPage);
+  const pdfRef = useRef<{ setPage: (p: number) => void } | null>(null);
   const [focus, setFocus] = useState<{ page: string[]; all: string[] } | null>(
     null,
   );
@@ -975,11 +1010,16 @@ export function PdfReader() {
       ...x,
       pdf: { ...x.pdf, [id]: { ...(x.pdf[id] ?? prog), page: p, ...extra } },
     }));
-  const go = (p: number) => {
-    if (p < 1 || p > total || p === page) return;
+  /** Called by the viewer whenever the visible page changes (swipe or jump). */
+  const onPage = (p: number) => {
+    if (p === page) return;
     setPage(p);
     save(p, p === total ? { finished: true } : {});
-    if (p === total && !prog.finished) celebrate();
+    if (p === total && total > 1 && !prog.finished) celebrate();
+  };
+  const go = (p: number) => {
+    if (p < 1 || p > total || p === page) return;
+    pdfRef.current?.setPage(p);
   };
   const openFocus = async () => {
     if (!m?.uri) return;
@@ -1102,8 +1142,9 @@ export function PdfReader() {
         }}
       >
         <Pdf
+          ref={pdfRef}
           source={{ uri: m.uri, cache: true }}
-          page={page}
+          page={startPage}
           enablePaging
           horizontal
           fitPolicy={0}
@@ -1118,7 +1159,7 @@ export function PdfReader() {
                 ),
               }));
           }}
-          onPageChanged={p => go(p)}
+          onPageChanged={onPage}
           onError={() =>
             Alert.alert('Couldn’t open this PDF', 'The file may be damaged.')
           }

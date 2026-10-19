@@ -55,7 +55,7 @@
   },
   "assistant": {
     "hello": "Hi! I can plan your week, quiz you, or explain anything from your notes. What would help right now?",
-    "notConnected": "Sample conversation · AI not connected yet"
+    "notConnected": "Offline assistant · answers from your own plan"
   },
   "never": [
     "Only X days left!",
