@@ -46,6 +46,7 @@ import { useStore } from '../data/store';
 import { useNav, type RootParams } from '../navigation';
 import { celebrate } from '../lib/celebrate';
 import { pdfText } from '../lib/pdfText';
+import { aiEnabled, askAssistant } from '../lib/ai';
 import { addDays, daysBetween, fmtShort, todayISO, weekday } from '../lib/dates';
 import { hours } from '../lib/plan';
 import type {
@@ -564,13 +565,30 @@ export function Assistant() {
     }));
     setText('');
     setTyping(true);
-    timer.current = setTimeout(() => {
+    const answer = (a: Omit<ChatMessage, 'id' | 'role'>) => {
       setTyping(false);
       update(x => ({
         ...x,
-        chat: [...x.chat, { id: uid(), role: 'assistant', ...reply(q, x) }],
+        chat: [...x.chat, { id: uid(), role: 'assistant', ...a }],
       }));
-    }, 900);
+    };
+    if (!aiEnabled) {
+      // Offline assistant: answers from the student's own plan.
+      timer.current = setTimeout(() => answer(reply(q, state)), 900);
+      return;
+    }
+    const history: ChatMessage[] = [
+      ...msgs.filter(m => m.id !== 'hello'),
+      { id: 'q', role: 'user', text: q.trim() },
+    ];
+    askAssistant(state, history)
+      .then(answer)
+      .catch((e: Error) =>
+        answer({
+          ...reply(q, state),
+          text: `${reply(q, state).text}\n\n(Offline answer — ${e.message})`,
+        }),
+      );
   };
   const addToCal = (m: ChatMessage) => {
     const b = m.block as StudyPlanBlock;
@@ -654,7 +672,7 @@ export function Assistant() {
         }}
       >
         <Txt style={{ textAlign: 'center', fontSize: 13, color: C.inkMuted }}>
-          {micro.assistant.notConnected}
+          {aiEnabled ? 'Gemini · knows your exams, topics & questions' : micro.assistant.notConnected}
         </Txt>
       </View>
       <ScrollView

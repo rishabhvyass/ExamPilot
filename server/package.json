@@ -1,0 +1,8 @@
+{
+  "name": "exampilot-ai",
+  "private": true,
+  "version": "1.0.0",
+  "description": "ExamPilot AI proxy: keeps the Gemini API key off the phone.",
+  "type": "module",
+  "engines": { "node": "22.x" }
+}

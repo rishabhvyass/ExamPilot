@@ -21,6 +21,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { keepLocalCopy, pick, types } from '@react-native-documents/picker';
 import { parseAdmitCard, shortCode } from '../lib/admitParser';
 import { imageText, pdfText } from '../lib/pdfText';
+import { aiEnabled, readAdmitCardAI } from '../lib/ai';
 import { launchCamera } from 'react-native-image-picker';
 import {
   Field,
@@ -940,6 +941,12 @@ function DragRow({
     </Animated.View>
   );
 }
+type AdmitSource = {
+  lines: () => Promise<string[]>;
+  /** Set for photos so the AI fallback can look at the image itself. */
+  imageUri?: string;
+  mimeType?: string;
+};
 export function AdmitCard() {
   const nav = useNav();
   const { update } = useStore();
@@ -966,7 +973,7 @@ export function AdmitCard() {
    * `append` adds to the exams already found (another admit card); duplicates are dropped.
    */
   const read = async (
-    sources: (() => Promise<string[]>)[],
+    sources: AdmitSource[],
     append: boolean,
   ) => {
     setError('');
@@ -974,14 +981,26 @@ export function AdmitCard() {
     const started = Date.now();
     const failed: string[] = [];
     const parsed = await Promise.all(
-      sources.map(get =>
-        get()
-          .then(lines => parseAdmitCard(lines))
-          .catch((e: Error) => {
-            failed.push(e.message);
-            return { exams: [], undated: [] as string[] };
-          }),
-      ),
+      sources.map(async src => {
+        try {
+          const lines = await src.lines().catch(() => [] as string[]);
+          const local = parseAdmitCard(lines);
+          // On-device parsing first; Gemini only when it finds nothing (odd layouts, blurry photos, scans).
+          if (local.exams.length || !aiEnabled) {
+            if (!local.exams.length && !lines.join('').trim())
+              throw new Error('No readable text in that file.');
+            return local;
+          }
+          return await readAdmitCardAI(
+            src.imageUri
+              ? { imageUri: src.imageUri, mimeType: src.mimeType }
+              : { text: lines.join('\n') },
+          );
+        } catch (e) {
+          failed.push((e as Error).message);
+          return { exams: [], undated: [] as string[] };
+        }
+      }),
     );
     // Let the scan animation register even when reading is instant.
     await new Promise<void>(r =>
@@ -1047,8 +1066,13 @@ export function AdmitCard() {
           const isPdf =
             file.type === 'application/pdf' ||
             /\.pdf$/i.test(file.name ?? uri);
-          return async () =>
-            isPdf ? (await pdfText(uri)).pages : imageText(uri);
+          return isPdf
+            ? { lines: async () => (await pdfText(uri)).pages }
+            : {
+                lines: () => imageText(uri),
+                imageUri: uri,
+                mimeType: file.type ?? 'image/jpeg',
+              };
         }),
         append,
       );
@@ -1058,9 +1082,18 @@ export function AdmitCard() {
   };
   const takePhoto = async (append = false) => {
     try {
-      const r = await launchCamera({ mediaType: 'photo', quality: 0.9 });
+      const r = await launchCamera({
+        mediaType: 'photo',
+        quality: 0.8,
+        maxWidth: 2000,
+        maxHeight: 2000,
+      });
       const uri = r.assets?.[0]?.uri;
-      if (!r.didCancel && uri) read([() => imageText(uri)], append);
+      if (!r.didCancel && uri)
+        read(
+          [{ lines: () => imageText(uri), imageUri: uri, mimeType: 'image/jpeg' }],
+          append,
+        );
       else if (r.errorCode === 'camera_unavailable')
         setError('No camera here — choose a PDF or photo instead.');
     } catch {
