@@ -101,6 +101,8 @@ export interface ChatMessage {
 export interface State {
   splashSeen: boolean;
   signedIn: boolean;
+  /** Device-local access while authentication is unavailable. Never grants cloud access. */
+  guestMode?: boolean;
   onboarded: boolean;
   profile: Profile;
   exams: Exam[];

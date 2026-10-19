@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { BottomSheet, Field, PrimaryButton, Txt } from './ui';
 import { ChoiceGroup } from './choicegroup';
-import { C, INK, TYPE } from '../theme';
+import { useColors, useTypography, INK } from '../theme';
 import {
   fmtLong,
   fmtTime,
@@ -27,6 +27,8 @@ export function Row({
   open: boolean;
   onPress: () => void;
 }) {
+  const C = useColors();
+  const TYPE = useTypography();
   return (
     <Pressable
       accessibilityRole="button"
@@ -60,6 +62,8 @@ function Calendar({
   value: string;
   onChange: (iso: string) => void;
 }) {
+  const C = useColors();
+  const TYPE = useTypography();
   const sel = parseISO(value);
   const [view, setView] = useState({ y: sel.getFullYear(), m: sel.getMonth() });
   const first = new Date(view.y, view.m, 1).getDay();
@@ -180,6 +184,7 @@ export function TimePicker({
   value: string;
   onChange: (t: string) => void;
 }) {
+  const C = useColors();
   const [h24, m] = value.split(':').map(Number);
   const pm = h24 >= 12;
   const h12 = ((h24 + 11) % 12) + 1;

@@ -1,3 +1,4 @@
+import { useAppearance } from './appearance';
 // Clear Glass tokens (design handoff native/theme.ts), kept under the existing key names.
 import type { TextStyle } from 'react-native';
 
@@ -183,3 +184,25 @@ export const EASE = {
   standard: [0.2, 0, 0, 1],
   decelerate: [0.05, 0.7, 0.1, 1],
 } as const;
+
+// Theme-aware tokens. Subject palettes keep their own contrasting text colours.
+export const DARK: typeof C = {
+  ...C, ground: '#101114', surface: '#1B1D22', surfaceMuted: '#24272E', input: '#24272E', splash: '#101114',
+  track: '#30343C', line: '#30343C', line2: '#3B404A', lineStrong: '#505764', ring: '#687181',
+  ink: '#F4F5F7', inkButton: '#F4F5F7', inkFlat: '#E2E7F0', inkMuted: '#BBC2CF', inkSubtle: '#A3ADBD',
+  placeholder: '#929CAC', otherMonth: '#737E8F', highlight: '#263B5B', infoFill: '#203347', infoText: '#B8DAF5',
+  headsupFill: '#423519', headsupText: '#F8D87E', errorFill: '#45252A', errorText: '#FFB5BC', scrim: 'rgba(0,0,0,0.55)',
+};
+export function useColors() { return useAppearance().dark ? DARK : C; }
+export function useTypography() {
+  const colors = useColors();
+  return Object.fromEntries(Object.entries(TYPE).map(([key, value]) => [key, {
+    ...value, color: value.color === C.inkMuted ? colors.inkMuted : colors.ink,
+  }])) as typeof TYPE;
+}
+export const DARK_SUBJ: typeof SUBJ = {
+  se: { ...SUBJ.se, fill: '#1C304B', deep: '#244164', text: '#C8DEFF', mark: '#83B4FF', divider: 'rgba(200,222,255,0.18)' },
+  daa: { ...SUBJ.daa, fill: '#302540', deep: '#423058', text: '#E3D3FF', mark: '#C5A5FF', divider: 'rgba(227,211,255,0.18)' },
+  dds: { ...SUBJ.dds, fill: '#173A30', deep: '#20513F', text: '#B9EFD6', mark: '#6DDEAD', divider: 'rgba(185,239,214,0.18)' },
+};
+export function useSubjectColors() { return useAppearance().dark ? DARK_SUBJ : SUBJ; }

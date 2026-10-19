@@ -15,14 +15,14 @@ import { useEffect, useRef, useState } from "react";
 import { Platform, Pressable, StyleSheet, Text, View, type LayoutChangeEvent } from "react-native";
 import Animated, { interpolateColor, useDerivedValue, useAnimatedStyle, useReducedMotion, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { BlurVeil } from "../compat";
-import { LinearGradient } from "../compat";
+import {  } from "../compat";
 import { BlurIn } from "./BlurIn";
 import { ProgressiveBlur } from "./ProgressiveBlur";
 import { PressableScale } from "./PressableScale";
 import { Surface, splitShadow } from "./Surface";
 import { GlossIcon, ICON, READER_ICONS } from "./Icon";
 import { blur as BLUR, duration, ease, readerLine, spring } from "../motion";
-import { color, fontFamily, radius, surface } from "../theme";
+import { useKitColors, fontFamily, radius, surface } from "../theme";
 
 export { READER_ICONS };
 export type ReaderMode = { id: string; label: string; iconPath: string; lines: string[] };
@@ -31,6 +31,7 @@ const androidFilter = Platform.OS === "android" && Number(Platform.Version) >= 3
 const TOOLBAR = 96;
 
 function Line({ text, distance, highlight, onPress, onLayout, reduce }: { text: string; distance: number; highlight: boolean; onPress: () => void; onLayout: (e: LayoutChangeEvent) => void; reduce: boolean }) {
+  const color = useKitColors();
   const look = readerLine(distance);
   const distanceValue = useSharedValue(Math.min(2, distance));
   const op = useSharedValue(look.opacity);
@@ -55,7 +56,7 @@ function Line({ text, distance, highlight, onPress, onLayout, reduce }: { text: 
   return (
     <Pressable onPress={onPress} onLayout={onLayout} accessibilityRole="text" accessibilityState={{ selected: distance === 0 }}>
       <Animated.View style={[{ marginBottom: 22 }, wrap]}>
-        <Animated.View pointerEvents="none" style={[styles.marker, { transformOrigin: "left" }, marker]} />
+        <Animated.View pointerEvents="none" style={[styles.marker, { transformOrigin: "left", backgroundColor: color.highlighter }, marker]} />
         <Animated.Text maxFontSizeMultiplier={1.3} style={[{ fontFamily: fontFamily[look.weight], fontSize: 17, lineHeight: 25.5 }, textColor]}>{text}</Animated.Text>
         {Platform.OS === "ios" && !reduce && distance > 0 && distance <= 2 && (
           <BlurVeil level={veil} max={18} style={StyleSheet.absoluteFill} />
@@ -66,6 +67,7 @@ function Line({ text, distance, highlight, onPress, onLayout, reduce }: { text: 
 }
 
 export function BlurReader({ modes, height = 600, onHighlight }: { modes: ReaderMode[]; height?: number; onHighlight?: (text: string) => void }) {
+  const color = useKitColors();
   const reduce = useReducedMotion();
   const [modeIdx, setModeIdx] = useState(0);
   const [focus, setFocus] = useState(0);
@@ -158,7 +160,7 @@ export function BlurReader({ modes, height = 600, onHighlight }: { modes: Reader
       <View style={styles.toolbar}>
         <Surface kind="dock" style={{ height: 60, flexDirection: "row", padding: PAD, gap: GAP }}>
           <Animated.View pointerEvents="none" style={[styles.groove, groove]}>
-            <LinearGradient colors={[...surface.recess.colors]} style={StyleSheet.absoluteFill} />
+            <Surface kind="recess" style={StyleSheet.absoluteFill} />
             <View style={[StyleSheet.absoluteFill, { borderRadius: 9999, boxShadow: recessInset }]} />
           </Animated.View>
           {modes.map((m, i) => (
@@ -180,7 +182,7 @@ export function BlurReader({ modes, height = 600, onHighlight }: { modes: Reader
 }
 
 const styles = StyleSheet.create({
-  marker: { position: "absolute", left: -6, right: -6, top: 2, bottom: 2, borderRadius: 6, backgroundColor: color.highlighter },
+  marker: { position: "absolute", left: -6, right: -6, top: 2, bottom: 2, borderRadius: 6, backgroundColor: "transparent" },
   toolbar: { position: "absolute", left: 16, right: 16, bottom: 18, height: 64, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   groove: { position: "absolute", top: 5, left: 0, width: 64, height: 50, borderRadius: 9999, overflow: "hidden" },
   modeBtn: { width: 64, height: 50, borderRadius: 9999, alignItems: "center", justifyContent: "center" },

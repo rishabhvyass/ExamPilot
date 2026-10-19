@@ -15,3 +15,13 @@ export const pdfText = (uri: string) =>
   native ? native.pdfText(decodeURI(uri)) : unsupported();
 export const imageText = (uri: string) =>
   native ? native.imageText(decodeURI(uri)) : unsupported();
+
+/** Page texts for a saved study PDF: from SQLite when already read, otherwise extracted once and cached. */
+export async function studyPdfText(materialId: string, uri: string) {
+  const { loadPdfText, savePdfText } = await import('../data/db');
+  const cached = await loadPdfText(materialId);
+  if (cached) return cached;
+  const { pages } = await pdfText(uri);
+  await savePdfText(materialId, pages);
+  return pages;
+}

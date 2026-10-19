@@ -33,7 +33,7 @@ const Tab = ({
   ) : (
     <View style={style}>{children}</View>
   );
-const layout = LinearTransition.springify().stiffness(400).damping(36);
+const layout = LinearTransition.springify().stiffness(400).damping(40);
 
 export function TabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
@@ -69,7 +69,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                   accessibilityRole="tab"
                   accessibilityState={{ selected: on }}
                   accessibilityLabel={m.label}
-                  scaleTo={0.92}
+                  scaleTo={0.96}
                   onPress={() => {
                     if (!on) navigation.navigate(r.name);
                   }}

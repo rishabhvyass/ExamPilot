@@ -1,16 +1,14 @@
 import { TimeRangePicker } from '../components/TimeRangePicker';
-import { StudyIsland } from '../components/StudyIsland';
 import { BlurIn } from '../kit/components/BlurIn';
 import { FocusReaderSheet, readingLines } from '../components/FocusReaderSheet';
 import { MaterialView } from '../components/surface';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, Pressable, ScrollView, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, TextInput, View } from 'react-native';
 import Animated, {
   FadeIn,
   LinearTransition,
   ZoomIn,
 } from 'react-native-reanimated';
-import { liveActivity, type ExamActivity } from '../lib/liveActivity';
 import { QuickAddMenu } from '../kit/components/QuickAddMenu';
 import { StudyBlockPicker } from '../components/rangepicker';
 import { ChoiceGroup } from '../components/choicegroup';
@@ -38,7 +36,7 @@ import {
   TopBar,
   Txt,
 } from '../components/ui';
-import { C, FONT, SUBJ, TYPE, colorOf, SHADOW, INK, SHEEN, CLAY } from '../theme';
+import { useSubjectColors, useColors, useTypography, FONT, colorOf, SHADOW, INK, SHEEN, CLAY } from '../theme';
 import { useStore } from '../data/store';
 import { useNav } from '../navigation';
 import { celebrate } from '../lib/celebrate';
@@ -64,27 +62,12 @@ import micro from '../data/seed/microcopy.json';
 
 /* ---------- 06 Today ---------- */
 export function Today() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const nav = useNav();
   const tabNav = useNavigation<{ navigate: (n: string) => void }>();
-  const { state, update, user, signOut } = useStore();
-  const profileMenu = () =>
-    Alert.alert(
-      [state.profile.firstName, state.profile.surname].join(' ').trim() ||
-        'Your account',
-      user?.email ?? state.profile.email,
-      [
-        { text: 'Add admit card', onPress: () => nav.navigate('Admit') },
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Sign out',
-          style: 'destructive',
-          onPress: () =>
-            signOut()
-              .then(() => nav.reset({ index: 0, routes: [{ name: 'Login' }] }))
-              .catch(() => Alert.alert('Couldn’t sign out. Please try again.')),
-        },
-      ],
-    );
+  const { state, update } = useStore();
   const today = todayISO();
   const tasks = state.tasks.filter(t => t.date === today);
   const done = tasks.filter(t => t.done).length;
@@ -105,47 +88,6 @@ export function Today() {
     if (allDone && !wasDone.current) celebrate();
     wasDone.current = allDone;
   }, [allDone]);
-  // The next exam lives in the real Dynamic Island / lock screen as a Live Activity (iOS 16.2+).
-  const [islandSupported, setIslandSupported] = useState(false);
-  const [inIsland, setInIsland] = useState(false);
-  const activity: ExamActivity | null = next
-    ? {
-        code: nextSubj?.code ?? 'Exam',
-        title: nextSubj?.name ?? next.title,
-        date: next.date,
-        time: next.time,
-        accent: SUBJ[colorOf(nextSubj?.color)].mark,
-        topicsDone: done,
-        topicsTotal: tasks.length,
-      }
-    : null;
-  useEffect(() => {
-    liveActivity.isSupported().then(setIslandSupported).catch(() => {});
-    liveActivity.isRunning().then(setInIsland).catch(() => {});
-  }, []);
-  // Keep a running activity in step with the checklist and the next exam.
-  const activityKey = activity && JSON.stringify(activity);
-  useEffect(() => {
-    if (inIsland && activity) liveActivity.update(activity).catch(() => {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inIsland, activityKey]);
-  const toggleIsland = async () => {
-    try {
-      if (inIsland) {
-        await liveActivity.end();
-        setInIsland(false);
-      } else if (activity) {
-        await liveActivity.start(activity);
-        setInIsland(true);
-      }
-    } catch (e) {
-      Alert.alert(
-        'Couldn’t show it in the Dynamic Island',
-        (e as Error).message ?? 'Please try again.',
-      );
-    }
-  };
-
   const toggle = (id: string) =>
     update(x => ({
       ...x,
@@ -207,74 +149,8 @@ export function Today() {
         />
       }
     >
-      <StudyIsland exam={nextSubj?.code} days={n} complete={allDone} />
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-        <Pressable
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: 28,
-            backgroundColor: SUBJ.se.fill,
-            ...SHEEN,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          accessibilityRole="button"
-          accessibilityLabel="Profile"
-          onPress={profileMenu}
-        >
-          <Icon name="user" color={SUBJ.se.text} />
-        </Pressable>
-        <View style={{ flex: 1 }} />
-        <IconButton
-          icon="sparkle"
-          label="Open study assistant"
-          onPress={() => nav.navigate('Assistant')}
-        />
-        <IconButton icon="search" label="Search study materials" onPress={() => nav.navigate('Materials', {})} />
-        <IconButton icon="more-horizontal" label="Account options" onPress={profileMenu} />
-      </View>
+      <TopBar />
       <ScreenHeader eyebrow={greeting()} title={'Your Exam\nWeek'} />
-      {islandSupported && activity && (
-        <Press
-          accessibilityRole="switch"
-          accessibilityState={{ checked: inIsland }}
-          accessibilityLabel="Show next exam in the Dynamic Island"
-          onPress={toggleIsland}
-          style={[
-            {
-              alignSelf: 'flex-start',
-              height: 44,
-              borderRadius: 22,
-              paddingHorizontal: 16,
-              marginBottom: 14,
-              marginLeft: 4,
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 8,
-            },
-            inIsland ? INK : CLAY,
-          ]}
-        >
-          <View
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: 4,
-              backgroundColor: inIsland ? '#34D399' : C.inkSubtle,
-            }}
-          />
-          <Txt
-            style={{
-              fontSize: 15,
-              fontWeight: 600,
-              color: inIsland ? '#fff' : C.inkButton,
-            }}
-          >
-            {inIsland ? 'In Dynamic Island' : 'Show in Dynamic Island'}
-          </Txt>
-        </Press>
-      )}
       <View style={{ gap: 14 }}>
         {next ? (
           <Rise i={0}>
@@ -435,7 +311,7 @@ export function Today() {
                     width: 44,
                     height: 44,
                     borderRadius: 22,
-                    backgroundColor: '#fff',
+                    backgroundColor: C.surface,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
@@ -528,6 +404,9 @@ export function Today() {
 
 /* ---------- 07 Calendar ---------- */
 export function Calendar() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const { state, update } = useStore();
   const today = todayISO();
   const [sel, setSel] = useState(today);
@@ -950,6 +829,8 @@ export function Subjects() {
   return <SubjectsBody />;
 }
 function SubjectsBody() {
+  const C = useColors();
+  const TYPE = useTypography();
   const nav = useNav();
   const { state, update } = useStore();
   const [focusNote, setFocusNote] = useState(false);
@@ -1113,7 +994,7 @@ function SubjectsBody() {
                     width: 46,
                     height: 46,
                     borderRadius: 23,
-                    backgroundColor: '#fff',
+                    backgroundColor: C.surface,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
@@ -1178,6 +1059,9 @@ function SubjectsBody() {
 
 /* ---------- 09 Questions ---------- */
 export function Questions() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const { state, update } = useStore();
   const [f, setF] = useState('all');
   const [open, setOpen] = useState<string | null>(null);
@@ -1310,7 +1194,7 @@ export function Questions() {
                       color={colorOf(q.subjectId)}
                     />
                     {q.revised && (
-                      <Animated.View entering={ZoomIn.springify().stiffness(300).damping(24)}>
+                      <Animated.View entering={ZoomIn.springify().stiffness(300).damping(35)}>
                         <Txt style={[TYPE.micro, { color: SUBJ.dds.text }]}>
                           ✓ Revised
                         </Txt>

@@ -29,8 +29,12 @@ import { BarChart } from 'react-native-gifted-charts';
 import { ICON, READER_ICONS, Icon as KIcon } from '../kit/components/Icon';
 import { ToolDock } from '../kit/components/ToolDock';
 import { ChoiceGroup } from '../components/choicegroup';
+import { AppLogo } from '../components/AppLogo';
 import {
   BottomSheet,
+  TopBar,
+  ScreenHeader,
+  PrimaryButton,
   Card,
   EmptyState,
   FormSheet,
@@ -43,11 +47,11 @@ import {
   TypingDots,
   Txt,
 } from '../components/ui';
-import { C, FONT, SHADOW, SUBJ, TYPE, colorOf, INK, SHEEN } from '../theme';
+import { useSubjectColors, useColors, useTypography, FONT, SHADOW, colorOf, INK, SHEEN } from '../theme';
 import { useStore } from '../data/store';
 import { useNav, type RootParams } from '../navigation';
 import { celebrate } from '../lib/celebrate';
-import { pdfText } from '../lib/pdfText';
+import { studyPdfText } from '../lib/pdfText';
 import { aiEnabled, askAssistant } from '../lib/ai';
 import { addDays, daysBetween, fmtShort, todayISO, weekday } from '../lib/dates';
 import { hours } from '../lib/plan';
@@ -101,20 +105,23 @@ export function Materials() {
   return <MaterialsBody />;
 }
 function MaterialsBody() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const nav = useNav();
   const route = useRoute<RouteProp<RootParams, 'Materials'>>();
   const insets = useSafeAreaInsets();
   const { state, update } = useStore();
   const [picked, setF] = useState(
-    route.params?.subjectId ?? state.subjects[0].id,
+    route.params?.subjectId ?? state.subjects[0]?.id ?? '',
   );
   const [sheet, setSheet] = useState(false);
   const [form, setForm] = useState<'link' | 'note' | null>(null);
   const [pendingForm, setPendingForm] = useState<'link' | 'note' | null>(null);
-  const items = state.materials.filter(m => m.subjectId === f);
   const sj = state.subjects.find(x => x.id === picked) ?? state.subjects[0];
-  const f = sj.id;
-  const c = SUBJ[colorOf(sj.color)];
+  const f = sj?.id ?? '';
+  const items = state.materials.filter(m => m.subjectId === f);
+  const c = SUBJ[colorOf(sj?.color)];
   const add = (...ms: Omit<Material, 'id' | 'subjectId' | 'isSample'>[]) =>
     update(x => ({
       ...x,
@@ -222,6 +229,7 @@ function MaterialsBody() {
       },
     ],
   ];
+  if (!sj) return <Screen><TopBar back /><ScreenHeader eyebrow="Your library" title="Study materials" /><Txt>Add a subject from your admit card before adding study materials.</Txt><PrimaryButton label="Add admit card" onPress={() => nav.navigate('Admit')} /></Screen>;
   return (
     <Screen
       footer={
@@ -549,6 +557,9 @@ function reply(q: string, state: State): Omit<ChatMessage, 'id' | 'role'> {
   };
 }
 export function Assistant() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const [focusReply, setFocusReply] = useState<string | null>(null);
   const nav = useNav();
   const insets = useSafeAreaInsets();
@@ -639,22 +650,10 @@ export function Assistant() {
           onPress={() => nav.goBack()}
         />
         <Glow>
-          <MaterialView
-            style={{
-              width: 48,
-              height: 48,
-              borderRadius: 24,
-              backgroundColor: SUBJ.se.fill,
-              ...SHEEN,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon name="sparkle" color={SUBJ.se.text} />
-          </MaterialView>
+          <AppLogo size={48} round />
         </Glow>
         <View>
-          <Txt style={{ fontSize: 18, fontWeight: 600 }}>Study buddy</Txt>
+          <Txt style={{ fontSize: 18, fontWeight: 600 }}>Ask Pilo</Txt>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <View
               style={{
@@ -681,7 +680,7 @@ export function Assistant() {
         }}
       >
         <Txt style={{ textAlign: 'center', fontSize: 13, color: C.inkMuted }}>
-          {aiEnabled ? 'Gemini · knows your exams, topics & questions' : micro.assistant.notConnected}
+          {aiEnabled ? 'Your exams, topics and materials — ready to help.' : 'Offline mode · answers from your study plan'}
         </Txt>
       </View>
       <ScrollView
@@ -887,6 +886,8 @@ function Glow({ children }: { children: React.ReactNode }) {
   return <Animated.View style={a}>{children}</Animated.View>;
 }
 function PlanCard({ m, onAdd }: { m: ChatMessage; onAdd: () => void }) {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
   const b = m.block as StudyPlanBlock;
   const c = SUBJ[colorOf(b.subjectId)];
   return (
@@ -954,6 +955,8 @@ function PlanCard({ m, onAdd }: { m: ChatMessage; onAdd: () => void }) {
   );
 }
 function ChartCard({ b }: { b: ChartBlock }) {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
   const max = Math.max(...b.data.map(d => d.value), 0);
   return (
     <View
@@ -1020,6 +1023,9 @@ const toLines = (text: string) => {
   return out;
 };
 export function PdfReader() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const nav = useNav();
   const route = useRoute<RouteProp<RootParams, 'Pdf'>>();
   const { state, update } = useStore();
@@ -1072,7 +1078,7 @@ export function PdfReader() {
   const openFocus = async () => {
     if (!m?.uri) return;
     try {
-      const r = await pdfText(m.uri);
+      const r = { pages: await studyPdfText(m.id, m.uri) };
       const all = toLines(r.pages.join(' '));
       if (!all.length) {
         Alert.alert(
@@ -1090,7 +1096,7 @@ export function PdfReader() {
   const searchPages = async (values: Record<string, string>) => {
     if (!m?.uri || !values.query?.trim()) return;
     try {
-      const result = await pdfText(m.uri);
+      const result = { pages: await studyPdfText(m.id, m.uri) };
       const matches = result.pages.map((text, index) => ({ text, page: index + 1 })).filter(p => p.text.toLocaleLowerCase().includes(values.query.toLocaleLowerCase()));
       setSearchOpen(false);
       if (!matches.length) return Alert.alert('No matches', 'Try a different word or phrase.');
@@ -1231,7 +1237,7 @@ export function PdfReader() {
       </View>
       {finished && (
         <AnimatedMaterialView
-          entering={ZoomIn.springify().stiffness(400).damping(28)}
+          entering={ZoomIn.springify().stiffness(400).damping(40)}
           style={{
             marginTop: 16,
             borderRadius: 28,

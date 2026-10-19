@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { GooeyIsland } from '../kit/components/GooeyIsland';
 import { Icon } from './ui';
-import { C } from '../theme';
+import { useColors } from '../theme';
 
 export function StudyIsland({
   exam,
@@ -13,6 +13,7 @@ export function StudyIsland({
   days: number;
   complete: boolean;
 }) {
+  const C = useColors();
   const focused = useIsFocused();
   const [remaining, setRemaining] = useState(25 * 60);
   const [deadline, setDeadline] = useState<number | null>(null);

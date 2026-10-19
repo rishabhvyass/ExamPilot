@@ -15,13 +15,18 @@ import {
   SecondaryButton,
   Txt,
 } from '../components/ui';
-import { C, SUBJ, TYPE } from '../theme';
+import { useSubjectColors, useColors, useTypography } from '../theme';
+import { useStore } from '../data/store';
 import { useNav } from '../navigation';
 import { authMessage } from '../data/auth';
 
 // Firebase verifies by email link, so no pretend six-digit-code endpoint is used.
 export function VerifyEmail() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const nav = useNav();
+  const { signOut } = useStore();
   const [busy, setBusy] = useState(false);
   const [verified, setVerified] = useState(false);
   const [message, setMessage] = useState(
@@ -37,9 +42,10 @@ export function VerifyEmail() {
         setMessage('A new verification link is on its way.');
       } else {
         await reload(user);
-        setVerified(user.emailVerified);
+        const confirmed = getAuth().currentUser?.emailVerified ?? false;
+        setVerified(confirmed);
         setMessage(
-          user.emailVerified
+          confirmed
             ? 'Your email is verified.'
             : 'The link hasn’t been confirmed yet. Check your inbox and spam folder.',
         );
@@ -55,7 +61,7 @@ export function VerifyEmail() {
       <IconButton
         icon="chevron-left"
         label="Back"
-        onPress={() => nav.goBack()}
+        onPress={() => { signOut().then(() => nav.reset({ index: 0, routes: [{ name: 'Login' }] })).catch(error => setMessage(authMessage(error))); }}
       />
       <View style={{ marginTop: 48, gap: 20 }}>
         <Txt style={TYPE.onboard}>Check your email</Txt>

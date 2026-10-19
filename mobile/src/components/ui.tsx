@@ -1,3 +1,4 @@
+import { useStore } from '../data/store';
 import { useNav } from '../navigation';
 import { LiveSubjectIcon } from './LiveSubjectIcon';
 import { AnimatedMaterialView } from './surface';
@@ -36,7 +37,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 import Svg, { Path, SvgXml } from 'react-native-svg';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { C, FONT, R, SHADOW, SUBJ, TYPE, type SubjectColor, INK, SHEEN } from '../theme';
+import { useSubjectColors, useColors, useTypography, C as LIGHT_COLORS, FONT, R, SHADOW, SUBJ as LIGHT_SUBJECTS, type SubjectColor, INK, SHEEN } from '../theme';
 import { ICONS } from '../assets/icons';
 import { ILLOS } from '../assets/illustrations';
 import { GlassCard, Surface } from './surface';
@@ -50,6 +51,7 @@ export function Txt({
   style,
   ...p
 }: TextProps & { style?: StyleProp<TextStyle> }) {
+  const C = useColors();
   const flat = {
     ...StyleSheet.flatten([
       { fontFamily: FONT[400], color: C.ink, fontSize: 16 },
@@ -68,15 +70,16 @@ export function Txt({
 export function Icon({
   name,
   size = 22,
-  color = C.ink,
+  color,
 }: {
   name: string;
   size?: number;
   color?: string;
 }) {
+  const C = useColors();
   const xml = ICONS[name];
   if (!xml) return null;
-  return <SvgXml xml={xml} width={size} height={size} color={color} />;
+  return <SvgXml xml={xml} width={size} height={size} color={color ?? C.ink} />;
 }
 export function Illo({
   name,
@@ -103,7 +106,7 @@ export function Illo({
 export function Press({
   children,
   style,
-  scaleTo = 0.96,
+  scaleTo = 0.98,
   ...p
 }: PressableProps & {
   style?: StyleProp<ViewStyle>;
@@ -112,7 +115,7 @@ export function Press({
 }) {
   const reduce = useReducedMotion();
   const s = useSharedValue(1);
-  const a = useAnimatedStyle(() => ({ opacity: p.disabled ? 0.45 : 1 - (1 - s.value) * 1.5, transform: [{ scale: reduce ? 1 : s.value }] }));
+  const a = useAnimatedStyle(() => ({ opacity: p.disabled ? 0.45 : 1 - (1 - s.value) * 1, transform: [{ scale: reduce ? 1 : s.value }] }));
   // Sizing in the parent's layout belongs on the Pressable, or flex/width are ignored.
   const { flex, flexGrow, flexShrink, alignSelf, width, ...inner } = StyleSheet.flatten(style) ?? {};
   const outer = { flex, flexGrow, flexShrink, alignSelf, width };
@@ -146,6 +149,7 @@ export function PrimaryButton({
   onPress?: () => void;
   disabled?: boolean;
 }) {
+  const C = useColors();
   return (
     <Press
       accessibilityRole="button"
@@ -194,6 +198,7 @@ export function SecondaryButton({
   variant?: 'white' | 'outline' | 'dashed';
   icon?: string;
 }) {
+  const C = useColors();
   const content = (
     <>
       {icon && <Icon name={icon} size={20} color={C.inkButton} />}
@@ -243,6 +248,8 @@ export function IconButton({
   /** Toggled-on state: the pressed-in groove. */
   pressed?: boolean;
 }) {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
   const dim = {
     width: size,
     height: size,
@@ -259,7 +266,7 @@ export function IconButton({
       accessibilityState={pressed === undefined ? undefined : { selected: pressed }}
       onPress={onPress}
       hitSlop={size < 44 ? 6 : 0}
-      scaleTo={0.92}
+      scaleTo={0.96}
     >
       {tone === 'dark' ? (
         <Surface kind="ink" style={dim}>
@@ -299,6 +306,7 @@ export function Chip({
   label: string;
   onPress: () => void;
 }) {
+  const C = useColors();
   const text = (
     <Txt
       style={{
@@ -335,6 +343,7 @@ export function FilterRow({
   children: ReactNode;
   icon?: boolean;
 }) {
+  const C = useColors();
   return (
     <ScrollView
       horizontal
@@ -369,6 +378,7 @@ export function Screen({
   tabs?: boolean;
   footer?: ReactNode;
 }) {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const [visit, setVisit] = useState(0);
   useFocusEffect(useCallback(() => { setVisit(v => v + 1); }, []));
@@ -411,32 +421,31 @@ export function Rise({
     </BlurIn>
   );
 }
-export function TopBar({
-  back,
-  onSearch,
-  more = true,
-}: {
-  back?: boolean;
-  onSearch?: () => void;
-  more?: boolean;
+export function TopBar({ back, onSearch, more = true, search = true }: {
+  back?: boolean; onSearch?: () => void; more?: boolean; search?: boolean;
 }) {
+  const SUBJ = useSubjectColors();
   const nav = useNav();
+  const { state, signOut } = useStore();
+  const menu = () => Alert.alert('Your account', undefined, [
+    { text: 'Profile & appearance', onPress: () => nav.navigate('Profile') },
+    { text: 'Add admit card', onPress: () => nav.navigate('Admit') },
+    { text: 'Log out', style: 'destructive', onPress: () => {
+      signOut().then(() => nav.reset({ index: 0, routes: [{ name: 'Login' }] }))
+        .catch(() => Alert.alert('Couldn’t log out', 'Please try again.'));
+    } },
+    { text: 'Cancel', style: 'cancel' },
+  ]);
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-      {back ? (
-        <IconButton
-          icon="chevron-left"
-          label="Back"
-          onPress={() => nav.goBack()}
-        />
-      ) : (
-        <View accessibilityLabel="Profile" style={[s.avatar]}>
-          <Icon name="user" color={SUBJ.se.text} />
-        </View>
+      {back ? <IconButton icon="chevron-left" label="Back" onPress={() => nav.goBack()} /> : (
+        <Pressable accessibilityRole="button" accessibilityLabel="Open profile" onPress={() => nav.navigate('Profile')} style={[s.avatar, { backgroundColor: SUBJ.se.fill }]}>
+          {state.profile.firstName ? <Txt style={{ fontSize: 22, fontWeight: 600, color: SUBJ.se.text }}>{state.profile.firstName[0].toUpperCase()}</Txt> : <Icon name="user" color={SUBJ.se.text} />}
+        </Pressable>
       )}
       <View style={{ flex: 1 }} />
-      <IconButton icon="search" label="Search" onPress={onSearch ?? (() => nav.navigate('Materials', {}))} />
-      {more && <IconButton icon="more-horizontal" label="More" onPress={() => Alert.alert('Study tools', undefined, [{ text: 'Study materials', onPress: () => nav.navigate('Materials', {}) }, { text: 'Study assistant', onPress: () => nav.navigate('Assistant') }, { text: 'Cancel', style: 'cancel' }])} />}
+      {search && <IconButton icon="search" label="Search" onPress={onSearch ?? (() => nav.navigate('Search'))} />}
+      {more && <IconButton icon="more-horizontal" label="Account options" onPress={menu} />}
     </View>
   );
 }
@@ -447,6 +456,7 @@ export function ScreenHeader({
   eyebrow: string;
   title: string;
 }) {
+  const TYPE = useTypography();
   return (
     <View style={{ paddingTop: 14, paddingBottom: 16, paddingHorizontal: 4 }}>
       <Txt style={TYPE.eyebrow}>{eyebrow}</Txt>
@@ -476,6 +486,8 @@ export function InfoCard({
   tone?: 'dds' | 'se' | 'info' | 'headsup';
   icon?: string;
 }) {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
   const c = {
     dds: [SUBJ.dds.fill, SUBJ.dds.text],
     se: [SUBJ.se.fill, SUBJ.se.text],
@@ -499,13 +511,16 @@ export function InfoCard({
     </View>
   );
 }
-export const SubjectTag = ({
+export function SubjectTag({
   code,
   color,
 }: {
   code: string;
   color: SubjectColor;
-}) => (
+}) {
+  const SUBJ = useSubjectColors();
+  const TYPE = useTypography();
+  return (
   <View
     style={{
       backgroundColor: SUBJ[color].fill,
@@ -517,6 +532,7 @@ export const SubjectTag = ({
     <Txt style={[TYPE.micro, { color: SUBJ[color].text }]}>{code}</Txt>
   </View>
 );
+}
 export function SubjectRow({
   color,
   code,
@@ -530,6 +546,8 @@ export function SubjectRow({
   meta: string;
   onPress?: () => void;
 }) {
+  const SUBJ = useSubjectColors();
+  const TYPE = useTypography();
   const c = SUBJ[color];
   return (
     <Press
@@ -553,6 +571,7 @@ export function SubjectRow({
   );
 }
 function Segment({ on, tint, h }: { on: boolean; tint?: boolean; h: number }) {
+  const C = useColors();
   const v = useSharedValue(on ? 1 : 0);
   useEffect(() => {
     v.value = withSpring(on ? 1 : 0, spring.progress);
@@ -622,6 +641,8 @@ export function HeroCard({
   action?: ReactNode;
   footer?: ReactNode;
 }) {
+  const SUBJ = useSubjectColors();
+  const TYPE = useTypography();
   const c = SUBJ[color];
   return (
     <Surface kind="sheen" subject={color} radius={R.card} style={{ padding: 8 }}>
@@ -745,6 +766,8 @@ export function Field({
   placeholder?: string;
   autoCapitalize?: 'none' | 'words';
 }) {
+  const C = useColors();
+  const TYPE = useTypography();
   const [focus, setFocus] = useState(false);
   const input = useRef<{ focus: () => void } | null>(null);
   return (
@@ -753,6 +776,7 @@ export function Field({
       accessible={false}
       style={[
         s.field,
+        { backgroundColor: C.input, borderColor: C.line },
         focus && { backgroundColor: C.surface, borderColor: C.ink },
       ]}
     >
@@ -793,6 +817,7 @@ export function StepHeader({
   step: 1 | 2 | 3;
   onBack: () => void;
 }) {
+  const C = useColors();
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
       <IconButton icon="chevron-left" label="Back" onPress={onBack} size={52} />
@@ -818,6 +843,8 @@ export function BottomSheet({
   title: string;
   children: ReactNode;
 }) {
+  const C = useColors();
+  const TYPE = useTypography();
   const insets = useSafeAreaInsets();
   const reduce = useReducedMotion();
   const [mounted, setMounted] = useState(open);
@@ -974,6 +1001,8 @@ export function AnimatedCheckbox({
   checked: boolean;
   onToggle: () => void;
 }) {
+  const C = useColors();
+  const TYPE = useTypography();
   const p = useSharedValue(checked ? 1 : 0);
   const pop = useSharedValue(1);
   const tickProgress = useSharedValue(checked ? 1 : 0);
@@ -1007,7 +1036,7 @@ export function AnimatedCheckbox({
       accessibilityState={{ checked }}
       accessibilityLabel={title}
       onPress={onToggle}
-      scaleTo={0.96}
+      scaleTo={0.98}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
@@ -1072,6 +1101,7 @@ export function AnimatedCheckbox({
 
 /* ---------- Misc ---------- */
 export function TypingDots() {
+  const C = useColors();
   return (
     <View
       accessibilityLabel="Study buddy is typing"
@@ -1093,6 +1123,7 @@ export function TypingDots() {
   );
 }
 function Dot({ delay }: { delay: number }) {
+  const C = useColors();
   const v = useSharedValue(0);
   const reduce = useReducedMotion();
   useEffect(() => {
@@ -1152,7 +1183,7 @@ export const s = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: SUBJ.se.fill,
+    backgroundColor: LIGHT_SUBJECTS.se.fill,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1174,7 +1205,7 @@ export const s = StyleSheet.create({
   field: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: C.input,
+    backgroundColor: LIGHT_COLORS.input,
     borderRadius: R.input,
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -1197,6 +1228,7 @@ export function EmptyState({
   tabs?: boolean;
   back?: boolean;
 }) {
+  const C = useColors();
   const nav = useNavigation<{ navigate: (r: 'Admit') => void }>();
   return (
     <Screen tabs={tabs}>

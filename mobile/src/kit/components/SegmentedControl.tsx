@@ -7,11 +7,12 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-na
 import { Surface } from "./Surface";
 import { PressableScale } from "./PressableScale";
 import { spring } from "../motion";
-import { color, fontFamily } from "../theme";
+import { useKitColors, fontFamily } from "../theme";
 
 type Option<T extends string> = { value: T; label: string };
 
 export function SegmentedControl<T extends string>({ options, value, onChange }: { options: Option<T>[]; value: T; onChange: (v: T) => void }) {
+  const color = useKitColors();
   const [frames, setFrames] = useState<Record<string, { x: number; width: number }>>({});
   const x = useSharedValue(0);
   const w = useSharedValue(0);
@@ -26,7 +27,7 @@ export function SegmentedControl<T extends string>({ options, value, onChange }:
   const slider = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }], width: w.value }));
 
   return (
-    <View accessibilityRole="tablist" style={styles.track}>
+    <View accessibilityRole="tablist" style={[styles.track, { backgroundColor: color.surfaceMuted }]}>
       <Animated.View pointerEvents="none" style={[styles.slider, slider]}>
         <Surface kind="ink" style={StyleSheet.absoluteFill} />
       </Animated.View>

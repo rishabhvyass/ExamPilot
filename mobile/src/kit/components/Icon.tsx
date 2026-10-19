@@ -1,3 +1,4 @@
+import { useAppearance } from '../../appearance';
 // Icon — 24×24 stroke icons (2px, round caps/joins) drawn with react-native-svg.
 // Pass `d` (one or more path strings) or SVG children. Colour comes from `color`.
 // For the 39 icon files in assets/icons/*.svg you can also use react-native-svg-transformer:
@@ -5,14 +6,15 @@
 // (their stroke is "currentColor", which react-native-svg resolves from the `color` prop).
 import type { ReactNode } from "react";
 import Svg, { Defs, LinearGradient, Path, Stop } from "react-native-svg";
-import { color as c } from "../theme";
+import { useKitColors } from "../theme";
 
 type Props = { d?: string | string[]; size?: number; color?: string; strokeWidth?: number; children?: ReactNode };
 
-export function Icon({ d, size = 22, color = c.inkButton, strokeWidth = 2, children }: Props) {
+export function Icon({ d, size = 22, color, strokeWidth = 2, children }: Props) {
+  const c = useKitColors();
   const paths = d ? (Array.isArray(d) ? d : [d]) : [];
   return (
-    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color ?? c.inkButton} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
       {paths.map((p, i) => <Path key={i} d={p} />)}
       {children}
     </Svg>
@@ -21,19 +23,20 @@ export function Icon({ d, size = 22, color = c.inkButton, strokeWidth = 2, child
 
 /** Glossy black icon (reader toolbar, from your reference clip). `active` = brighter gloss. */
 export function GlossIcon({ d, size = 24, active = true, stroke = false }: { d: string; size?: number; active?: boolean; stroke?: boolean }) {
+  const { dark } = useAppearance();
   const id = active ? "gloss" : "glossSoft";
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24">
       <Defs>
         <LinearGradient id="gloss" x1="0" y1="0" x2="0.4" y2="1">
-          <Stop offset="0" stopColor="#8A8A90" />
-          <Stop offset="0.45" stopColor="#2A2A2E" />
-          <Stop offset="1" stopColor="#050506" />
+          <Stop offset="0" stopColor={dark ? "#FFFFFF" : "#8A8A90"} />
+          <Stop offset="0.45" stopColor={dark ? "#D4DAE4" : "#2A2A2E"} />
+          <Stop offset="1" stopColor={dark ? "#B5BECE" : "#050506"} />
         </LinearGradient>
         <LinearGradient id="glossSoft" x1="0" y1="0" x2="0.4" y2="1">
-          <Stop offset="0" stopColor="#C4C4C9" />
-          <Stop offset="0.5" stopColor="#6A6A70" />
-          <Stop offset="1" stopColor="#2A2A2E" />
+          <Stop offset="0" stopColor={dark ? "#E0E5ED" : "#C4C4C9"} />
+          <Stop offset="0.5" stopColor={dark ? "#BCC5D4" : "#6A6A70"} />
+          <Stop offset="1" stopColor={dark ? "#D4DAE4" : "#2A2A2E"} />
         </LinearGradient>
       </Defs>
       {stroke ? (

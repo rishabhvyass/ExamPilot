@@ -7,7 +7,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { BlurIn } from '../kit/components/BlurIn';
-import { C, SUBJ } from '../theme';
+import { useSubjectColors, useColors } from '../theme';
 import { Txt } from './ui';
 import { Surface } from './surface';
 import { clampRange, minutesToTime, timeToMinutes } from '../lib/studyRange';
@@ -22,6 +22,8 @@ export function TimeRangePicker({
   end: string;
   onChange: (start: string, end: string) => void;
 }) {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
   const savedStart = timeToMinutes(start);
   const savedEnd = timeToMinutes(end);
   const width = useSharedValue(1);
@@ -148,7 +150,7 @@ export function TimeRangePicker({
                     width: 3,
                     height: 14,
                     borderRadius: 2,
-                    backgroundColor: edge === 'start' ? C.ink : C.surface,
+                    backgroundColor: edge === 'start' ? C.ink : '#FFFFFF',
                   }}
                 />
               </Surface>

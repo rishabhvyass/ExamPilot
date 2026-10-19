@@ -1,3 +1,4 @@
+import { useAppearance } from '../../appearance';
 import { useIsFocused } from "@react-navigation/native";
 // QuickAddMenu — board M4. A glossy black + (64px) above the tab bar, bottom-right.
 // Tap: the whole screen blurs behind a white veil, the actions fly out of the button one after another
@@ -13,11 +14,13 @@ import { PressableScale } from "./PressableScale";
 import { Surface } from "./Surface";
 import { Icon, ICON } from "./Icon";
 import { blur as BLUR, duration, quickAddItemIn, quickAddItemOut, spring } from "../motion";
-import { color, fontFamily } from "../theme";
+import { useKitColors, fontFamily } from "../theme";
 
 export type QuickAction = { id: string; label: string; icon: ReactNode; onSelect: () => void };
 
 export function QuickAddMenu({ actions }: { actions: QuickAction[] }) {
+  const color = useKitColors();
+  const { dark } = useAppearance();
   const focused = useIsFocused();
   const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
@@ -39,14 +42,14 @@ export function QuickAddMenu({ actions }: { actions: QuickAction[] }) {
         <Animated.View entering={FadeIn.duration(duration.veil)} exiting={FadeOut.duration(duration.veil)} style={StyleSheet.absoluteFill}>
           <Pressable style={StyleSheet.absoluteFill} onPress={() => setOpen(false)} accessibilityLabel="Close quick add">
             {Platform.OS === "ios" && !reduce ? (
-              <BlurView intensity={BLUR.veil} tint="light" style={[StyleSheet.absoluteFill, { backgroundColor: "rgba(255,255,255,0.55)" }]} />
+              <BlurView intensity={BLUR.veil} tint={dark ? "dark" : "light"} style={[StyleSheet.absoluteFill, { backgroundColor: dark ? "rgba(16,17,20,0.55)" : "rgba(255,255,255,0.55)" }]} />
             ) : (
-              <View style={[StyleSheet.absoluteFill, { backgroundColor: "rgba(255,255,255,0.82)" }]} />
+              <View style={[StyleSheet.absoluteFill, { backgroundColor: dark ? "rgba(16,17,20,0.82)" : "rgba(255,255,255,0.82)" }]} />
             )}
           </Pressable>
         </Animated.View>
       )}
-      <View pointerEvents="box-none" style={{ position: "absolute", right: 20, bottom: 112 + insets.bottom, alignItems: "flex-end", gap: 12 }}>
+      <View pointerEvents="box-none" style={{ position: "absolute", right: 20, bottom: 86 + insets.bottom, alignItems: "flex-end", gap: 12 }}>
         {open &&
           actions.map((a, i) => (
             <Animated.View key={a.id} entering={quickAddItemIn(actions.length - 1 - i)} exiting={quickAddItemOut}>

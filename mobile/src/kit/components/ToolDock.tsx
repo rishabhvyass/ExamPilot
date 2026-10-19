@@ -8,11 +8,12 @@ import { PressableScale } from "./PressableScale";
 import { Surface } from "./Surface";
 import { Icon, ICON } from "./Icon";
 import { layout, spring, toolIn } from "../motion";
-import { color, fontFamily } from "../theme";
+import { useKitColors, fontFamily } from "../theme";
 
 export type Tool = { id: string; label: string; icon: ReactNode; active?: boolean; onSelect: () => void };
 
 export function ToolDock({ primary, more }: { primary: Tool[]; more: Tool[] }) {
+  const color = useKitColors();
   const [open, setOpen] = useState(false);
   const rot = useSharedValue(0);
   useEffect(() => {

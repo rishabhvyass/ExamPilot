@@ -18,6 +18,8 @@ export type RootParams = {
   Main: { screen?: keyof TabParams } | undefined;
   Materials: { subjectId?: string } | undefined;
   Assistant: undefined;
+  Profile: undefined;
+  Search: undefined;
   Pdf: { id: string; page?: number };
 };
 export const useNav = () =>

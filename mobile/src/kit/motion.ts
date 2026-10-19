@@ -20,16 +20,16 @@ export const ease = {
 /* ─────────────── Springs (stiffness / damping identical to the web spec, mass 1) ─────────────── */
 const s = (stiffness: number, damping: number): WithSpringConfig => ({ stiffness, damping, mass: 1, reduceMotion: ReduceMotion.System });
 export const spring = {
-  press: s(500, 30),
-  layout: s(400, 34), // tab groove, segmented slider, dock morph
-  progress: s(300, 30),
-  sheet: s(380, 36),
-  pop: s(600, 18),
-  icon: s(500, 18),
-  pen: s(420, 16),
-  island: s(380, 26),
-  quickAdd: s(420, 24),
-  tool: s(500, 22),
+  press: s(500, 44),
+  layout: s(400, 40), // tab groove, segmented slider, dock morph
+  progress: s(300, 35),
+  sheet: s(380, 39),
+  pop: s(600, 44),
+  icon: s(500, 40),
+  pen: s(420, 38),
+  island: s(380, 38),
+  quickAdd: s(420, 40),
+  tool: s(500, 42),
 };
 
 /* ─────────────── Durations (ms) ─────────────── */
@@ -58,7 +58,7 @@ export const blur = {
 /* ─────────────── Press (every button) ───────────────
    Web: scale .96 + blur .6px. Native: scale .96 + opacity .94 + a light haptic — the .6px blur is
    invisible on a phone and costs a blur pass, so it is replaced by the haptic tick. */
-export const press = { scale: 0.96, scaleSmall: 0.92, scaleRow: 0.98, opacity: 0.94 } as const;
+export const press = { scale: 0.98, scaleSmall: 0.96, scaleRow: 0.99, opacity: 0.96 } as const;
 
 /* ─────────────── Layout animations ─────────────── */
 /** Blur-in rise for a block. Pair with <BlurIn> which adds the blur veil. */
@@ -82,7 +82,7 @@ export const tabGrow = LinearTransition.duration(520).easing(Easing.bezier(0.2, 
 export const tabLabelTiming = { duration: 320, delay: 180 } as const;
 
 /** Groove / dock / list re-layouts. */
-export const layout = LinearTransition.springify().stiffness(400).damping(34).reduceMotion(ReduceMotion.System);
+export const layout = LinearTransition.springify().stiffness(400).damping(40).reduceMotion(ReduceMotion.System);
 
 export const fadeIn = (ms = 260, delay = 0) => FadeIn.duration(ms).delay(delay).reduceMotion(ReduceMotion.System);
 export const fadeOut = (ms = 160) => FadeOut.duration(ms);
@@ -90,35 +90,35 @@ export const fadeOut = (ms = 160) => FadeOut.duration(ms);
 /** Chat bubble. */
 export const messageIn = new Keyframe({
   0: { opacity: 0, transform: [{ translateY: 10 }, { scale: 0.98 }] },
-  100: { opacity: 1, transform: [{ translateY: 0 }, { scale: 1 }], easing: ease.overshoot },
+  100: { opacity: 1, transform: [{ translateY: 0 }, { scale: 1 }], easing: ease.decelerate },
 }).duration(duration.message);
 
 /** M4 quick-add item: flies out of the + button. Pass the reversed index so the last item comes first. */
 export const quickAddItemIn = (i: number) =>
   new Keyframe({
-    0: { opacity: 0, transform: [{ translateX: 14 }, { translateY: 26 }, { scale: 0.3 }] },
-    100: { opacity: 1, transform: [{ translateX: 0 }, { translateY: 0 }, { scale: 1 }], easing: ease.overshoot },
+    0: { opacity: 0, transform: [{ translateX: 14 }, { translateY: 26 }, { scale: 0.9 }] },
+    100: { opacity: 1, transform: [{ translateX: 0 }, { translateY: 0 }, { scale: 1 }], easing: ease.decelerate },
   })
     .duration(340)
     .delay(i * 50);
 export const quickAddItemOut = new Keyframe({
   0: { opacity: 1, transform: [{ translateX: 0 }, { translateY: 0 }, { scale: 1 }] },
-  100: { opacity: 0, transform: [{ translateX: 14 }, { translateY: 26 }, { scale: 0.3 }] },
+  100: { opacity: 0, transform: [{ translateX: 14 }, { translateY: 26 }, { scale: 0.9 }] },
 }).duration(200);
 
 /** M5 tool dock: extra tools pop in 35ms apart. */
 export const toolIn = (i: number) =>
   new Keyframe({
-    0: { opacity: 0, transform: [{ scale: 0.4 }] },
-    100: { opacity: 1, transform: [{ scale: 1 }], easing: ease.overshoot },
+    0: { opacity: 0, transform: [{ scale: 0.9 }] },
+    100: { opacity: 1, transform: [{ scale: 1 }], easing: ease.decelerate },
   })
     .duration(320)
     .delay(80 + i * 35);
 
 /** M1 typed digit. */
 export const digitIn = new Keyframe({
-  0: { opacity: 0, transform: [{ scale: 0.6 }, { translateY: 4 }] },
-  100: { opacity: 1, transform: [{ scale: 1 }, { translateY: 0 }], easing: ease.overshoot },
+  0: { opacity: 0, transform: [{ scale: 0.94 }, { translateY: 4 }] },
+  100: { opacity: 1, transform: [{ scale: 1 }, { translateY: 0 }], easing: ease.decelerate },
 }).duration(260);
 
 /** M3 onboarding: card drops in with a little rotation. */
@@ -134,7 +134,7 @@ export const dropIn = (delay = 0, rotate = -6) =>
 /** Pop (badges, finish card). */
 export const popIn = (delay = 0) =>
   new Keyframe({
-    0: { opacity: 0, transform: [{ scale: 0.6 }] },
+    0: { opacity: 0, transform: [{ scale: 0.94 }] },
     60: { opacity: 1, transform: [{ scale: 1.08 }] },
     100: { opacity: 1, transform: [{ scale: 1 }] },
   })
@@ -144,8 +144,8 @@ export const popIn = (delay = 0) =>
 /** Splash circles bloom. */
 export const bloom = (delay: number) =>
   new Keyframe({
-    0: { opacity: 0, transform: [{ scale: 0.6 }] },
-    100: { opacity: 1, transform: [{ scale: 1 }], easing: ease.overshoot },
+    0: { opacity: 0, transform: [{ scale: 0.94 }] },
+    100: { opacity: 1, transform: [{ scale: 1 }], easing: ease.decelerate },
   })
     .duration(900)
     .delay(delay)

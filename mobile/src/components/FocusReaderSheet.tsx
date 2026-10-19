@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useReducedMotion } from 'react-native-reanimated';
 import { BlurReader, READER_ICONS } from '../kit/components/BlurReader';
 import { IconButton, Txt } from './ui';
-import { C, TYPE } from '../theme';
+import { useColors, useTypography } from '../theme';
 import { useStore } from '../data/store';
 
 export const readingLines = (text: string) =>
@@ -26,6 +26,8 @@ export function FocusReaderSheet({
   lines: string[];
   subjectId?: string;
 }) {
+  const C = useColors();
+  const TYPE = useTypography();
   const { state, update } = useStore();
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();

@@ -1,3 +1,4 @@
+import { useColors } from '../theme';
 // ExamPilot "Clear Glass" — design tokens for React Native (Expo SDK 58 / RN 0.88, New Architecture).
 // Every value here is copied from the v1 · Clear Glass design. Components import ONLY from this file;
 // never type a new hex value in a screen.
@@ -151,3 +152,11 @@ export const size = {
 export const space = {
   gutter: 20, gutterOnboarding: 24, top: 60, cardGap: 14, cardPadding: 20, bottomClearance: 128,
 } as const;
+
+export function useKitColors() {
+  const c = useColors();
+  return { ...color, ground: c.ground, input: c.input, surfaceMuted: c.surfaceMuted, skeleton: c.track,
+    line: c.line, line2: c.line2, lineStrong: c.lineStrong, checkRing: c.ring,
+    ink: c.ink, inkButton: c.inkButton, inkMuted: c.inkMuted, inkSubtle: c.inkSubtle, placeholder: c.placeholder,
+    inkFlat: c.inkFlat, scrim: c.scrim, highlighter: c.highlight, readerNear: c.inkMuted, readerFar: c.inkSubtle };
+}

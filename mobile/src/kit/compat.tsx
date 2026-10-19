@@ -1,3 +1,4 @@
+import { useAppearance } from '../appearance';
 // React Native CLI replacements for the three Expo modules the handoff kit imports:
 // expo-linear-gradient, expo-blur, expo-haptics.
 import { forwardRef, type ComponentProps } from 'react';
@@ -28,7 +29,7 @@ export const BlurView = forwardRef<unknown, ViewProps & { intensity?: number; ti
         style={style}
         blurType={tint === 'dark' ? 'dark' : 'light'}
         blurAmount={Math.max(1, Math.min(100, intensity))}
-        reducedTransparencyFallbackColor="#FFFFFF"
+        reducedTransparencyFallbackColor={tint === 'dark' ? '#1B1D22' : '#FFFFFF'}
       />
     );
   },
@@ -54,7 +55,7 @@ export const Haptics = {
 export function BlurVeil({
   level,
   max = 40,
-  tint = 'light',
+  tint,
   style,
 }: {
   level: SharedValue<number>;
@@ -62,10 +63,11 @@ export function BlurVeil({
   tint?: 'light' | 'dark';
   style?: ViewProps['style'];
 }) {
+  const { dark } = useAppearance();
   const a = useAnimatedStyle(() => ({ opacity: Math.min(1, Math.max(0, level.value / max)) }));
   return (
     <Animated.View pointerEvents="none" style={[style, a]}>
-      <BlurView intensity={max} tint={tint} style={{ flex: 1 }} />
+      <BlurView intensity={max} tint={tint ?? (dark ? 'dark' : 'light')} style={{ flex: 1 }} />
     </Animated.View>
   );
 }

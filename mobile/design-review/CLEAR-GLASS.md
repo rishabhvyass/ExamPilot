@@ -48,3 +48,16 @@ The UI automation connection to Device Hub timed out. A complete screen-by-scree
 - Confirmed that the iPhone 15 Pro (iOS 18.0) and iPhone 17 (iOS 26.5) simulators are booted. Device Hub's computer-use connection still timed out, so the interactive walkthrough remains unverified.
 - Reviewed the new study timer, verification screen, focus reader and range picker. Fixed cancelled range gestures leaving unsaved handle positions on screen, separated the two handles' drag origins, and guarded against a zero-width track during layout.
 - After the range-picker change, TypeScript and targeted ESLint passed; both Jest suites passed (seven tests). These checks do not verify native gesture cancellation behavior on a device.
+
+
+## Account, navigation and appearance update — 19 October 2026
+
+- Lowered the tab dock by 34 pt on devices with a bottom safe area; added a fixed centre AI assistant action. Tab items keep stable widths and labels, avoiding the previous expanding-label layout.
+- Removed the simulated Today island and the “In Dynamic Island” toggle. The next upcoming exam now starts/updates the existing native Live Activity automatically in the foreground on supported iPhones; no upcoming exam or logout ends it. The OS controls its display and lifetime.
+- Added editable name, college and semester fields, a read-only account email, persisted Light/Dark/System preferences, and search over the student's subjects/topics, materials, exams and questions. Profile is accessible from the avatar; logout is in the three-dot menu.
+- Added a quiet 1.2-second launch screen that restores the account's destination automatically. Signup confirms passwords, login accepts trimmed email, reset requests are guarded while busy, and Google sign-in does not use the email-signup verification route. Restored “Skip for now” at the user’s request as explicit local guest access. Guest sessions resume after restarting and do not claim Firebase authentication.
+- Added theme-aware screen, text, subject, input, card, sheet, reader and dock colours; removed the forced-light iOS appearance. Theme changes fade over 320 ms and honour Reduce Motion. Native platform changes require a rebuild.
+- Fixed the empty-subject materials route to show an add-admit-card action instead of accessing a missing subject.
+- Validation: TypeScript and all four Jest suites (12 tests) passed. Device Hub's UI connection still times out; full visual, real-account and physical-device Live Activity checks remain outstanding.
+
+These changes supersede the earlier light-only appearance and simulated study-island notes above.

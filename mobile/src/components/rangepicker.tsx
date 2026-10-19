@@ -2,7 +2,7 @@ import { MaterialView } from './surface';
 // Study-block picker: tap a start day, tap an end day, and a band joins them. Presets fill it in one tap.
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { C, INK, SUBJ } from '../theme';
+import { useSubjectColors, useColors, INK } from '../theme';
 import { Txt } from './ui';
 import { ChoiceGroup } from './choicegroup';
 import {
@@ -30,6 +30,8 @@ export function StudyBlockPicker({
   /** Dates to mark with a dot; the "Until exam" preset runs to the first one after the start. */
   examDates?: string[];
 }) {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
   const s0 = parseISO(value.start);
   const [view, setView] = useState({ y: s0.getFullYear(), m: s0.getMonth() });
   // Which end the next tap sets: after choosing a start, the next tap picks the end.

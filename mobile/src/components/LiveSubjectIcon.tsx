@@ -12,7 +12,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import Svg, { Circle, Path } from 'react-native-svg';
-import { C, SUBJ, type SubjectColor } from '../theme';
+import { useSubjectColors, useColors, type SubjectColor } from '../theme';
 import { Surface } from './surface';
 
 export function LiveSubjectIcon({
@@ -22,6 +22,8 @@ export function LiveSubjectIcon({
   subject: SubjectColor;
   size?: number;
 }) {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
   const focused = useIsFocused();
   const reduce = useReducedMotion();
   const phase = useSharedValue(0);

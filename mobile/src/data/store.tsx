@@ -1,3 +1,4 @@
+import { liveActivity } from '../lib/liveActivity';
 import {
   createContext,
   useCallback,
@@ -8,7 +9,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { kv } from './kv';
 import type { State } from './types';
 import { signOut as authSignOut, watchAuth, type User } from './auth';
 import { createSync, loadUser, migrate } from './cloud';
@@ -20,6 +21,7 @@ export function seed(): State {
   return {
     splashSeen: false,
     signedIn: false,
+    guestMode: false,
     onboarded: false,
     tasksEdited: false,
     profile: { firstName: '', surname: '', email: '' },
@@ -69,7 +71,7 @@ const stripSamples = (s: State): State => ({
 });
 
 /**
- * Signed out: AsyncStorage (device-local). Signed in: Firestore under users/{uid},
+ * Signed out: MMKV (device-local). Signed in: Firestore under users/{uid},
  * with the local data copied up once on first login.
  */
 export function StoreProvider({
@@ -99,11 +101,13 @@ export function StoreProvider({
           ...remote,
           splashSeen: dev.splashSeen,
           signedIn: true,
+          guestMode: false,
         });
       } else {
         s = {
           ...dev,
           signedIn: true,
+          guestMode: false,
           profile: {
             ...dev.profile,
             email: dev.profile.email || u.email || '',
@@ -126,7 +130,7 @@ export function StoreProvider({
   useEffect(() => {
     let unsub: (() => void) | undefined;
     let alive = true;
-    AsyncStorage.getItem(KEY)
+    kv.getItem(KEY)
       .then(raw =>
         raw ? stripSamples({ ...seed(), ...JSON.parse(raw) }) : seed(),
       )
@@ -162,7 +166,7 @@ export function StoreProvider({
       () => {
         if (sync.current) return sync.current.push(state);
         local.current = state;
-        AsyncStorage.setItem(KEY, JSON.stringify(state)).catch(() => {});
+        kv.setItem(KEY, JSON.stringify(state)).catch(() => {});
       },
       user ? 400 : 300,
     );
@@ -175,7 +179,7 @@ export function StoreProvider({
         user,
         update: fn => setState(s => (s ? fn(s) : s)),
         reset: () => {
-          if (!sync.current) AsyncStorage.removeItem(KEY).catch(() => {});
+          if (!sync.current) kv.removeItem(KEY).catch(() => {});
           setState({ ...seed(), signedIn: !!sync.current });
         },
         signIn: async run => {
@@ -184,14 +188,25 @@ export function StoreProvider({
         },
         signOut: async () => {
           clearTimeout(timer.current);
+          if (!user) {
+            const current = latest.current ?? seed();
+            const guest = { ...current, signedIn: false, guestMode: false };
+            local.current = guest;
+            setState(guest);
+            await kv.setItem(KEY, JSON.stringify(guest)).catch(() => {});
+            await liveActivity.end().catch(() => {});
+            return;
+          }
           if (sync.current && latest.current) sync.current.push(latest.current);
-          sync.current = null;
-          // The next student on this device starts fresh; their data stays in the cloud.
-          local.current = signedOut();
-          await AsyncStorage.setItem(KEY, JSON.stringify(local.current)).catch(
-            () => {},
-          );
+          // Keep the current store intact if Firebase rejects sign-out.
           await authSignOut();
+          sync.current = null;
+          hydrating.current = null;
+          local.current = signedOut();
+          setUser(null);
+          setState(local.current);
+          await kv.setItem(KEY, JSON.stringify(local.current)).catch(() => {});
+          await liveActivity.end().catch(() => {});
         },
       },
     [state, user, hydrate],

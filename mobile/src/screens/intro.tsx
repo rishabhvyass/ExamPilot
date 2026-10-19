@@ -13,7 +13,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon, IconButton, Press, Txt, PrimaryButton, SecondaryButton } from '../components/ui';
 import { GlassCard, Surface } from '../components/surface';
-import { C, INK, SUBJ, TYPE, type SubjectColor } from '../theme';
+import { useSubjectColors, useTypography, useColors, INK, type SubjectColor } from '../theme';
 import { useNav } from '../navigation';
 import { useStore } from '../data/store';
 
@@ -24,6 +24,8 @@ const DATES: [string, string, string, SubjectColor, string][] = [
 ];
 
 function PlanArt() {
+  const SUBJ = useSubjectColors();
+  const TYPE = useTypography();
   return (
     <View style={{ flex: 1, justifyContent: 'center' }}>
       {DATES.map(([d, m, name, c, rot], i) => (
@@ -80,6 +82,8 @@ function PlanArt() {
   );
 }
 function CalmArt() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
   const rows = [
     ['Recurrence relations', true, 'se'],
     ['Master theorem', true, 'se'],
@@ -149,26 +153,29 @@ const SLIDES = [
     eyebrow: 'SMART PLANNING',
     title: 'Plan around\nyour exams',
     body: 'Add your admit card and we’ll build a calm day-by-day plan.',
-    tint: SUBJ.se.fill,
+    tint: 'se' as const,
     Art: PlanArt,
   },
   {
     eyebrow: 'CALM REVISION',
     title: 'One topic\nat a time',
     body: 'A short checklist each day. Tick it off, rest, and come back tomorrow.',
-    tint: SUBJ.dds.fill,
+    tint: 'dds' as const,
     Art: CalmArt,
   },
   {
     eyebrow: 'STUDY ASSISTANT',
     title: 'Ask when\nyou’re stuck',
     body: 'Get plain-language answers, short plans and quick charts for any topic.',
-    tint: SUBJ.daa.fill,
+    tint: 'daa' as const,
     Art: AskArt,
   },
 ];
 
 export function Intro() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const nav = useNav();
   const reduce = useReducedMotion();
   const { state } = useStore();
@@ -183,14 +190,14 @@ export function Intro() {
   const goTo = (n: number) => {
     scroll.current?.scrollTo({ x: n * width, animated: !reduce });
     setI(n);
-    knob.value = withSpring(n / (SLIDES.length - 1), { stiffness: 300, damping: 31 });
+    knob.value = withSpring(n / (SLIDES.length - 1), { stiffness: 300, damping: 35 });
   };
   const finish = () =>
     nav.reset({
       index: 0,
       routes: [
         {
-          name: state.signedIn ? (state.onboarded ? 'Main' : 'Details') : 'Login',
+          name: state.signedIn || state.guestMode ? (state.onboarded ? 'Main' : 'Details') : 'Login',
         },
       ],
     });
@@ -210,7 +217,7 @@ export function Intro() {
         onMomentumScrollEnd={e => {
           const n = Math.round(e.nativeEvent.contentOffset.x / width);
           setI(n);
-          knob.value = withSpring(n / (SLIDES.length - 1), { stiffness: 300, damping: 31 });
+          knob.value = withSpring(n / (SLIDES.length - 1), { stiffness: 300, damping: 35 });
         }}
         style={{ flex: 1 }}
       >
@@ -223,7 +230,7 @@ export function Intro() {
               style={{
                 height: '52%',
                 borderRadius: 40,
-                backgroundColor: s.tint,
+                backgroundColor: SUBJ[s.tint].fill,
                 padding: 20,
                 overflow: 'hidden',
               }}

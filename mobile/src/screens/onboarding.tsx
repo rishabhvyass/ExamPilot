@@ -1,10 +1,11 @@
+import { destinationAfterLogin, validateAuthForm, launchDestination } from '../lib/authForm';
 import { useRoute, type RouteProp } from '@react-navigation/native';
 import type { RootParams } from '../navigation';
 import { SegmentedControl } from '../kit/components/SegmentedControl';
 import { BlurIn } from '../kit/components/BlurIn';
 import { MaterialView, AnimatedMaterialView } from '../components/surface';
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, View, useWindowDimensions } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, {
   Easing,
   FadeInDown,
@@ -22,7 +23,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { scheduleOnRN } from 'react-native-worklets';
 import type { SharedValue } from 'react-native-reanimated';
 import Svg, { Path } from 'react-native-svg';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {  } from 'react-native-safe-area-context';
 import { keepLocalCopy, pick, types } from '@react-native-documents/picker';
 import { parseAdmitCard, shortCode } from '../lib/admitParser';
 import { imageText, pdfText } from '../lib/pdfText';
@@ -44,8 +45,9 @@ import {
 } from '../components/ui';
 import { ExamSheet } from '../components/examsheet';
 import { ChoiceGroup } from '../components/choicegroup';
+import { AppLogo } from '../components/AppLogo';
 import { celebrate } from '../lib/celebrate';
-import { C, SUBJ, TYPE, colorOf, paletteAt, SHADOW, INK, SHEEN } from '../theme';
+import { useSubjectColors, useTypography, useColors, colorOf, paletteAt, SHADOW, INK, SHEEN } from '../theme';
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
 import { useStore } from '../data/store';
 import {
@@ -56,7 +58,7 @@ import {
   signUpEmail,
   type User,
 } from '../data/auth';
-import type { State } from '../data/types';
+import type {  } from '../data/types';
 import { useNav } from '../navigation';
 import {
   daysBetween,
@@ -70,344 +72,79 @@ import { generatePlan, hours } from '../lib/plan';
 import micro from '../data/seed/microcopy.json';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
-const T = {
-  rings: [0, 120],
-  circles: [0, 140, 280],
-  markBadge: 300,
-  markDraw: 500,
-  orbitDots: [700, 820],
-  letters: { start: 700, step: 45 },
-  loadBar: { start: 400, duration: 1500 },
-  tagline: 1200,
-  cta: 1700,
-};
-
-/* ---------- 01 Splash ---------- */
-function Bloom({
-  delay,
-  style,
-  children,
-}: {
-  delay: number;
-  style: object;
-  children?: React.ReactNode;
-}) {
-  const v = useSharedValue(0);
-  useEffect(() => {
-    v.value = withDelay(
-      delay,
-      withTiming(1, {
-        duration: 900,
-        easing: Easing.bezier(0.2, 0.9, 0.25, 1.08),
-      }),
-    );
-  }, [delay, v]);
-  const a = useAnimatedStyle(() => ({
-    opacity: Math.min(1, v.value * 1.4),
-    transform: [{ scale: 0.6 + 0.4 * v.value }],
-  }));
-  return (
-    <AnimatedMaterialView style={[{ position: 'absolute' }, style, a]}>
-      {children}
-    </AnimatedMaterialView>
-  );
-}
-function Letter({ c, i }: { c: string; i: number }) {
-  const v = useSharedValue(0);
-  useEffect(() => {
-    v.value = withDelay(
-      T.letters.start + i * T.letters.step,
-      withTiming(1, {
-        duration: 600,
-        easing: Easing.bezier(0.05, 0.7, 0.1, 1),
-      }),
-    );
-  }, [i, v]);
-  const a = useAnimatedStyle(() => ({
-    opacity: v.value,
-    transform: [{ translateY: 22 * (1 - v.value) }],
-  }));
-  return <Animated.Text style={[TYPE.splash, a]}>{c}</Animated.Text>;
-}
-function FadeUpAt({ at, children }: { at: number; children: React.ReactNode }) {
-  return (
-    <Animated.View
-      entering={FadeInDown.delay(at)
-        .duration(600)
-        .easing(Easing.bezier(0.05, 0.7, 0.1, 1))}
-    >
-      {children}
-    </Animated.View>
-  );
-}
+/* A short, quiet launch transition; returning users continue automatically. */
 export function Splash() {
+  const C = useColors();
   const nav = useNav();
   const { state, update } = useStore();
   const reduce = useReducedMotion();
-  const insets = useSafeAreaInsets();
-  const { width } = useWindowDimensions();
-  const orbit = useSharedValue(0);
-  const draw = useSharedValue(0);
-  const bar = useSharedValue(0);
+  const opacity = useSharedValue(reduce ? 1 : 0);
+  const rise = useSharedValue(reduce ? 0 : 10);
   useEffect(() => {
-    if (!reduce)
-      orbit.value = withRepeat(
-        withTiming(360, { duration: 14000, easing: Easing.linear }),
-        -1,
-      );
-    draw.value = withDelay(
-      T.markDraw,
-      withTiming(1, { duration: 700, easing: Easing.bezier(0.6, 0, 0.2, 1) }),
-    );
-    bar.value = withDelay(
-      T.loadBar.start,
-      withTiming(1, {
-        duration: T.loadBar.duration,
-        easing: Easing.bezier(0.4, 0, 0.2, 1),
-      }),
-    );
-  }, [reduce, orbit, draw, bar]);
-  const orbitStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${orbit.value}deg` }],
-  }));
-  const pathProps = useAnimatedProps(() => ({
-    strokeDashoffset: 60 * (1 - draw.value),
-  }));
-  const barStyle = useAnimatedStyle(() => ({
-    transform: [{ scaleX: bar.value }],
-  }));
-  const begin = () => {
-    update(x => ({ ...x, splashSeen: true }));
-    nav.reset({
-      index: 0,
-      routes: [
-        {
-          name: state.signedIn
-            ? state.onboarded
-              ? 'Main'
-              : 'Details'
-            : 'Intro',
-        },
-      ],
-    });
-  };
-  const cx = Math.min(width, 480) / 2 - 24;
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: C.splash,
-        paddingTop: insets.top + 24,
-        paddingBottom: insets.bottom + 24,
-        paddingHorizontal: 24,
-      }}
-    >
-      <View
-        style={{ flex: 1, minHeight: 360 }}
-        importantForAccessibility="no-hide-descendants"
-      >
-        <View style={{ position: 'absolute', left: cx, top: '48%' }}>
-          {[320, 220].map((s, i) => (
-            <Bloom
-              key={s}
-              delay={T.rings[i]}
-              style={{
-                left: -s / 2,
-                top: -s / 2,
-                width: s,
-                height: s,
-                borderRadius: s / 2,
-                borderWidth: 1.5,
-                borderColor: 'rgba(255,255,255,0.6)',
-              }}
-            />
-          ))}
-          <Animated.View
-            style={[
-              {
-                position: 'absolute',
-                left: -160,
-                top: -160,
-                width: 320,
-                height: 320,
-              },
-              orbitStyle,
-            ]}
-          >
-            <Bloom
-              delay={T.orbitDots[0]}
-              style={{
-                left: 149,
-                top: -11,
-                width: 22,
-                height: 22,
-                borderRadius: 11,
-                backgroundColor: '#fff',
-              }}
-            />
-            <Bloom
-              delay={T.orbitDots[1]}
-              style={{
-                left: 8,
-                top: 210,
-                width: 14,
-                height: 14,
-                borderRadius: 7,
-                ...INK,
-              }}
-            />
-          </Animated.View>
-          <Bloom
-            delay={T.circles[0]}
-            style={{
-              left: -95,
-              top: -85,
-              width: 130,
-              height: 130,
-              borderRadius: 65,
-              backgroundColor: C.artPlum,
-            }}
-          />
-          <Bloom
-            delay={T.circles[1]}
-            style={{
-              left: -5,
-              top: -40,
-              width: 118,
-              height: 118,
-              borderRadius: 59,
-              backgroundColor: C.artPink,
-            }}
-          />
-          <Bloom
-            delay={T.circles[2]}
-            style={{
-              left: -55,
-              top: 25,
-              width: 96,
-              height: 96,
-              borderRadius: 48,
-              backgroundColor: C.artMint,
-            }}
-          />
-          <Bloom
-            delay={T.markBadge}
-            style={{
-              left: -40,
-              top: -25,
-              width: 80,
-              height: 80,
-              borderRadius: 28,
-              ...INK,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Svg width={40} height={40} viewBox="0 0 24 24">
-              <AnimatedPath
-                d="M3 11l18-7-7 18-2.5-8.5z"
-                fill="none"
-                stroke="#fff"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeDasharray="60"
-                animatedProps={pathProps}
-              />
-            </Svg>
-          </Bloom>
-        </View>
-      </View>
-      <View
-        style={{ gap: 14, maxWidth: 480, width: '100%', alignSelf: 'center' }}
-      >
-        <View
-          accessible
-          accessibilityRole="header"
-          accessibilityLabel="ExamPilot"
-          style={{ flexDirection: 'row' }}
-        >
-          {'ExamPilot'.split('').map((c, i) => (
-            <Letter key={i} c={c} i={i} />
-          ))}
-        </View>
-        <FadeUpAt at={T.tagline}>
-          <Txt style={{ fontSize: 19, lineHeight: 28, color: SUBJ.se.text }}>
-            Study calm. Exam ready.{'\n'}One topic at a time.
-          </Txt>
-        </FadeUpAt>
-        <View
-          style={{
-            height: 4,
-            borderRadius: 2,
-            backgroundColor: C.line,
-            overflow: 'hidden',
-            marginTop: 6,
-          }}
-        >
-          <Animated.View
-            style={[
-              { flex: 1, backgroundColor: C.ink, transformOrigin: 'left' },
-              barStyle,
-            ]}
-          />
-        </View>
-        <FadeUpAt at={T.cta}>
-          <View style={{ marginTop: 12 }}>
-            <PrimaryButton label="Let’s begin" onPress={begin} />
-          </View>
-        </FadeUpAt>
-      </View>
-    </View>
-  );
+    opacity.value = withTiming(1, { duration: 500 });
+    rise.value = withTiming(0, { duration: 650, easing: Easing.out(Easing.cubic) });
+    const timer = setTimeout(() => {
+      update(current => ({ ...current, splashSeen: true }));
+      const target = launchDestination(state);
+      nav.reset({ index: 0, routes: [{ name: target }] });
+    }, reduce ? 300 : 1200);
+    return () => clearTimeout(timer);
+    // Launch routing is captured once; editing profile data must not restart the splash.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const motion = useAnimatedStyle(() => ({ opacity: opacity.value, transform: [{ translateY: rise.value }] }));
+  return <View style={{ flex: 1, backgroundColor: C.ground, alignItems: 'center', justifyContent: 'center', padding: 28 }}>
+    <Animated.View style={[{ alignItems: 'center', gap: 20 }, motion]}>
+      <AppLogo size={96} />
+      <Txt accessibilityRole="header" style={{ fontSize: 42, fontWeight: 600, letterSpacing: -1.5 }}>ExamPilot</Txt>
+      <Txt style={{ fontSize: 17, color: C.inkMuted }}>Study calm. Exam ready.</Txt>
+    </Animated.View>
+  </View>;
 }
 
 /* ---------- 02 Login ---------- */
 export function Login() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const nav = useNav();
-  const { signIn } = useStore();
+  const { signIn, state, update } = useStore();
   const loginRoute = useRoute<RouteProp<RootParams, 'Login'>>();
   const [mode, setMode] = useState<'in' | 'up'>(loginRoute.params?.mode ?? 'in');
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [show, setShow] = useState(false);
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState('');
-  const finish = (s: State | null) =>
-    s &&
-    nav.reset({ index: 0, routes: [{ name: s.onboarded ? 'Main' : mode === 'up' ? 'VerifyEmail' : 'Details' }] });
-  const run = async (fn: () => Promise<{ user: User } | null>) => {
+  const run = async (fn: () => Promise<{ user: User } | null>, verifyEmail = false) => {
     if (busy) return;
-    setErr('');
-    setNote('');
-    setBusy(true);
+    setErr(''); setNote(''); setBusy(true);
     try {
-      finish(await signIn(fn));
-    } catch (e) {
-      setErr(authMessage(e));
-    } finally {
-      setBusy(false);
-    }
+      const result = await signIn(fn);
+      if (result) nav.reset({ index: 0, routes: [{ name: destinationAfterLogin(result.onboarded, verifyEmail) }] });
+    } catch (e) { setErr(authMessage(e)); }
+    finally { setBusy(false); }
   };
   const submit = () => {
-    if (!/^\S+@\S+\.\S+$/.test(email))
-      return setErr('That email doesn’t look quite right.');
-    if (pw.length < 6)
-      return setErr('Use at least 6 characters for your password.');
-    run(() => (mode === 'up' ? signUpEmail : signInEmail)(email, pw));
+    const error = validateAuthForm(mode, email, pw, confirm);
+    if (error) return setErr(error);
+    run(() => (mode === 'up' ? signUpEmail : signInEmail)(email.trim(), pw), mode === 'up');
   };
   const forgot = async () => {
+    if (busy) return;
     setNote('');
-    if (!/^\S+@\S+\.\S+$/.test(email))
+    if (!/^\S+@\S+\.\S+$/.test(email.trim()))
       return setErr('Add your email above and we’ll send a reset link.');
     setErr('');
     try {
-      await resetPassword(email);
+      setBusy(true);
+      await resetPassword(email.trim());
       setNote('Check your inbox for a link to reset your password.');
     } catch (e) {
       setErr(authMessage(e));
-    }
+    } finally { setBusy(false); }
   };
   return (
     <Screen gutter={24}>
@@ -418,18 +155,7 @@ export function Login() {
         <Illo name="login-corner-art" width={200} height={200} />
       </View>
       <View style={{ paddingTop: 24 }}>
-        <MaterialView
-          style={{
-            width: 52,
-            height: 52,
-            borderRadius: 18,
-            ...INK,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Icon name="logo-plane" size={26} color="#fff" />
-        </MaterialView>
+        <AppLogo size={52} />
         <Txt
           style={[
             TYPE.onboard,
@@ -444,9 +170,9 @@ export function Login() {
             : 'It takes about a minute.'}
         </Txt>
         <View style={{ marginTop: 28 }}>
-          <SegmentedControl options={[{ value: 'in', label: 'Sign in' }, { value: 'up', label: 'Create account' }]} value={mode} onChange={m => { setMode(m); setErr(''); }} />
+          <SegmentedControl options={[{ value: 'in', label: 'Sign in' }, { value: 'up', label: 'Create account' }]} value={mode} onChange={m => { if (!busy) { setMode(m); setErr(''); setNote(''); setConfirm(''); } }} />
         </View>
-        <BlurIn replayKey={mode} delay={0} style={{ gap: 12, marginTop: 20 }}>
+        <BlurIn replayKey={mode} delay={0} amount={0} rise={4} ms={220} style={{ gap: 12, marginTop: 20 }}>
           <Rise i={0}>
             <Field
               label="Email"
@@ -471,6 +197,7 @@ export function Login() {
               }
             />
           </Rise>
+          {mode === 'up' && <Field label="Confirm password" value={confirm} onChangeText={setConfirm} secure={!show} autoComplete="new-password" autoCapitalize="none" placeholder="Re-enter your password" />}
           {!!err && (
             <Txt
               accessibilityRole="alert"
@@ -544,18 +271,18 @@ export function Login() {
           onPress={() => run(signInGoogle)}
           style={{ width: '100%', height: 56 }}
         />
-        {__DEV__ && (
-          // TODO: remove once email sign-in is fixed.
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => nav.reset({ index: 0, routes: [{ name: 'Details' }] })}
-            style={{ alignSelf: 'center', padding: 12 }}
-          >
-            <Txt style={{ fontSize: 15, fontWeight: 600, color: C.inkMuted }}>
-              Skip for now
-            </Txt>
-          </Pressable>
-        )}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Skip sign-in and continue on this device"
+          disabled={busy}
+          onPress={() => {
+            update(current => ({ ...current, guestMode: true, splashSeen: true }));
+            nav.reset({ index: 0, routes: [{ name: state.onboarded ? 'Main' : 'Details' }] });
+          }}
+          style={{ minHeight: 48, alignItems: 'center', justifyContent: 'center', marginTop: 16, opacity: busy ? 0.5 : 1 }}
+        >
+          <Txt style={{ color: C.ink, fontWeight: 600 }}>Skip for now</Txt>
+        </Pressable>
         <Txt
           style={{
             marginTop: 8,
@@ -564,7 +291,7 @@ export function Login() {
             color: C.inkSubtle,
           }}
         >
-          By continuing you agree to our terms and privacy notice.
+          Sign in to sync, or skip to save your studies on this device.
         </Txt>
       </View>
     </Screen>
@@ -573,6 +300,9 @@ export function Login() {
 
 /* ---------- 03 Your details ---------- */
 export function Details() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const nav = useNav();
   const { state, update, signOut } = useStore();
   const [p, setP] = useState(state.profile);
@@ -583,7 +313,7 @@ export function Details() {
   useEffect(() => {
     pop.value = withSequence(
       withTiming(0.85, { duration: 80 }),
-      withSpring(1, { stiffness: 600, damping: 34 }),
+      withSpring(1, { stiffness: 600, damping: 49 }),
     );
   }, [initials, pop]);
   const popStyle = useAnimatedStyle(() => ({
@@ -721,6 +451,7 @@ type Found = {
   flag?: string;
 };
 function ScanLine() {
+  const C = useColors();
   const reduce = useReducedMotion();
   const v = useSharedValue(0);
   useEffect(() => {
@@ -787,6 +518,7 @@ function DragRow({
   bg: string;
   children: React.ReactNode;
 }) {
+  const C = useColors();
   const ty = useSharedValue(0);
   const pan = Gesture.Pan()
     .onBegin(() => {
@@ -886,6 +618,9 @@ type AdmitSource = {
   mimeType?: string;
 };
 export function AdmitCard() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const nav = useNav();
   const { update } = useStore();
   const [phase, setPhase] = useState<'idle' | 'scanning' | 'results'>('idle');
@@ -1399,6 +1134,9 @@ function BurstDot({ i }: { i: number }) {
   );
 }
 export function PlanReady() {
+  const SUBJ = useSubjectColors();
+  const C = useColors();
+  const TYPE = useTypography();
   const nav = useNav();
   const { state, update } = useStore();
   const reduce = useReducedMotion();
@@ -1443,7 +1181,7 @@ export function PlanReady() {
               <BurstDot key={i} i={i} />
             ))}
           <AnimatedMaterialView
-            entering={FadeInDown.springify().stiffness(500).damping(31)}
+            entering={FadeInDown.springify().stiffness(500).damping(45)}
             style={{
               position: 'absolute',
               left: 8,
