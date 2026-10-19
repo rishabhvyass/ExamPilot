@@ -29,9 +29,9 @@ import { BarChart } from 'react-native-gifted-charts';
 import { BlurReader } from '../kit/components/BlurReader';
 import { ICON, Icon as KIcon, READER_ICONS } from '../kit/components/Icon';
 import { ToolDock } from '../kit/components/ToolDock';
+import { ChoiceGroup } from '../components/choicegroup';
 import {
   BottomSheet,
-  Chip,
   FormSheet,
   Icon,
   IconButton,
@@ -239,20 +239,13 @@ export function Materials() {
           {'Study\nMaterials'}
         </Txt>
       </View>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 8 }}
-      >
-        {state.subjects.map(x => (
-          <Chip
-            key={x.id}
-            label={x.code}
-            active={f === x.id}
-            onPress={() => setF(x.id)}
-          />
-        ))}
-      </ScrollView>
+      <ChoiceGroup
+        scroll
+        label="Subject"
+        options={state.subjects.map(x => ({ value: x.id, label: x.code }))}
+        value={f}
+        onChange={setF}
+      />
       <View key={f} style={{ marginTop: 16, gap: 20, paddingBottom: 80 }}>
         {groups.map(([title, kinds], gi) => {
           const rows = items.filter(m => kinds.includes(m.type));

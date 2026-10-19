@@ -61,3 +61,38 @@ Starting dev server on http://localhost:8081
  BUNDLE  ./index.js 
  BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
  BUNDLE  ./index.js 
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js 
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js 
+ ERROR  [timeout] connection terminated with Device for app='org.reactjs.native.example.ExamPilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ ERROR  [timeout] connection terminated with Device for app='com.exampilot' on device='iPhone 17' after not responding for 60 seconds.
+ BUNDLE  ./index.js ░░░░░░░░░░░░░░░░ 0% (0/1)
+ BUNDLE  ./index.js 

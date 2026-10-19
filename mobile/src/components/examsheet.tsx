@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { BottomSheet, Field, PrimaryButton, Txt } from './ui';
+import { ChoiceGroup } from './choicegroup';
 import { C, INK, TYPE } from '../theme';
 import {
   fmtLong,
@@ -171,39 +172,6 @@ function Calendar({
   );
 }
 
-function Chip({
-  label,
-  on,
-  onPress,
-}: {
-  label: string;
-  on: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityState={{ selected: on }}
-      onPress={onPress}
-      style={{
-        height: 44,
-        minWidth: 56,
-        paddingHorizontal: 14,
-        borderRadius: 22,
-        alignItems: 'center',
-        justifyContent: 'center',
-        ...(on ? INK : { backgroundColor: C.input }),
-      }}
-    >
-      <Txt
-        style={{ fontSize: 15, fontWeight: 600, color: on ? '#fff' : C.ink }}
-      >
-        {label}
-      </Txt>
-    </Pressable>
-  );
-}
-
 export function TimePicker({
   value,
   onChange,
@@ -219,31 +187,38 @@ export function TimePicker({
   return (
     <View style={{ paddingVertical: 8, gap: 12 }}>
       <Txt style={{ fontSize: 13, color: C.inkMuted }}>Hour</Txt>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-        {Array.from({ length: 12 }, (_, i) => i + 1).map(h => (
-          <Chip
-            key={h}
-            label={String(h)}
-            on={h === h12}
-            onPress={() => set(h, m, pm)}
-          />
-        ))}
-      </View>
+      <ChoiceGroup
+        wrap
+        size="small"
+        outline={false}
+        label="Hour"
+        options={Array.from({ length: 12 }, (_, i) => ({
+          value: i + 1,
+          label: String(i + 1),
+        }))}
+        value={h12}
+        onChange={h => set(h, m, pm)}
+      />
       <Txt style={{ fontSize: 13, color: C.inkMuted }}>Minutes</Txt>
-      <View style={{ flexDirection: 'row', gap: 8 }}>
-        {[0, 15, 30, 45].map(min => (
-          <Chip
-            key={min}
-            label={pad(min)}
-            on={min === m}
-            onPress={() => set(h12, min, pm)}
-          />
-        ))}
-      </View>
-      <View style={{ flexDirection: 'row', gap: 8 }}>
-        <Chip label="AM" on={!pm} onPress={() => set(h12, m, false)} />
-        <Chip label="PM" on={pm} onPress={() => set(h12, m, true)} />
-      </View>
+      <ChoiceGroup
+        size="small"
+        outline={false}
+        label="Minutes"
+        options={[0, 15, 30, 45].map(min => ({ value: min, label: pad(min) }))}
+        value={[0, 15, 30, 45].includes(m) ? m : null}
+        onChange={min => set(h12, min, pm)}
+      />
+      <ChoiceGroup
+        size="small"
+        outline={false}
+        label="AM or PM"
+        options={[
+          { value: 'AM', label: 'AM' },
+          { value: 'PM', label: 'PM' },
+        ]}
+        value={pm ? 'PM' : 'AM'}
+        onChange={v => set(h12, m, v === 'PM')}
+      />
     </View>
   );
 }

@@ -10,6 +10,7 @@ import Animated, {
 import { liveActivity, type ExamActivity } from '../lib/liveActivity';
 import { QuickAddMenu } from '../kit/components/QuickAddMenu';
 import { StudyBlockPicker } from '../components/rangepicker';
+import { ChoiceGroup } from '../components/choicegroup';
 import { TimeField } from '../components/examsheet';
 import { useNavigation } from '@react-navigation/native';
 import { pick, types } from '@react-native-documents/picker';
@@ -18,8 +19,6 @@ import {
   ArrowButton,
   BottomSheet,
   Card,
-  Chip,
-  FilterRow,
   HeroCard,
   Icon,
   IconButton,
@@ -489,15 +488,13 @@ export function Today() {
             marginBottom: 12,
           }}
         />
-        <View style={{ flexDirection: 'row', gap: 8, marginBottom: 16 }}>
-          {state.subjects.map(s => (
-            <Chip
-              key={s.id}
-              label={s.code}
-              active={draft.subjectId === s.id}
-              onPress={() => setDraft({ ...draft, subjectId: s.id })}
-            />
-          ))}
+        <View style={{ marginBottom: 16 }}>
+          <ChoiceGroup
+            label="Subject"
+            options={state.subjects.map(x => ({ value: x.id, label: x.code }))}
+            value={draft.subjectId}
+            onChange={v => setDraft({ ...draft, subjectId: v })}
+          />
         </View>
         <PrimaryButton label="Add to today" onPress={add} />
       </BottomSheet>
@@ -871,15 +868,13 @@ export function Calendar() {
         onClose={() => setSheet(false)}
         title="Add a study session"
       >
-        <View style={{ flexDirection: 'row', gap: 8, marginBottom: 12 }}>
-          {state.subjects.map(x => (
-            <Chip
-              key={x.id}
-              label={x.code}
-              active={form.subjectId === x.id}
-              onPress={() => setForm({ ...form, subjectId: x.id })}
-            />
-          ))}
+        <View style={{ marginBottom: 12 }}>
+          <ChoiceGroup
+            label="Subject"
+            options={state.subjects.map(x => ({ value: x.id, label: x.code }))}
+            value={form.subjectId}
+            onChange={v => setForm({ ...form, subjectId: v })}
+          />
         </View>
         <ScrollView
           style={{ maxHeight: 460 }}
@@ -985,16 +980,14 @@ export function Subjects() {
         eyebrow={sj.isSample ? 'Sample syllabus' : 'Your syllabus'}
         title={'Your Custom\nSyllabus'}
       />
-      <FilterRow>
-        {state.subjects.map(x => (
-          <Chip
-            key={x.id}
-            label={x.code}
-            active={x.id === id}
-            onPress={() => setId(x.id)}
-          />
-        ))}
-      </FilterRow>
+      <ChoiceGroup
+        scroll
+        filterIcon
+        label="Subject"
+        options={state.subjects.map(x => ({ value: x.id, label: x.code }))}
+        value={id}
+        onChange={setId}
+      />
       <Animated.View
         key={id}
         entering={fade}
@@ -1200,13 +1193,17 @@ export function Questions() {
         eyebrow="Sample question bank"
         title={'Important\nQuestions'}
       />
-      <FilterRow>
-        {[['all', 'All'], ...state.subjects.map(x => [x.id, x.code])].map(
-          ([k, l]) => (
-            <Chip key={k} label={l} active={f === k} onPress={() => setF(k)} />
-          ),
-        )}
-      </FilterRow>
+      <ChoiceGroup
+        scroll
+        filterIcon
+        label="Filter questions"
+        options={[
+          { value: 'all', label: 'All' },
+          ...state.subjects.map(x => ({ value: x.id as string, label: x.code })),
+        ]}
+        value={f}
+        onChange={setF}
+      />
       <View
         style={{
           marginTop: 12,

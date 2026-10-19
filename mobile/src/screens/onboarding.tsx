@@ -35,6 +35,7 @@ import {
   Txt,
 } from '../components/ui';
 import { ExamSheet } from '../components/examsheet';
+import { ChoiceGroup } from '../components/choicegroup';
 import { celebrate } from '../lib/celebrate';
 import { C, SUBJ, TYPE, colorOf, SHADOW, INK, SHEEN } from '../theme';
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
@@ -749,34 +750,18 @@ export function Details() {
           >
             Semester
           </Txt>
-          <View style={{ flexDirection: 'row', gap: 8 }}>
-            {[3, 4, 5, 6, 7, 8].map(n => (
-              <Press
-                key={n}
-                accessibilityRole="button"
-                accessibilityLabel={`Semester ${n}`}
-                accessibilityState={{ selected: p.semester === n }}
-                onPress={() => setP({ ...p, semester: n })}
-                style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 24,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: p.semester === n ? C.ink : C.surface,
-                }}
-              >
-                <Txt
-                  style={{
-                    fontWeight: 600,
-                    color: p.semester === n ? '#fff' : C.ink,
-                  }}
-                >
-                  {n}
-                </Txt>
-              </Press>
-            ))}
-          </View>
+          <ChoiceGroup
+            size="circle"
+            outline={false}
+            label="Semester"
+            options={[3, 4, 5, 6, 7, 8].map(n => ({
+              value: n,
+              label: String(n),
+              a11y: `Semester ${n}`,
+            }))}
+            value={p.semester ?? null}
+            onChange={n => setP({ ...p, semester: Number(n) })}
+          />
         </Rise>
         {!!err && <InfoCard tone="headsup">{err}</InfoCard>}
         <Rise i={6} style={{ marginTop: 8 }}>

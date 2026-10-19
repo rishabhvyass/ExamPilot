@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { C, INK, SUBJ } from '../theme';
 import { Txt } from './ui';
+import { ChoiceGroup } from './choicegroup';
 import {
   addDays,
   daysBetween,
@@ -236,28 +237,14 @@ export function StudyBlockPicker({
         })}
       </View>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-        {presets.map(([l, get]) => {
-          const on = isPreset(get);
-          return (
-            <Pressable
-              key={l}
-              accessibilityRole="button"
-              accessibilityState={{ selected: on }}
-              onPress={() => preset(get())}
-              style={[
-                {
-                  height: 44,
-                  paddingHorizontal: 16,
-                  borderRadius: 22,
-                  justifyContent: 'center',
-                },
-                on ? INK : { borderWidth: 1.5, borderColor: C.lineStrong },
-              ]}
-            >
-              <Txt style={{ fontWeight: 600, color: on ? '#fff' : C.ink }}>{l}</Txt>
-            </Pressable>
-          );
-        })}
+        <ChoiceGroup
+          wrap
+          size="small"
+          label="Presets"
+          options={presets.map(([l]) => ({ value: l, label: l }))}
+          value={presets.find(([, get]) => isPreset(get))?.[0] ?? null}
+          onChange={l => preset(presets.find(([x]) => x === l)![1]())}
+        />
         <Pressable
           accessibilityRole="button"
           onPress={() => preset({ start: today, end: today })}
