@@ -1148,3 +1148,37 @@ export const s = StyleSheet.create({
     borderColor: 'transparent',
   },
 });
+
+/** Shown when a screen has nothing to work with yet: points the student at the admit card. */
+export function EmptyState({
+  eyebrow,
+  title,
+  body,
+  tabs,
+  back,
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+  tabs?: boolean;
+  back?: boolean;
+}) {
+  const nav = useNavigation<{ navigate: (r: 'Admit') => void }>();
+  return (
+    <Screen tabs={tabs}>
+      {back ? <TopBar back more={false} /> : null}
+      <ScreenHeader eyebrow={eyebrow} title={title} />
+      <Rise i={0}>
+        <Card>
+          <Txt style={{ fontSize: 17, color: C.inkMuted, marginBottom: 20 }}>
+            {body}
+          </Txt>
+          <PrimaryButton
+            label="Add admit card"
+            onPress={() => nav.navigate('Admit')}
+          />
+        </Card>
+      </Rise>
+    </Screen>
+  );
+}

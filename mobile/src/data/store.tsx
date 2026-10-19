@@ -9,16 +9,10 @@ import {
   type ReactNode,
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { State, Subject, Exam } from './types';
-import { todayISO } from '../lib/dates';
+import type { State } from './types';
 import { signOut as authSignOut, watchAuth, type User } from './auth';
 import { createSync, loadUser, migrate } from './cloud';
-import subjectsSeed from './seed/subjects.json';
-import examsSeed from './seed/exams.json';
-import tasksSeed from './seed/daily-tasks.json';
-import sessionsSeed from './seed/study-sessions.json';
-import questionsSeed from './seed/questions.json';
-import materialsSeed from './seed/materials.json';
+import { registerSubjectColors } from '../theme';
 
 const KEY = 'exampilot:v1';
 
@@ -29,29 +23,13 @@ export function seed(): State {
     onboarded: false,
     tasksEdited: false,
     profile: { firstName: '', surname: '', email: '' },
-    exams: examsSeed.exams.map(e => ({
-      ...e,
-      source: 'preloaded' as const,
-    })) as Exam[],
-    subjects: subjectsSeed.subjects.map(s => ({
-      ...s,
-      isSample: true,
-    })) as Subject[],
-    tasks: tasksSeed.tasks.map(t => ({
-      ...t,
-      date: todayISO(),
-      isSample: true,
-    })),
-    sessions: sessionsSeed.sessions.map((s, i) => ({
-      ...s,
-      id: 's' + i,
-      source: 'plan' as const,
-    })),
-    questions: questionsSeed.questions.map(q => ({ ...q, isSample: true })),
-    materials: materialsSeed.materials.map(m => ({
-      ...m,
-      isSample: true,
-    })) as State['materials'],
+    // Everything starts empty: exams and subjects come from the student's admit card.
+    exams: [],
+    subjects: [],
+    tasks: [],
+    sessions: [],
+    questions: [],
+    materials: [],
     pdf: {},
     chat: [],
   };
@@ -70,6 +48,17 @@ interface Ctx {
 const StoreCtx = createContext<Ctx>(null as never);
 
 const signedOut = (): State => ({ ...seed(), splashSeen: true });
+
+/** Drops the sample content earlier builds seeded (sample flags, preloaded exams, seeded sessions). */
+const stripSamples = (s: State): State => ({
+  ...s,
+  exams: s.exams.filter(e => e.source !== 'preloaded'),
+  subjects: s.subjects.filter(x => !x.isSample),
+  tasks: s.tasks.filter(t => !t.isSample),
+  sessions: s.sessions.filter(x => !/^s\d+$/.test(x.id)),
+  questions: s.questions.filter(q => !q.isSample),
+  materials: s.materials.filter(m => !m.isSample),
+});
 
 /**
  * Signed out: AsyncStorage (device-local). Signed in: Firestore under users/{uid},
@@ -98,7 +87,7 @@ export function StoreProvider({
       const remote = await loadUser(u.uid);
       let s: State;
       if (remote) {
-        s = { ...remote, splashSeen: dev.splashSeen, signedIn: true };
+        s = stripSamples({ ...remote, splashSeen: dev.splashSeen, signedIn: true });
       } else {
         s = {
           ...dev,
@@ -123,7 +112,7 @@ export function StoreProvider({
     let unsub: (() => void) | undefined;
     let alive = true;
     AsyncStorage.getItem(KEY)
-      .then(raw => (raw ? { ...seed(), ...JSON.parse(raw) } : seed()))
+      .then(raw => (raw ? stripSamples({ ...seed(), ...JSON.parse(raw) }) : seed()))
       .catch(() => seed())
       .then((s: State) => {
         if (!alive) return;
@@ -190,6 +179,8 @@ export function StoreProvider({
       },
     [state, user, hydrate],
   );
+  // Subject colours are looked up by id across the app (colorOf); keep that map in step.
+  if (state) registerSubjectColors(state.subjects);
   if (!value) return <>{fallback ?? null}</>;
   return <StoreCtx.Provider value={value}>{children}</StoreCtx.Provider>;
 }

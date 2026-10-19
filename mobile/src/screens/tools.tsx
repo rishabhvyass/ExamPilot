@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
+  Alert,
   Modal,
   Pressable,
   ScrollView,
@@ -17,9 +18,6 @@ import Animated, {
   useSharedValue,
   withRepeat,
   withTiming,
-  SlideInRight,
-  SlideInLeft,
-  FadeOut,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRoute, type RouteProp } from '@react-navigation/native';
@@ -32,13 +30,14 @@ import { ToolDock } from '../kit/components/ToolDock';
 import { ChoiceGroup } from '../components/choicegroup';
 import {
   BottomSheet,
+  Card,
+  EmptyState,
   FormSheet,
   Icon,
   IconButton,
   Press,
   Rise,
   Screen,
-  SecondaryButton,
   TypingDots,
   Txt,
 } from '../components/ui';
@@ -46,6 +45,7 @@ import { C, FONT, SHADOW, SUBJ, TYPE, colorOf, INK, SHEEN } from '../theme';
 import { useStore } from '../data/store';
 import { useNav, type RootParams } from '../navigation';
 import { celebrate } from '../lib/celebrate';
+import { pdfText } from '../lib/pdfText';
 import { addDays, fmtShort, todayISO } from '../lib/dates';
 import { hours } from '../lib/plan';
 import type {
@@ -85,15 +85,31 @@ function Breathe({ children }: { children: React.ReactNode }) {
   );
 }
 export function Materials() {
+  const { state } = useStore();
+  if (!state.subjects.length)
+    return (
+      <EmptyState
+        back
+        eyebrow="Study materials"
+        title={'Notes &\nPDFs'}
+        body="Add your admit card first — then keep PDFs, photos of notes and links for each subject here."
+      />
+    );
+  return <MaterialsBody />;
+}
+function MaterialsBody() {
   const nav = useNav();
   const route = useRoute<RouteProp<RootParams, 'Materials'>>();
   const insets = useSafeAreaInsets();
   const { state, update } = useStore();
-  const [f, setF] = useState(route.params?.subjectId ?? state.subjects[0].id);
+  const [picked, setF] = useState(
+    route.params?.subjectId ?? state.subjects[0].id,
+  );
   const [sheet, setSheet] = useState(false);
   const [form, setForm] = useState<'link' | 'note' | null>(null);
   const items = state.materials.filter(m => m.subjectId === f);
-  const sj = state.subjects.find(x => x.id === f)!;
+  const sj = state.subjects.find(x => x.id === picked) ?? state.subjects[0];
+  const f = sj.id;
   const c = SUBJ[colorOf(sj.color)];
   const add = (m: Omit<Material, 'id' | 'subjectId' | 'isSample'>) =>
     update(x => ({
@@ -911,74 +927,33 @@ function ChartCard({ b }: { b: ChartBlock }) {
 }
 
 /* ---------- 12 PDF reader ---------- */
-// Sample pages until react-native-pdf (or similar) renders real files from device storage.
-const PAGES = (name: string) => [
-  {
-    h: 'Overview',
-    lines: [
-      name.replace(/\.pdf$/i, '').replace(/_/g, ' '),
-      'This is a sample page. Real PDF rendering arrives once files are stored on the device.',
-      'Skim the headings first, then read slowly.',
-    ],
-  },
-  {
-    h: 'Key ideas',
-    lines: [
-      'Break the topic into three or four ideas.',
-      'Write each one in your own words.',
-      'Say it out loud as if teaching a friend.',
-    ],
-  },
-  {
-    h: 'Worked example',
-    lines: [
-      'Pick one small example and walk through it step by step.',
-      'Note where you hesitate — that is the part to revise.',
-      'Come back to it tomorrow.',
-    ],
-  },
-  {
-    h: 'Common mistakes',
-    lines: [
-      'Mixing up similar terms.',
-      'Skipping the base case.',
-      'Memorising without understanding.',
-    ],
-  },
-  {
-    h: 'Practice',
-    lines: [
-      'Try two questions without looking.',
-      'Check your answers, then mark what to revisit.',
-      'Short sessions beat long ones.',
-    ],
-  },
-  {
-    h: 'Summary',
-    lines: [
-      'You have covered the main ideas.',
-      'Rest well — sleep helps it stick.',
-      'Nicely done.',
-    ],
-  },
-];
+/** Splits extracted PDF text into short sentence-sized lines for the focus reader. */
+const toLines = (text: string) => {
+  const out: string[] = [];
+  for (const raw of text.replace(/\s+/g, ' ').match(/[^.!?]+[.!?]*/g) ?? []) {
+    let line = raw.trim();
+    while (line.length > 150) {
+      const cut = line.lastIndexOf(' ', 140);
+      const at = cut > 40 ? cut : 140;
+      out.push(line.slice(0, at));
+      line = line.slice(at).trim();
+    }
+    if (line.length > 1) out.push(line);
+  }
+  return out;
+};
 export function PdfReader() {
   const nav = useNav();
   const route = useRoute<RouteProp<RootParams, 'Pdf'>>();
   const { state, update } = useStore();
   const id = route.params.id;
   const m = state.materials.find(x => x.id === id);
-  const pages = PAGES(m?.name ?? 'Notes.pdf');
-  const real = !!m?.uri;
-  const [realTotal, setRealTotal] = useState(m?.pages ?? 0);
-  const [focusRead, setFocusRead] = useState(false);
-  const total = real ? Math.max(1, realTotal) : pages.length;
   const prog = state.pdf[id] ?? { page: 1, highlights: {} };
-  const [page, setPage] = useState(
-    Math.min(total, Math.max(1, route.params.page ?? prog.page)),
+  const [total, setTotal] = useState(Math.max(1, m?.pages ?? 1));
+  const [page, setPage] = useState(Math.max(1, route.params.page ?? prog.page));
+  const [focus, setFocus] = useState<{ page: string[]; all: string[] } | null>(
+    null,
   );
-  const [dir, setDir] = useState(1);
-  const [hl, setHl] = useState(false);
   const [trackW, setTrackW] = useState(0);
   const pct = total > 1 ? (page - 1) / (total - 1) : 0;
   const knob = useSharedValue(0);
@@ -988,7 +963,7 @@ export function PdfReader() {
       easing: Easing.bezier(0.2, 0.8, 0.2, 1),
     });
   }, [pct, knob]);
-  // Clamp the rocket inside the track so it never covers the page count (known fix from the spec).
+  // Clamp the rocket inside the track so it never covers the page count.
   const knobStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: Math.min(knob.value * trackW, Math.max(0, trackW - 28)) },
@@ -1002,29 +977,46 @@ export function PdfReader() {
     }));
   const go = (p: number) => {
     if (p < 1 || p > total || p === page) return;
-    setDir(p > page ? 1 : -1);
     setPage(p);
     save(p, p === total ? { finished: true } : {});
-    if (p === total && !prog.finished) celebrate({ x: 0.5, y: 0.6 });
+    if (p === total && !prog.finished) celebrate();
   };
-  const toggleLine = (i: number) => {
-    if (!hl) return;
-    const cur = prog.highlights[page] ?? [];
-    save(page, {
-      highlights: {
-        ...prog.highlights,
-        [page]: cur.includes(i) ? cur.filter(x => x !== i) : [...cur, i],
-      },
-    });
+  const openFocus = async () => {
+    if (!m?.uri) return;
+    try {
+      const r = await pdfText(m.uri);
+      const all = toLines(r.pages.join(' '));
+      if (!all.length) {
+        Alert.alert(
+          'No text in this PDF',
+          'It looks like a scanned image, so there’s nothing to read line by line.',
+        );
+        return;
+      }
+      const here = toLines(r.pages[page - 1] ?? '');
+      setFocus({ page: here.length ? here : all, all });
+    } catch (e) {
+      Alert.alert('Couldn’t read this PDF', (e as Error).message);
+    }
   };
-  if (!m)
+  if (!m?.uri)
     return (
       <Screen>
-        <Txt style={{ paddingTop: 80 }}>That file isn’t here any more.</Txt>
+        <IconButton
+          icon="chevron-left"
+          label="Back"
+          onPress={() => nav.goBack()}
+        />
+        <Card style={{ marginTop: 24 }}>
+          <Txt style={TYPE.section}>This file isn’t on this device</Txt>
+          <Txt style={{ color: C.inkMuted, marginTop: 6 }}>
+            Add the PDF again from Study materials to read it here.
+          </Txt>
+        </Card>
       </Screen>
     );
   const sj = state.subjects.find(x => x.id === m.subjectId);
-  const finished = page === total;
+  const finished = page === total && total > 1;
   return (
     <Screen>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
@@ -1038,26 +1030,10 @@ export function PdfReader() {
             {m.name}
           </Txt>
           <Txt style={{ fontSize: 14, color: C.inkMuted }}>
-            {sj?.name} · {m.isSample ? 'sample PDF' : 'PDF'}
+            {sj ? `${sj.name} · ` : ''}
+            {total} {total === 1 ? 'page' : 'pages'}
           </Txt>
         </View>
-        <Press
-          accessibilityRole="switch"
-          accessibilityLabel="Highlighter"
-          accessibilityState={{ checked: hl }}
-          onPress={() => setHl(!hl)}
-          scaleTo={0.92}
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: 28,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: hl ? C.ink : C.surface,
-          }}
-        >
-          <Icon name="highlighter" color={hl ? '#fff' : C.ink} />
-        </Press>
       </View>
       <View
         style={{
@@ -1087,7 +1063,7 @@ export function PdfReader() {
                 top: 0,
                 bottom: 0,
                 borderRadius: 4,
-                ...INK,
+                backgroundColor: C.inkFlat,
               },
               fillStyle,
             ]}
@@ -1115,79 +1091,38 @@ export function PdfReader() {
           {page} / {total}
         </Txt>
       </View>
-      <View style={{ marginTop: 20, minHeight: 400 }}>
-        {real ? (
-          <View
-            style={{
-              height: 520,
-              borderRadius: 28,
-              overflow: 'hidden',
-              backgroundColor: C.surface,
-              boxShadow: SHADOW.soft,
-            }}
-          >
-            <Pdf
-              source={{ uri: m.uri!, cache: true }}
-              page={page}
-              enablePaging
-              horizontal
-              fitPolicy={0}
-              style={{ flex: 1, backgroundColor: 'transparent' }}
-              onLoadComplete={n => {
-                setRealTotal(n);
-                update(x => ({
-                  ...x,
-                  materials: x.materials.map(it =>
-                    it.id === m.id ? { ...it, pages: n } : it,
-                  ),
-                }));
-              }}
-              onPageChanged={p => go(p)}
-            />
-          </View>
-        ) : (
-        <Animated.View
-          key={page}
-          entering={(dir > 0 ? SlideInRight : SlideInLeft)
-            .duration(420)
-            .easing(Easing.bezier(0.2, 0.8, 0.2, 1))}
-          exiting={FadeOut.duration(120)}
-          style={{
-            minHeight: 400,
-            borderRadius: 28,
-            backgroundColor: C.surface,
-            boxShadow: SHADOW.soft,
-            padding: 28,
-            transform: [{ rotate: '0deg' }],
+      <View
+        style={{
+          marginTop: 20,
+          height: 560,
+          borderRadius: 28,
+          overflow: 'hidden',
+          backgroundColor: C.surface,
+          boxShadow: SHADOW.soft,
+        }}
+      >
+        <Pdf
+          source={{ uri: m.uri, cache: true }}
+          page={page}
+          enablePaging
+          horizontal
+          fitPolicy={0}
+          style={{ flex: 1, backgroundColor: 'transparent' }}
+          onLoadComplete={n => {
+            setTotal(Math.max(1, n));
+            if (m.pages !== n)
+              update(x => ({
+                ...x,
+                materials: x.materials.map(it =>
+                  it.id === m.id ? { ...it, pages: n } : it,
+                ),
+              }));
           }}
-        >
-          <Txt style={{ fontSize: 14, fontWeight: 600, color: C.inkSubtle }}>
-            Page {page}
-          </Txt>
-          <Txt style={[TYPE.section, { marginTop: 4, marginBottom: 16 }]}>
-            {pages[page - 1].h}
-          </Txt>
-          {pages[page - 1].lines.map((l, i) => {
-            const on = (prog.highlights[page] ?? []).includes(i);
-            return (
-              <Pressable
-                key={i}
-                disabled={!hl}
-                onPress={() => toggleLine(i)}
-                accessibilityState={{ selected: on }}
-                style={{
-                  marginBottom: 12,
-                  borderRadius: 8,
-                  paddingHorizontal: 4,
-                  backgroundColor: on ? C.highlight : 'transparent',
-                }}
-              >
-                <Txt style={{ fontSize: 17, lineHeight: 27 }}>{l}</Txt>
-              </Pressable>
-            );
-          })}
-        </Animated.View>
-        )}
+          onPageChanged={p => go(p)}
+          onError={() =>
+            Alert.alert('Couldn’t open this PDF', 'The file may be damaged.')
+          }
+        />
       </View>
       {finished && (
         <Animated.View
@@ -1204,144 +1139,87 @@ export function PdfReader() {
             {micro.pdf.finished}
           </Txt>
           <Txt style={{ color: SUBJ.se.text }}>{micro.pdf.finishedSub}</Txt>
-          <Press
-            accessibilityRole="button"
-            onPress={() => nav.navigate('Assistant')}
-            style={{
-              marginTop: 12,
-              alignSelf: 'flex-start',
-              height: 48,
-              borderRadius: 99,
-              ...INK,
-              paddingHorizontal: 24,
-              justifyContent: 'center',
-            }}
-          >
-            <Txt style={{ color: '#fff', fontWeight: 600, fontSize: 15 }}>
-              Yes, quiz me
-            </Txt>
-          </Press>
         </Animated.View>
       )}
-      {!real && (
-        <View style={{ marginTop: 16 }}>
-          <SecondaryButton
-            icon="book-open"
-            label="Focus read"
-            onPress={() => setFocusRead(true)}
-          />
-        </View>
-      )}
+      <View style={{ marginTop: 16 }}>
+        <ToolDock
+          primary={[
+            {
+              id: 'prev',
+              label: 'Previous page',
+              icon: <KIcon d={ICON.chevronLeft} />,
+              onSelect: () => go(page - 1),
+            },
+            {
+              id: 'focus',
+              label: 'Focus read',
+              icon: <Icon name="book-open" size={22} color={C.inkButton} />,
+              onSelect: openFocus,
+            },
+            {
+              id: 'ask',
+              label: 'Ask about this page',
+              icon: <Icon name="sparkle" size={22} color={C.inkButton} />,
+              onSelect: () => nav.navigate('Assistant'),
+            },
+            {
+              id: 'next',
+              label: 'Next page',
+              icon: <KIcon d={ICON.chevronRight} />,
+              onSelect: () => go(page + 1),
+            },
+          ]}
+          more={[
+            {
+              id: 'first',
+              label: 'First',
+              icon: <KIcon d={ICON.chevronLeft} />,
+              onSelect: () => go(1),
+            },
+            {
+              id: 'last',
+              label: 'Last',
+              icon: <KIcon d={ICON.chevronRight} />,
+              onSelect: () => go(total),
+            },
+          ]}
+        />
+      </View>
       <Modal
-        visible={focusRead}
+        visible={!!focus}
         animationType="slide"
         presentationStyle="pageSheet"
-        onRequestClose={() => setFocusRead(false)}
+        onRequestClose={() => setFocus(null)}
       >
         <View style={{ flex: 1, backgroundColor: C.ground, padding: 20 }}>
           <View style={{ alignItems: 'flex-end', marginBottom: 12 }}>
             <IconButton
               icon="close"
               label="Close focus read"
-              onPress={() => setFocusRead(false)}
+              onPress={() => setFocus(null)}
             />
           </View>
-          <BlurReader
-            height={620}
-            modes={[
-              {
-                id: 'notes',
-                label: 'Notes',
-                iconPath: READER_ICONS.notes,
-                lines: pages.flatMap(p => [p.h, ...p.lines]),
-              },
-            ]}
-          />
+          {focus && (
+            <BlurReader
+              height={620}
+              modes={[
+                {
+                  id: 'page',
+                  label: `Page ${page}`,
+                  iconPath: READER_ICONS.notes,
+                  lines: focus.page,
+                },
+                {
+                  id: 'all',
+                  label: 'Whole PDF',
+                  iconPath: READER_ICONS.saved,
+                  lines: focus.all,
+                },
+              ]}
+            />
+          )}
         </View>
       </Modal>
-      {!real && (
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ gap: 8, paddingVertical: 16 }}
-      >
-        {pages.map((_, i) => (
-          <Press
-            key={i}
-            accessibilityRole="button"
-            accessibilityLabel={`Go to page ${i + 1}`}
-            accessibilityState={{ selected: page === i + 1 }}
-            onPress={() => go(i + 1)}
-            style={{
-              width: 56,
-              height: 80,
-              borderRadius: 12,
-              backgroundColor: '#fff',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              paddingBottom: 4,
-              borderWidth: page === i + 1 ? 2 : 1,
-              borderColor: page === i + 1 ? C.ink : C.line,
-            }}
-          >
-            <Txt style={{ fontSize: 12, color: C.inkMuted }}>{i + 1}</Txt>
-          </Press>
-        ))}
-      </ScrollView>
-      )}
-      <ToolDock
-        primary={[
-          {
-            id: 'prev',
-            label: 'Previous page',
-            icon: <KIcon d={ICON.chevronLeft} />,
-            onSelect: () => go(page - 1),
-          },
-          {
-            id: 'hl',
-            label: 'Highlighter',
-            icon: <Icon name="highlighter" size={22} color={C.inkButton} />,
-            active: hl,
-            onSelect: () => setHl(!hl),
-          },
-          {
-            id: 'ask',
-            label: 'Ask about this page',
-            icon: <Icon name="sparkle" size={22} color={C.inkButton} />,
-            onSelect: () => nav.navigate('Assistant'),
-          },
-          {
-            id: 'next',
-            label: 'Next page',
-            icon: <KIcon d={ICON.chevronRight} />,
-            onSelect: () => go(page + 1),
-          },
-        ]}
-        more={[
-          {
-            id: 'first',
-            label: 'First',
-            icon: <KIcon d={ICON.chevronLeft} />,
-            onSelect: () => go(1),
-          },
-          {
-            id: 'last',
-            label: 'Last',
-            icon: <KIcon d={ICON.chevronRight} />,
-            onSelect: () => go(total),
-          },
-          ...(real
-            ? []
-            : [
-                {
-                  id: 'focus',
-                  label: 'Focus',
-                  icon: <Icon name="book-open" size={22} color={C.inkButton} />,
-                  onSelect: () => setFocusRead(true),
-                },
-              ]),
-        ]}
-      />
     </Screen>
   );
 }

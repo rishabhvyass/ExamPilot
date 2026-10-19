@@ -68,8 +68,19 @@ export const SUBJ: Record<
     art: 'hero-card-art-dds-green',
   },
 };
+const subjectColors: Record<string, SubjectColor> = {};
+/** Called by the store whenever subjects change, so colorOf(subjectId) resolves admit-card subjects. */
+export const registerSubjectColors = (
+  subjects: { id: string; color: SubjectColor }[],
+) => {
+  for (const x of subjects) subjectColors[x.id] = x.color;
+};
+/** Accepts a palette key ('se' | 'daa' | 'dds') or any subject id. */
 export const colorOf = (id?: string): SubjectColor =>
-  id && id in SUBJ ? (id as SubjectColor) : 'se';
+  !id ? 'se' : id in SUBJ ? (id as SubjectColor) : subjectColors[id] ?? 'se';
+/** Palette for the nth subject: blue, violet, green, then repeat. */
+export const paletteAt = (i: number): SubjectColor =>
+  (['se', 'daa', 'dds'] as const)[i % 3];
 
 /**
  * Materials. `gradient` is a CSS linear-gradient string (RN backgroundImage); `shadow` is split into

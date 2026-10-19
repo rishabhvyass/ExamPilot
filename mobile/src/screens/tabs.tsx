@@ -19,6 +19,8 @@ import {
   ArrowButton,
   BottomSheet,
   Card,
+  EmptyState,
+  FormSheet,
   HeroCard,
   Icon,
   IconButton,
@@ -92,7 +94,10 @@ export function Today() {
   const n = next ? daysBetween(today, next.date) : 0;
   const allDone = tasks.length > 0 && done === tasks.length;
   const [sheet, setSheet] = useState(false);
-  const [draft, setDraft] = useState({ title: '', subjectId: 'se' });
+  const [draft, setDraft] = useState({
+    title: '',
+    subjectId: state.subjects[0]?.id ?? '',
+  });
   const wasDone = useRef(allDone);
   useEffect(() => {
     if (allDone && !wasDone.current) celebrate();
@@ -296,12 +301,23 @@ export function Today() {
               {' '}
             </Txt>
           </Rise>
-        ) : (
+        ) : state.exams.length ? (
           <Card>
             <Txt style={TYPE.section}>All exams done</Txt>
             <Txt style={{ color: C.inkMuted, marginTop: 4 }}>
               Rest well — you’ve prepared for this.
             </Txt>
+          </Card>
+        ) : (
+          <Card>
+            <Txt style={TYPE.section}>No exams yet</Txt>
+            <Txt style={{ color: C.inkMuted, marginTop: 4, marginBottom: 16 }}>
+              Add your admit card and we’ll fill in your exam week.
+            </Txt>
+            <PrimaryButton
+              label="Add admit card"
+              onPress={() => nav.navigate('Admit')}
+            />
           </Card>
         )}
         {upcoming.slice(1).map((e, i) => (
@@ -513,7 +529,7 @@ export function Calendar() {
   });
   const [sheet, setSheet] = useState(false);
   const [form, setForm] = useState({
-    subjectId: 'se',
+    subjectId: state.subjects[0]?.id ?? '',
     date: today,
     endDate: today,
     start: '10:00',
@@ -831,7 +847,7 @@ export function Calendar() {
                 </Txt>
                 <Txt style={{ fontSize: 14, color: C.inkMuted }}>
                   {fmtTimeShort(x.start)} – {fmtTimeShort(x.end)}
-                  {x.source === 'plan' ? ' · Sample' : ''}
+                  {x.source === 'plan' ? ' · From your plan' : ''}
                 </Txt>
               </View>
             </View>
@@ -853,16 +869,6 @@ export function Calendar() {
           </View>
         )}
       </Animated.View>
-      <Txt
-        style={{
-          marginTop: 16,
-          paddingHorizontal: 4,
-          fontSize: 14,
-          color: C.inkSubtle,
-        }}
-      >
-        {micro.calendar.sampleNote}
-      </Txt>
       <BottomSheet
         open={sheet}
         onClose={() => setSheet(false)}
@@ -923,10 +929,24 @@ const milestone = (p: number) =>
 const size = (kb = 0) =>
   kb > 1024 ? `${(kb / 1024).toFixed(1)} MB` : `${kb} KB`;
 export function Subjects() {
+  const { state } = useStore();
+  if (!state.subjects.length)
+    return (
+      <EmptyState
+        tabs
+        eyebrow="Your syllabus"
+        title={'Your Custom\nSyllabus'}
+        body="Your subjects appear here once you add your admit card. Then add the topics you need to cover."
+      />
+    );
+  return <SubjectsBody />;
+}
+function SubjectsBody() {
   const nav = useNav();
   const { state, update } = useStore();
-  const [id, setId] = useState(state.subjects[0].id);
-  const sj = state.subjects.find(x => x.id === id)!;
+  const [picked, setId] = useState(state.subjects[0].id);
+  const sj = state.subjects.find(x => x.id === picked) ?? state.subjects[0];
+  const id = sj.id;
   const done = sj.topics.filter(t => t.done).length;
   const pct = Math.round((done / Math.max(1, sj.topics.length)) * 100);
   const exam = state.exams.find(e => e.subjectId === id);
@@ -1171,7 +1191,27 @@ export function Questions() {
   const { state, update } = useStore();
   const [f, setF] = useState('all');
   const [open, setOpen] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
   const list = state.questions.filter(q => f === 'all' || q.subjectId === f);
+  const addQuestion = (v: Record<string, string>) => {
+    const sid = f !== 'all' ? f : state.subjects[0]?.id;
+    if (!v.question?.trim() || !sid) return;
+    update(x => ({
+      ...x,
+      questions: [
+        ...x.questions,
+        {
+          id: 'q' + Date.now(),
+          subjectId: sid,
+          question: v.question.trim(),
+          answer: v.answer?.trim() ?? '',
+          revised: false,
+          isSample: false,
+        },
+      ],
+    }));
+    setAdding(false);
+  };
   const revised = list.filter(q => q.revised).length;
   const msg =
     list.length && revised === list.length
@@ -1190,7 +1230,7 @@ export function Questions() {
     <Screen tabs>
       <TopBar />
       <ScreenHeader
-        eyebrow="Sample question bank"
+        eyebrow="Question bank"
         title={'Important\nQuestions'}
       />
       <ChoiceGroup
@@ -1358,7 +1398,37 @@ export function Questions() {
             </Animated.View>
           );
         })}
+        {list.length === 0 && (
+          <Txt style={{ color: C.inkMuted, paddingVertical: 12, paddingHorizontal: 4 }}>
+            {state.subjects.length
+              ? 'No questions yet. Add the ones your teacher marked as important.'
+              : 'Add your admit card first, then save important questions per subject.'}
+          </Txt>
+        )}
+        {state.subjects.length > 0 && (
+          <SecondaryButton
+            variant="dashed"
+            icon="plus"
+            label="Add a question"
+            onPress={() => setAdding(true)}
+          />
+        )}
       </View>
+      <FormSheet
+        open={adding}
+        onClose={() => setAdding(false)}
+        title={`Add a question${
+          f !== 'all'
+            ? ` · ${state.subjects.find(x => x.id === f)?.code ?? ''}`
+            : ` · ${state.subjects[0]?.code ?? ''}`
+        }`}
+        submit="Save question"
+        fields={[
+          { key: 'question', label: 'Question' },
+          { key: 'answer', label: 'Answer (optional)' },
+        ]}
+        onSubmit={addQuestion}
+      />
     </Screen>
   );
 }

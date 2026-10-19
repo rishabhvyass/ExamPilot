@@ -13,6 +13,7 @@
 		155D8456F9C5B32F3044CB49 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D850BD3772D336CCBA57783 /* SwiftUI.framework */; };
 		1948D5358CBE5E459343D732 /* ActivityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89BD08E50BBB3A72FFAD0764 /* ActivityKit.framework */; };
 		21BEA19C6DEC46278CEAF606 /* Urbanist-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B965FC04EBDD4EEE9C8CB0EC /* Urbanist-Regular.ttf */; };
+		38FE2764DE174B43BE906290 /* PdfTextModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E8999206A6E5FF18354F9F9 /* PdfTextModule.m */; };
 		40AFA52AE697B03C35E07556 /* LiveActivityModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F43BC4329ED920FABA7F5D16 /* LiveActivityModule.m */; };
 		4FA6AA516A3327477EAE939A /* Pods_ExamPilot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E426A95E2A759B94C04BB56F /* Pods_ExamPilot.framework */; };
 		6164127E75A7364698FB1340 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EF90D4ECB4CD80B9558E280E /* GoogleService-Info.plist */; };
@@ -22,6 +23,7 @@
 		761780EF2CA45674006654EF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EE2CA45674006654EF /* SceneDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		90F9076706C71B668B6EEC99 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 543EE8796427595C358CEB1E /* WidgetKit.framework */; };
+		A2F183AFC5AB741B357DA497 /* PdfTextModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72BEB52DCD5360D67EA36D5 /* PdfTextModule.swift */; };
 		ACE1953A52F90D802A5BB215 /* ExamPilotWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A169C7CFA89495BC89E4DB03 /* ExamPilotWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B4DF5710DB67C2592A97DB9E /* ExamActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E955795083D959BD172B0FAC /* ExamActivityAttributes.swift */; };
 		C7D9D0A617C152BCD4FB4EB0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
@@ -73,12 +75,14 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ExamPilot/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89BD08E50BBB3A72FFAD0764 /* ActivityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ActivityKit.framework; path = System/Library/Frameworks/ActivityKit.framework; sourceTree = SDKROOT; };
 		9B97B253D5596F75E5D7B428 /* ExamPilotWidgetBundle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExamPilotWidgetBundle.swift; sourceTree = "<group>"; };
+		9E8999206A6E5FF18354F9F9 /* PdfTextModule.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PdfTextModule.m; path = ExamPilot/PdfTextModule.m; sourceTree = "<group>"; };
 		A169C7CFA89495BC89E4DB03 /* ExamPilotWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ExamPilotWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2C3E933AA3B44E7A0219D65 /* Urbanist-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Urbanist-SemiBold.ttf"; path = "../assets/fonts/Urbanist-SemiBold.ttf"; sourceTree = "<group>"; };
 		A66A02E4AAF54902E33F824C /* ExamLiveActivity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExamLiveActivity.swift; sourceTree = "<group>"; };
 		B965FC04EBDD4EEE9C8CB0EC /* Urbanist-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Urbanist-Regular.ttf"; path = "../assets/fonts/Urbanist-Regular.ttf"; sourceTree = "<group>"; };
 		CAB88DE8BF8FC8921261306C /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E426A95E2A759B94C04BB56F /* Pods_ExamPilot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExamPilot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E72BEB52DCD5360D67EA36D5 /* PdfTextModule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PdfTextModule.swift; path = ExamPilot/PdfTextModule.swift; sourceTree = "<group>"; };
 		E955795083D959BD172B0FAC /* ExamActivityAttributes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExamPilot/ExamActivityAttributes.swift; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		EF90D4ECB4CD80B9558E280E /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ExamPilot/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -121,6 +125,8 @@
 				E955795083D959BD172B0FAC /* ExamActivityAttributes.swift */,
 				0F264B5C53B1BEEF3028A281 /* LiveActivityModule.swift */,
 				F43BC4329ED920FABA7F5D16 /* LiveActivityModule.m */,
+				E72BEB52DCD5360D67EA36D5 /* PdfTextModule.swift */,
+				9E8999206A6E5FF18354F9F9 /* PdfTextModule.m */,
 			);
 			name = ExamPilot;
 			sourceTree = "<group>";
@@ -409,6 +415,8 @@
 				B4DF5710DB67C2592A97DB9E /* ExamActivityAttributes.swift in Sources */,
 				CF3831FEEB7E225651A52E38 /* LiveActivityModule.swift in Sources */,
 				40AFA52AE697B03C35E07556 /* LiveActivityModule.m in Sources */,
+				A2F183AFC5AB741B357DA497 /* PdfTextModule.swift in Sources */,
+				38FE2764DE174B43BE906290 /* PdfTextModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

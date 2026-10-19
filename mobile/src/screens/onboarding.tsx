@@ -18,7 +18,9 @@ import { scheduleOnRN } from 'react-native-worklets';
 import type { SharedValue } from 'react-native-reanimated';
 import Svg, { Path } from 'react-native-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { pick, types } from '@react-native-documents/picker';
+import { keepLocalCopy, pick, types } from '@react-native-documents/picker';
+import { parseAdmitCard, shortCode } from '../lib/admitParser';
+import { imageText, pdfText } from '../lib/pdfText';
 import { launchCamera } from 'react-native-image-picker';
 import {
   Field,
@@ -37,7 +39,7 @@ import {
 import { ExamSheet } from '../components/examsheet';
 import { ChoiceGroup } from '../components/choicegroup';
 import { celebrate } from '../lib/celebrate';
-import { C, SUBJ, TYPE, colorOf, SHADOW, INK, SHEEN } from '../theme';
+import { C, SUBJ, TYPE, colorOf, paletteAt, SHADOW, INK, SHEEN } from '../theme';
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
 import { useStore } from '../data/store';
 import {
@@ -55,12 +57,10 @@ import {
   dayNum,
   fmtTimeShort,
   monthShort,
-  parseDDMM,
   todayISO,
   weekday,
 } from '../lib/dates';
 import { generatePlan, hours } from '../lib/plan';
-import admitSample from '../data/seed/admit-card-extraction-example.json';
 import micro from '../data/seed/microcopy.json';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -942,7 +942,7 @@ function DragRow({
 }
 export function AdmitCard() {
   const nav = useNav();
-  const { state, update } = useStore();
+  const { update } = useStore();
   const [phase, setPhase] = useState<'idle' | 'scanning' | 'results'>('idle');
   const [found, setFound] = useState<Found[]>([]);
   const [editing, setEditing] = useState<number | null>(null);
@@ -958,58 +958,101 @@ export function AdmitCard() {
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useEffect(() => () => clearTimeout(timer.current), []);
 
-  const scan = () => {
+  const [error, setError] = useState('');
+  const [undated, setUndated] = useState<string[]>([]);
+  /** Reads the file's text on-device, parses the timetable rows, and shows them for confirmation. */
+  const read = async (getLines: () => Promise<string[]>) => {
+    setError('');
     setPhase('scanning');
-    // Mocked extractor: the real pipeline (on-device text → server proxy → validation) lands with the AI backend.
-    timer.current = setTimeout(() => {
-      setFound(
-        admitSample.exams.map((e, i) => {
-          const p = parseDDMM(e.rawText, e.weekdayPrinted);
-          const ex = state.exams[i];
-          return {
-            id: ex?.id ?? 'x' + i,
-            subjectId: ex?.subjectId ?? 'se',
-            title: e.subjectName,
-            date: e.date,
-            time: e.start,
-            flag:
-              p && !p.weekdayMatches
-                ? 'Weekday doesn’t match the date — please check.'
-                : undefined,
-          };
-        }),
+    const started = Date.now();
+    try {
+      const { exams, undated: u } = parseAdmitCard(await getLines());
+      // Let the scan animation register even when reading is instant.
+      await new Promise<void>(r =>
+        setTimeout(r, Math.max(0, 1200 - (Date.now() - started))),
       );
+      setUndated(u);
+      setFound(
+        exams.map((e, i) => ({
+          id: `a${Date.now()}-${i}`,
+          subjectId: '',
+          title: e.name,
+          date: e.date,
+          time: e.time,
+          flag: e.flag,
+        })),
+      );
+      if (!exams.length)
+        setError(
+          'We couldn’t find exam dates in that file. Try a clearer photo, or add them yourself below.',
+        );
       setPhase('results');
-    }, 2400);
+    } catch (e) {
+      setError((e as Error).message || 'Couldn’t read that file.');
+      setPhase('idle');
+    }
   };
   const chooseFile = async () => {
     try {
-      await pick({ type: [types.pdf, types.images] });
-      scan();
+      const [file] = await pick({ type: [types.pdf, types.images] });
+      const [copy] = await keepLocalCopy({
+        files: [{ uri: file.uri, fileName: file.name ?? 'admit-card' }],
+        destination: 'cachesDirectory',
+      });
+      const uri = copy.status === 'success' ? copy.localUri : file.uri;
+      const isPdf =
+        file.type === 'application/pdf' || /\.pdf$/i.test(file.name ?? uri);
+      read(async () =>
+        isPdf ? (await pdfText(uri)).pages : imageText(uri),
+      );
     } catch {
       /* cancelled */
     }
   };
   const takePhoto = async () => {
     try {
-      const r = await launchCamera({ mediaType: 'photo', quality: 0.8 });
-      if (!r.didCancel && r.assets?.length) scan();
+      const r = await launchCamera({ mediaType: 'photo', quality: 0.9 });
+      const uri = r.assets?.[0]?.uri;
+      if (!r.didCancel && uri) read(() => imageText(uri));
+      else if (r.errorCode === 'camera_unavailable')
+        setError('No camera here — choose a PDF or photo instead.');
     } catch {
-      /* camera unavailable (simulator) */
+      setError('No camera here — choose a PDF or photo instead.');
     }
   };
   const confirm = () => {
-    update(x => ({
-      ...x,
-      exams: found.map(f => ({
-        id: f.id,
-        subjectId: f.subjectId,
-        title: f.title,
-        date: f.date,
-        time: f.time,
-        source: 'admit-card' as const,
-      })),
-    }));
+    if (!found.length) return;
+    update(x => {
+      // One subject per exam name; reuse an existing subject with the same name.
+      const subjects = [...x.subjects];
+      const codes = new Set(subjects.map(sj => sj.code));
+      const exams = found.map((f, i) => {
+        let sj = subjects.find(
+          y => y.name.toLowerCase() === f.title.trim().toLowerCase(),
+        );
+        if (!sj) {
+          const code = shortCode(f.title, codes);
+          sj = {
+            id: `sub-${Date.now().toString(36)}-${i}`,
+            code,
+            name: f.title.trim(),
+            color: paletteAt(subjects.length),
+            topics: [],
+            isSample: false,
+          };
+          subjects.push(sj);
+        }
+        return {
+          id: f.id,
+          subjectId: sj.id,
+          title: sj.name,
+          date: f.date,
+          time: f.time,
+          source: 'admit-card' as const,
+        };
+      });
+      return { ...x, subjects, exams };
+    });
     nav.navigate('Plan');
   };
   return (
@@ -1084,15 +1127,13 @@ export function AdmitCard() {
                 onPress={takePhoto}
               />
             </View>
-            <View style={{ flex: 1 }}>
-              <SecondaryButton
-                icon="sparkle-outline"
-                label="Try a sample"
-                onPress={scan}
-              />
-            </View>
           </Rise>
-          <Rise i={4}>
+          {!!error && (
+            <Rise i={4}>
+              <InfoCard tone="headsup">{error}</InfoCard>
+            </Rise>
+          )}
+          <Rise i={5}>
             <InfoCard tone="dds" icon="lock">
               {micro.admitCard.privacy}
             </InfoCard>
@@ -1134,8 +1175,14 @@ export function AdmitCard() {
               {micro.admitCard.doneTitle.replace('{n}', String(found.length))}
             </Txt>
           </Rise>
+          {!!error && <InfoCard tone="headsup">{error}</InfoCard>}
+          {undated.length > 0 && (
+            <InfoCard tone="info">
+              {`No date printed for: ${undated.join(', ')}. Add them below if they have one.`}
+            </InfoCard>
+          )}
           {found.map((f, i) => {
-            const c = SUBJ[colorOf(f.subjectId)];
+            const c = SUBJ[paletteAt(i)];
             return (
               <DragRow
                 key={f.id}
@@ -1204,6 +1251,7 @@ export function AdmitCard() {
             <PrimaryButton
               label="Looks right — build my plan"
               onPress={confirm}
+              disabled={!found.length}
             />
           </Rise>
           <Pressable
